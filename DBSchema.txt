@@ -1,0 +1,50 @@
+{
+    Studentid: ObjectID(sdlkjfaskldjklfsdjfdk),
+    email: [
+        personal-email: giridhar.balaz@gmail.com
+        college-email: giridhar.balachandran@learner.manipal.edu
+    ]
+    reviews:[
+        kdjfklsjfdkls.
+        sdkjflksfdk
+    ]
+    cv : {
+        elements: [
+            org: Microsoft,
+
+        ]
+    }
+}
+
+
+Applications
+{
+    Studentid: ObjectID(sdlkhfajsdflksjfd),
+    applications: [
+        app1 : {
+            projectID: 
+            Status: 
+        }
+        app2 : {
+            Status:
+        }
+    ]
+}
+
+
+Prof
+{
+    profID: 
+    name: Prakash Aital,
+    email:
+}
+
+Projects
+{
+    ProjId:
+    ProfID:
+    name:
+    desc:
+    tags:
+    
+}
