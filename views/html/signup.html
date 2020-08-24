@@ -5,86 +5,64 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/index.css">
-    <title>Login - ResearchR</title>
+    <title>Sign Up - ResearchR</title>
 </head>
 
 <body>
-    <!-- <header class="text-gray-700 body-font">
-        <div class="container mx-auto flex flex-wrap p-5 flex-col
-                md:flex-row items-center">
-            <a class="flex title-font font-medium items-center text-gray-900
-                    mb-4 md:mb-0">
-                Logo
-                <span class="ml-3 text-xl">ReSEARCHr</span>
-            </a>
-            <nav class="md:ml-auto flex flex-wrap items-center text-base
-                    justify-center">
-                <a class="mr-5 sm:mr-5 lg:mr-16 hover:text-gray-900" href="/#home">Home</a>
-                <a class="mr-5 sm:mr-5 lg:mr-16 hover:text-gray-900" href="/#about-us">What we do</a>
-                <a class="mr-5 sm:mr-5 lg:mr-16 hover:text-gray-900" href="/#about-us">About us</a>
-                <a class="mr-5 sm:mr-5 lg:mr-16 hover:text-gray-900" href="/#contact-us">Contact us</a>
-            </nav>
-            <button class="inline-flex items-center bg-gray-200 border-0 py-1
-                    px-3 focus:outline-none hover:bg-gray-300 rounded text-base
-                    mt-4 md:mt-0"><a href="/login">Sign in</a>
-                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    class="w-4 h-4 ml-1" viewBox="0 0 24 24">
-                    <path d="M5 12h14M12 5l7 7-7 7"></path>
-                </svg>
-            </button>
-        </div>
-    </header> -->
 
     <section id="sign-up">
         <div class="flex flex-col lg:flex-row">
-            <div class="w-full lg:w-4/12 flex flex-col items-center lg:items-start lg:px-24 space-y-8 p-4">
+            <div class="w-full lg:w-5/12">
 
-                <div>
-                    <p class="font-extrabold text-black text-3xl mt-8">Sign Up</p>
-                </div>
+                <form action="/signup" method="POST" class="flex flex-col items-center lg:items-start lg:px-24 space-y-8 p-4">
+                    <div>
+                        <p class="font-extrabold text-black text-3xl mt-8">Sign Up</p>
+                    </div>
 
-                <div class="">
-                    <p class="px-1 mb-1 text-sm text-gray-600 font-semibold">Full Name</p>
-                    <input
-                        class="border-2 rounded-lg relative px-4 py-2 w-full focus:outline-none focus:border-teal-500"
-                        type="text" required>
-                </div>
-                <div class="">
-                    <p class="px-1 mb-1 text-sm text-gray-600 font-semibold">College Email ID</p>
-                    <input
-                        class="border-2 rounded-lg relative px-4 py-2 w-full focus:outline-none focus:border-teal-500"
-                        type="text" required>
-                </div>
-                <div class="">
-                    <p class="px-1 mb-1 text-sm text-gray-600 font-semibold">Personal Email ID</p>
-                    <input
-                        class="border-2 rounded-lg relative px-4 py-2 w-full focus:outline-none focus:border-teal-500"
-                        type="text" required>
-                </div>
-                <div class="">
-                    <p class="px-1 mb-1 text-sm text-gray-600 font-semibold">College</p>
-                    <input
-                        class="border-2 rounded-lg relative px-4 py-2 w-full focus:outline-none focus:border-teal-500"
-                        type="text" required>
-                </div>
-                <div class="">
-                    <p class="px-1 mb-1 text-sm text-gray-600 font-semibold">Branch</p>
-                    <input
-                        class="border-2 rounded-lg relative px-4 py-2 w-full focus:outline-none focus:border-teal-500"
-                        type="text" required>
-                </div>
-                <div class="">
-                    <p class="px-1 mb-1 text-sm text-gray-600 font-semibold">Year of Graduation</p>
-                    <input class="border-2 rounded-lg relative px-4 py-2 focus:outline-none focus:border-teal-500"
-                        type="text" required>
-                </div>
-                <div>
-                    <button class="mt-4 lg:mr-24 focus:outline-none bg-teal-500 text-white rounded-md px-4 py-2">Sign
-                        Up</button>
-                </div>
+                    <div class="">
+                        <p class="px-1 mb-1 text-sm text-gray-600 font-semibold">Full Name</p>
+                        <input
+                            class="border-2 rounded-lg relative px-4 py-2 w-full focus:outline-none focus:border-teal-500"
+                            type="text" name="name" required>
+                    </div>
+                    <div class="">
+                        <p class="px-1 mb-1 text-sm text-gray-600 font-semibold">College Email ID</p>
+                        <input
+                            class="border-2 rounded-lg relative px-4 py-2 w-full focus:outline-none focus:border-teal-500"
+                            type="text" name="c_email" required>
+                    </div>
+                    <div class="">
+                        <p class="px-1 mb-1 text-sm text-gray-600 font-semibold">Personal Email ID</p>
+                        <input
+                            class="border-2 rounded-lg relative px-4 py-2 w-full focus:outline-none focus:border-teal-500"
+                            type="text" name="p_email" required>
+                    </div>
+                    <div class="">
+                        <p class="px-1 mb-1 text-sm text-gray-600 font-semibold">College</p>
+                        <input
+                            class="border-2 rounded-lg relative px-4 py-2 w-full focus:outline-none focus:border-teal-500"
+                            type="text" name="college" required>
+                    </div>
+                    <div class="">
+                        <p class="px-1 mb-1 text-sm text-gray-600 font-semibold">Branch</p>
+                        <input
+                            class="border-2 rounded-lg relative px-4 py-2 w-full focus:outline-none focus:border-teal-500"
+                            type="text" name="branch" required>
+                    </div>
+                    <div class="">
+                        <p class="px-1 mb-1 text-sm text-gray-600 font-semibold">Year of Graduation</p>
+                        <input class="border-2 rounded-lg relative px-4 py-2 focus:outline-none focus:border-teal-500"
+                            type="text" name="yog" required>
+                    </div>
+                    <div>
+                        <button
+                            class="mt-4 mb-4 lg:mr-24 focus:outline-none bg-teal-500 text-white rounded-md px-4 py-2">Sign
+                            Up</button>
+                    </div>
+                </form>
             </div>
 
-            <div class="w-0 lg:w-8/12">
+            <div class="w-0 lg:w-7/12">
                 <img src="images/signInResearchBuilding.jpg" alt="Sign Up" class="min-h-full">
             </div>
 

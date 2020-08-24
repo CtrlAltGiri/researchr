@@ -9,7 +9,7 @@ html(lang='en', style='scroll-behavior: smooth;')
     header.text-gray-700.body-font
       .container.mx-auto.flex.flex-wrap.p-5.flex-col.items-center(class='md:flex-row')
         a.flex.title-font.font-medium.items-center.text-gray-900.mb-4(class='md:mb-0')
-          | Logo
+          | 
           span.ml-3.text-xl ReSEARCHr
         nav.flex.flex-wrap.items-center.text-base.justify-center(class='md:ml-auto')
           a.mr-5(class='sm:mr-5 lg:mr-16 hover:text-gray-900', href='#home') Home
@@ -21,7 +21,7 @@ html(lang='en', style='scroll-behavior: smooth;')
           svg.w-4.h-4.ml-1(fill='none', stroke='currentColor', stroke-linecap='round', stroke-linejoin='round', stroke-width='2', viewBox='0 0 24 24')
             path(d='M5 12h14M12 5l7 7-7 7')
     section#home.text-gray-700.body-font.min-h-screen
-      .container.px-5.py-24.mx-auto.flex.flex-wrap.items-center(class='sm:py-5 md:py-20')
+      .container.px-5.py-5.mx-auto.flex.flex-wrap.items-center(class='lg:py-20')
         .pr-0(class='lg:w-3/5 md:w-1/2 md:pr-16 lg:pr-0')
           h1.title-font.font-medium.text-3xl.text-gray-900 This is re.Search("r").
           p.leading-relaxed.mt-4
@@ -29,11 +29,12 @@ html(lang='en', style='scroll-behavior: smooth;')
             | platform.
         .bg-gray-200.rounded-lg.p-8.flex.flex-col.w-full.mt-10(class='lg:w-2/6 md:w-1/2 md:ml-auto md:mt-0')
           h2.text-gray-900.text-lg.font-medium.title-font.mb-5 Sign Up
-          input.bg-white.rounded.border.border-gray-400.text-base.px-4.py-2.mb-4(class='focus:outline-none focus:border-teal-500', placeholder='Email ID', type='email')
-          input.bg-white.rounded.border.border-gray-400.text-base.px-4.py-2.mb-4(class='focus:outline-none focus:border-teal-500', placeholder='Password', type='password')
-          button.text-white.bg-teal-500.border-0.py-2.px-8.rounded.text-lg(class='focus:outline-none hover:bg-teal-600')
-            | Sign
-            | Up
+          form(action="/", method="post" class="flex flex-col")
+            input.bg-white.rounded.border.border-gray-400.text-base.px-4.py-2.mb-4(class='focus:outline-none focus:border-teal-500', placeholder='Full Name', type='text', name='name')
+            input.bg-white.rounded.border.border-gray-400.text-base.px-4.py-2.mb-4(class='focus:outline-none focus:border-teal-500', placeholder='Email ID', type='email', name='email')
+            button.text-white.bg-teal-500.border-0.py-2.px-8.rounded.text-lg(class='focus:outline-none hover:bg-teal-600' type='submit')
+              | Sign
+              | Up
           p.text-xs.text-gray-500.mt-3 We promise not to send you any spam.
     section#about-us.text-gray-700.body-font
       .container.px-5.py-24.mx-auto
@@ -44,11 +45,11 @@ html(lang='en', style='scroll-behavior: smooth;')
         .flex.flex-wrap.flex-col.-m-4(class='lg:flex-row')
           .p-4(class='lg:w-1/2')
             .h-full.flex.flex-col.items-center.justify-center.text-center(class='sm:flex-row sm:justify-start sm:text-left')
-              img.flex-shrink-0.rounded-lg.w-48.h-48.object-cover.object-center.mb-4(alt='team', class='sm:mb-0', src='https://dummyimage.com/200x200')
+              img.flex-shrink-0.rounded-lg.w-48.h-48.object-cover.object-center.mb-4(alt='team', class='sm:mb-0', src='images/aboutus/rahul.jpeg')
               .flex-grow(class='sm:pl-8')
                 h2.title-font.font-medium.text-lg.text-gray-900 Rahul Humayun
                 h3.text-gray-500.mb-3 Team Lead
-                p.mb-4 Thinks he is a bigshot nigga.
+                p.mb-4 Want to bring change to this world, one step at a time.
                 span.inline-flex
                   a.text-gray-500
                     svg.w-5.h-5(fill='none', stroke-linecap='round', stroke-linejoin='round', stroke-width='2', viewBox='0 0 24 24')
@@ -61,11 +62,11 @@ html(lang='en', style='scroll-behavior: smooth;')
                       path(d='M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z')
           .p-4(class='lg:w-1/2')
             .h-full.flex.flex-col.items-center.justify-center.text-center(class='sm:flex-row sm:justify-start sm:text-left')
-              img.flex-shrink-0.rounded-lg.w-48.h-48.object-cover.object-center.mb-4(alt='team', class='sm:mb-0', src='https://dummyimage.com/201x201')
+              img.flex-shrink-0.rounded-lg.w-48.h-48.object-cover.object-center.mb-4(alt='team', class='sm:mb-0', src='images/aboutus/adi.jpeg')
               .flex-grow(class='sm:pl-8')
                 h2.title-font.font-medium.text-lg.text-gray-900 Aditya Vavre
                 h3.text-gray-500.mb-3 Artificial Intelligence
-                p.mb-4 Ladies love him.
+                p.mb-4 AI motivates me everyday. We build AI to make our lives easier.
                 span.inline-flex
                   a.text-gray-500
                     svg.w-5.h-5(fill='none', stroke-linecap='round', stroke-linejoin='round', stroke-width='2', viewBox='0 0 24 24')
@@ -78,11 +79,11 @@ html(lang='en', style='scroll-behavior: smooth;')
                       path(d='M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z')
           .p-4(class='lg:w-1/2')
             .h-full.flex.flex-col.items-center.justify-center.text-center(class='sm:flex-row sm:justify-start sm:text-left')
-              img.flex-shrink-0.rounded-lg.w-48.h-48.object-cover.object-center.mb-4(alt='team', class='sm:mb-0', src='https://dummyimage.com/204x204')
+              img.flex-shrink-0.rounded-lg.w-48.h-48.object-cover.object-center.mb-4(alt='team', class='sm:mb-0', src='images/aboutus/giri.jpg')
               .flex-grow(class='sm:pl-8')
-                h2.title-font.font-medium.text-lg.text-gray-900 Jayesh Kumar Rout
-                h3.text-gray-500.mb-3 Business Lead
-                p.mb-4 I wake up and got money on my mind.
+                h2.title-font.font-medium.text-lg.text-gray-900 Giridhar B
+                h3.text-gray-500.mb-3 Software Engineer
+                p.mb-4 Want to build this platform that will enrich every researchr's life.
                 span.inline-flex
                   a.text-gray-500
                     svg.w-5.h-5(fill='none', stroke-linecap='round', stroke-linejoin='round', stroke-width='2', viewBox='0 0 24 24')
@@ -95,11 +96,11 @@ html(lang='en', style='scroll-behavior: smooth;')
                       path(d='M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z')
           .p-4(class='lg:w-1/2')
             .h-full.flex.flex-col.items-center.justify-center.text-center(class='sm:flex-row sm:justify-start sm:text-left')
-              img.flex-shrink-0.rounded-lg.w-48.h-48.object-cover.object-center.mb-4(alt='team', class='sm:mb-0', src='https://dummyimage.com/206x206')
+              img.flex-shrink-0.rounded-lg.w-48.h-48.object-cover.object-center.mb-4(alt='team', class='sm:mb-0', src='images/aboutus/ashwath.jfif')
               .flex-grow(class='sm:pl-8')
                 h2.title-font.font-medium.text-lg.text-gray-900 Ashwath Sajith
                 h3.text-gray-500.mb-3 Finance and Coporate Relations
-                p.mb-4 The night is young, but you are younger.
+                p.mb-4 Clients and Relationships are what I like to maintain.
                 span.inline-flex
                   a.text-gray-500
                     svg.w-5.h-5(fill='none', stroke-linecap='round', stroke-linejoin='round', stroke-width='2', viewBox='0 0 24 24')
