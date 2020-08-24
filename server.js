@@ -9,13 +9,13 @@ const cors = require('cors')
 const app = express();
 const PORT = process.env.PORT || 8080;
 
-app.set('views', __dirname + '/views');
-app.set('view engine', 'pug');
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true })); 
-app.use(express.static("dist/"));
+app.use(express.static("public/"));
 app.use(express.static("client/build"))
+
+app.set('views', __dirname + '/views');
+app.set('view engine', 'pug');
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
@@ -33,7 +33,7 @@ passport.deserializeUser(User.deserializeUser());
 
 app.route("/").get(function(req, res){
     if(!req.isAuthenticated())
-        res.render('index');
+        res.render('homepage');
     else{
         res.redirect('/platform')
     }
@@ -93,14 +93,12 @@ app.route('/signup')
 
 app.route('/platform')
 .get(function(req, res){
-
-    // if(req.isAuthenticated()){
-    //     res.render("platform");
-    // }
-    // else{
-    //     res.render("login", {wrongCreds: false});
-    // }
-    res.sendFile(__dirname + "\\client\\build\\index.html");
+    if(req.isAuthenticated()){
+        res.sendFile(__dirname + "\\client\\build\\platform.html");
+    }
+    else{
+        res.render("login", {wrongCreds: false});
+    }
 });
 
 app.get('/logout', function(req, res){
@@ -109,7 +107,7 @@ app.get('/logout', function(req, res){
 });
 
 app.get("/test", function(req, res){
-    res.sendFile(__dirname + "/views/html/signup.html")
+    res.render('homepage')
 });
 
 app.get("/passwords", cors(), function(req, res){
