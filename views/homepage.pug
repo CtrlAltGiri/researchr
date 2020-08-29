@@ -6,27 +6,16 @@ html(lang='en', style='scroll-behavior: smooth;')
     link(rel='stylesheet', href='css/index.css')
     title ReSEARCHr
   body
-    header.text-gray-700.body-font
-      .container.mx-auto.flex.flex-wrap.p-5.flex-col.items-center(class='md:flex-row')
-        a.flex.title-font.font-medium.items-center.text-gray-900.mb-4(class='md:mb-0')
-          | 
-          span.ml-3.text-xl ReSEARCHr
-        nav.flex.flex-wrap.items-center.text-base.justify-center(class='md:ml-auto')
-          a.mr-5(class='sm:mr-5 lg:mr-16 hover:text-gray-900', href='#home') Home
-          a.mr-5(class='sm:mr-5 lg:mr-16 hover:text-gray-900', href='#about-us') What we do
-          a.mr-5(class='sm:mr-5 lg:mr-16 hover:text-gray-900', href='#about-us') About us
-          a.mr-5(class='sm:mr-5 lg:mr-16 hover:text-gray-900', href='#contact-us') Contact us
-        button.inline-flex.items-center.bg-gray-200.border-0.py-1.px-3.rounded.text-base.mt-4(class='focus:outline-none hover:bg-gray-300 md:mt-0')
-          a(href='/login') Sign in
-          svg.w-4.h-4.ml-1(fill='none', stroke='currentColor', stroke-linecap='round', stroke-linejoin='round', stroke-width='2', viewBox='0 0 24 24')
-            path(d='M5 12h14M12 5l7 7-7 7')
+    include includes/header.pug
+        
     section#home.text-gray-700.body-font.min-h-screen
       .container.px-5.py-5.mx-auto.flex.flex-wrap.items-center(class='lg:py-20')
         .pr-0(class='lg:w-3/5 md:w-1/2 md:pr-16 lg:pr-0')
-          h1.title-font.font-medium.text-3xl.text-gray-900 This is re.Search("r").
+          h1.title-font.font-medium.text-3xl.text-gray-900(class="text-center md:text-left") Collaborate. Innovate. Create.
           p.leading-relaxed.mt-4
-            | We get the top of the world research projects for you through our
-            | platform.
+            |researchR is a platform that brings together students and professors from varied 
+            br(class="hidden sm:block")
+            |backgrounds to collaborate on research projects based on similar fields of interest.
         .bg-gray-200.rounded-lg.p-8.flex.flex-col.w-full.mt-10(class='lg:w-2/6 md:w-1/2 md:ml-auto md:mt-0')
           h2.text-gray-900.text-lg.font-medium.title-font.mb-5 Sign Up
           form(action="/", method="post" class="flex flex-col")

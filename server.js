@@ -22,7 +22,7 @@ app.use(session({
     saveUninitialized: false
 }));
 
-mongoose.connect("mongodb://localhost:27017/userDB", { useUnifiedTopology: true, useNewUrlParser: true });
+mongoose.connect(process.env.DB_URL, { useUnifiedTopology: true, useNewUrlParser: true });
 mongoose.set("useCreateIndex", true);
 
 app.use(passport.initialize());
@@ -107,11 +107,25 @@ app.get('/logout', function(req, res){
 });
 
 app.get("/test", function(req, res){
-    res.render('homepage')
+    res.sendFile(__dirname + "/views/html/index.html")
 });
 
 app.get("/passwords", cors(), function(req, res){
-    let a = ["giri","bala", "radhi"];
+    let a = [{category: ["#ComputerVision", "#Machine Learning"],
+            name: "Extensive Analysis on Human Brain Signals with Machine Learning", 
+            desc:"The project has been under works since the beginning of the 19th centry. Dr PBS has been working on this since 20th century and I intend to complete it before the end of this world.", 
+            profName:"Dr. Bhagath Singh", 
+            profDesignation:"Assistant Professor", 
+            views:"1.2k",
+            comments:"10"},
+            {category: ["#Software Engineering", "#Web Development"],
+            name: "API capturing algorithm to detect the presence of alien life near sector 7", 
+            desc:"The project has been under works since the beginning of the 19th centry. Dr PBS has been working on this since 20th century and I intend to complete it before the end of this world.", 
+            profName:"Dr. Giridhar Balachandran", 
+            profDesignation:"Senior Professor", 
+            views:"120.2M",
+            comments:"70"}
+        ];
     res.json(a);
 });
 

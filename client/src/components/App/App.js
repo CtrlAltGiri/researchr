@@ -1,61 +1,28 @@
-import React, { Component } from 'react';
-import './App.css';
-import Projectile from '../Projectile/Projectile';
-import InfiniteScroll from 'react-infinite-scroller';
+import React, { useState } from 'react';
+import Header from '../Header/Header';
+import ProjectSection from '../ProjectSection/ProjectSection';
+import { Switch , Route } from 'react-router-dom';
 
+function Cray(){
+  return (
+    <h1>
+      Giridhar
+    </h1>
+  )
+}
 
-class App extends Component {
+function App(props) {
 
-  constructor(props){
-    super(props);
-    this.state = {
-      projects: [],
-      hasMore: true
-    };
-  }
+  return (
+    <div>
+      <Header />
+      <Switch>
+          <Route path ="/" component={ProjectSection} exact/>
+          <Route path ="/profile" component={Cray} />
+      </Switch>
+    </div>
+  );
 
-  componentDidMount() {
-    fetch('/passwords', {mode: 'cors'})
-      .then(res => res.json())
-      .then(projects => this.setState({ projects: projects }));
-  }
-
-  newLoader() {
-    fetch('/passwords', {mode: 'cors'})
-      .then(res => res.json())
-      .then(newProjects => this.setState((state, props) => ({projects: this.state.projects.concat(newProjects)})))
-  }
-
-  render() {
-
-  var items = []
-  this.state.projects.map((item) => {
-      items.push(<Projectile name={item} />);
-  })
-
-    return (
-      // <div>
-      //   <ul className="flex flex-col items-center">
-      //     {
-      //       this.state.projects.map((item) => {
-      //         return (<Projectile name={item} />);
-      //       })
-      //     }
-      //   </ul>
-      // </div>
-
-      <InfiniteScroll
-      pageStart={0}
-      loadMore={this.newLoader.bind(this)}
-      hasMore={this.state.hasMore}
-      loader={<h1>Loading....</h1>}>
-
-      <div className="">
-          {items}
-      </div>
-      </InfiniteScroll>
-      );
-  }
 }
 
 export default App;

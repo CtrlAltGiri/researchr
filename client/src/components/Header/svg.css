@@ -1,0 +1,12 @@
+.svg-icon {
+    width: 2.5em;
+    height: 2.5em;
+  }
+  
+  .svg-icon path {
+    fill: #38b2ac;
+  }
+  
+#menu-toggle:checked + #menu {
+    display: block;
+}
