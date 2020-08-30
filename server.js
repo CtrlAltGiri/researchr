@@ -1,10 +1,12 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const session = require('express-session');
-const passport = require('passport');
-const User = require('./models/userDB.schema');
+// const passport = require('passport');
+require('./models/Users');
+const Users = mongoose.model('Users');
 require('dotenv').config();
 const cors = require('cors')
+// const LocalStrategy = require('passport-local');
 
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -24,12 +26,36 @@ app.use(session({
 
 mongoose.connect(process.env.DB_URL, { useUnifiedTopology: true, useNewUrlParser: true });
 mongoose.set("useCreateIndex", true);
+var passport = require('passport'), LocalStrategy = require('passport-local');
+app.use(passport.initialize(undefined));
+app.use(passport.session(undefined));
 
-app.use(passport.initialize());
-app.use(passport.session());
-passport.use(User.createStrategy());
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
+// Use this strategy for login authentication
+passport.use("local", new LocalStrategy({
+    usernameField: 'email',
+    passwordField: 'password',
+}, (email, password, done) => {
+    // find user (specified by unique email address)
+    Users.findOne({ email })
+        .then((user) => {
+            if(!user || !user.validatePassword(password)) {
+                // invalid user or password
+                return done(null, false, { errors: { 'email or password': 'is invalid' } });
+            }
+            // valid user and password
+            return done(null, user);
+        }).catch(done);
+}));
+
+passport.serializeUser(function(user, done) {
+    done(null, user.id);
+});
+
+passport.deserializeUser(function(id, done) {
+    Users.findById(id, function(err, user) {
+        done(err, user);
+    });
+})
 
 app.route("/").get(function(req, res){
     if(!req.isAuthenticated())
@@ -49,25 +75,15 @@ app.route("/login")
     else
         res.render("login", {wrongCreds: false});
 })
-.post(function(req,res){
-    
-    // req.body.remember_me.
-    const user = new User({
-        email : req.body.email,
-        password: req.body.password
-    });
-
-    req.login(user, function(err){
-        if(err){
-            console.log(err);
-            res.render("login", {wrongCreds: true});
-        }
-        else{
-            User.authenticate("local")(req, res, function(){
-                res.redirect("/platform");
-            });
-        }
-    });
+.post(function(req,res, next){
+    passport.authenticate('local', {}, function(err, user, info) {
+        if (err) { console.log(err);return next(err); }
+        if (!user) { return res.render("login", {wrongCreds: true}); }
+        req.logIn(user, function(err) {
+            if (err) { console.log(err);return next(err); }
+            return res.redirect('/platform');
+        });
+    })(req, res, next);
 });
 
 app.route('/signup')
@@ -76,19 +92,32 @@ app.route('/signup')
 })
 .post(function(req, res){
     console.log(req.body);
-    User.register({email: req.body.c_email}, req.body.password, function(err, user){
-        if(err){
-            console.log(err);
-            res.redirect("/signup");
-        }
-        else{
-            console.log(user);
-            User.authenticate("local")(req, res, function(){
-                console.log("Authenticated");
-                res.redirect("/platform")
-            });
-        }
+    if(!req.body.c_email) {
+        return res.status(422).json({
+            errors: {
+                email: 'is required',
+            },
+        });
+    }
+
+    if(!req.body.password) {
+        return res.status(422).json({
+            errors: {
+                password: 'is required',
+            },
+        });
+    }
+
+    const finalUser = new Users({
+        email: req.body.c_email,
+        password: req.body.password
     });
+
+    finalUser.setPassword(req.body.password);
+
+    // add user to database
+    return finalUser.save()
+        .then(() => res.json({ user: finalUser.toAuthJSON() }));
 });
 
 app.route('/platform')
