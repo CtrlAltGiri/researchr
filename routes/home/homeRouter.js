@@ -1,7 +1,8 @@
 const express = require('express');
 const homeRouter = express.Router();
-const User = require('../../models/userDB.schema');
+const Users = require('../../models/Users');
 const path = require('path');
+const passport = require('passport');
 
 homeRouter.route("/").get(function (req, res) {
     if (!req.isAuthenticated())
@@ -15,51 +16,57 @@ homeRouter.route("/").get(function (req, res) {
     });
 
 homeRouter.route("/login")
-    .get(function (req, res) {
-        if (req.isAuthenticated())
-            res.redirect("/platform");
-        else
-            res.render("login", { wrongCreds: false });
-    })
-    .post(function (req, res) {
-
-        const user = new User({
-            email: req.body.email,
-            password: req.body.password
+.get(function(req, res){
+    if(req.isAuthenticated())
+        res.redirect("/platform");
+    else
+        res.render("login", {wrongCreds: false});
+})
+.post(function(req,res, next){
+    passport.authenticate('local', {}, function(err, user, info) {
+        if (err) { console.log(err);return next(err); }
+        if (!user) { return res.render("login", {wrongCreds: true}); }
+        req.logIn(user, function(err) {
+            if (err) { console.log(err);return next(err); }
+            return res.redirect('/platform');
         });
+    })(req, res, next);
+});
 
-        req.login(user, function (err) {
-            if (err) {
-                console.log(err);
-                res.render("login", { wrongCreds: true });
-            }
-            else {
-                User.authenticate("local")(req, res, function () {
-                    res.redirect("/platform");
-                });
-            }
-        });
-    });
 
 homeRouter.route('/signup')
-    .get(function (req, res) {
-        res.render('signup', { name: "", email: "" });
-    })
-    .post(function (req, res) {
-        console.log(req.body);
-        User.register({ email: req.body.c_email }, req.body.password, function (err, user) {
-            if (err) {
-                console.log(err);
-                res.redirect("/signup");
-            }
-            else {
-                console.log(user);
-                User.authenticate("local")(req, res, function () {
-                    res.redirect("/platform")
-                });
-            }
+.get(function(req,res){
+    res.render('signup', {name: "", email: ""});
+})
+.post(function(req, res){
+    console.log(req.body);
+    if(!req.body.c_email) {
+        return res.status(422).json({
+            errors: {
+                email: 'is required',
+            },
         });
+    }
+
+    if(!req.body.password) {
+        return res.status(422).json({
+            errors: {
+                password: 'is required',
+            },
+        });
+    }
+
+    const finalUser = new Users({
+        email: req.body.c_email,
+        password: req.body.password
     });
+
+    finalUser.setPassword(req.body.password);
+
+    // add user to database
+    return finalUser.save()
+        .then(() => res.json({ user: finalUser.toAuthJSON() }));
+});
 
 homeRouter.get('/logout', function (req, res) {
     req.logout();
