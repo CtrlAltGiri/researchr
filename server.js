@@ -2,7 +2,9 @@ const router = require('./routes/router');
 const express = require('express');
 const mongoose = require('mongoose');
 const session = require('express-session');
-const passport = require('./models/auth');
+const passport = require('./config/passport');
+const crypto = require('crypto');
+require('./config/passport');
 require('dotenv').config();
 
 const app = express();
@@ -26,7 +28,6 @@ mongoose.set("useCreateIndex", true);
 
 app.use(passport.initialize());
 app.use(passport.session());
-
 
 app.use("/platform", router.platform);
 app.use("/api", router.api);
