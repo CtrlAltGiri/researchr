@@ -2,7 +2,7 @@ const express = require('express');
 const homeRouter = express.Router();
 const Users = require('../../models/Users');
 const path = require('path');
-const passport = require('passport');
+const passport = require('../../models/auth');
 
 homeRouter.route("/").get(function (req, res) {
     if (!req.isAuthenticated())
@@ -63,7 +63,6 @@ homeRouter.route('/signup')
 
     finalUser.setPassword(req.body.password);
 
-    // add user to database
     return finalUser.save()
         .then(() => res.json({ user: finalUser.toAuthJSON() }));
 });
