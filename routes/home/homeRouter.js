@@ -4,8 +4,7 @@ const Users = require('../../models/Users');
 const path = require('path');
 const passport = require('../../config/passport');
 const sendGrid = require('sendgrid').mail;
-const { sendVerificationEmail } = require('../../utils/verificationEmail/sendgirdEmailHelper'); 
-
+const { sendVerificationEmail } = require('../../utils/email/sendgirdEmailHelper'); 
 
 homeRouter.route("/").get(function (req, res) {
     if (!req.isAuthenticated())
