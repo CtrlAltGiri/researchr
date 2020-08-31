@@ -8,7 +8,7 @@ html(lang='en', style='scroll-behavior: smooth;')
   body
     include includes/header.pug
         
-    section#home.text-gray-700.body-font.min-h-screen
+    section#home.text-gray-700.body-font(class="mb-2")
       .container.px-5.py-5.mx-auto.flex.flex-wrap.items-center(class='lg:py-20')
         .pr-0(class='lg:w-3/5 md:w-1/2 md:pr-16 lg:pr-0')
           h1.title-font.font-medium.text-3xl.text-gray-900(class="text-center md:text-left") Collaborate. Innovate. Create.
@@ -25,10 +25,10 @@ html(lang='en', style='scroll-behavior: smooth;')
               | Sign
               | Up
           p.text-xs.text-gray-500.mt-3 We promise not to send you any spam.
-    section#about-us.text-gray-700.body-font
-      .container.px-5.py-24.mx-auto
+    section.text-gray-700.body-font
+      .container.px-5.py-12.mx-auto
         .flex.flex-col.text-center.w-full.mb-20
-          h1.text-2xl.font-medium.title-font.mb-4.text-gray-900.tracking-widest OUR TEAM
+          h1#about-us.text-2xl.font-medium.title-font.mb-4.pt-4.text-gray-900.tracking-widest OUR TEAM
           p.mx-auto.leading-relaxed.text-base(class='lg:w-2/3')
             | We are a bunch of kids who grew up together. We wanted to be big and we're grabbing that opportunity.
         .flex.flex-wrap.flex-col.-m-4(class='lg:flex-row')

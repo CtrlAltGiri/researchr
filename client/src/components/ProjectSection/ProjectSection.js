@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import Projectile from "../Projectile/Projectile";
+import Projectile from "./Projectile/Projectile";
 import InfiniteScroll from 'react-infinite-scroller';
 
 
@@ -14,13 +14,13 @@ class ProjectSection extends Component{
     }
 
     componentDidMount() {
-        fetch('/passwords', {mode: 'cors'})
+        fetch('/api/passwords', {mode: 'cors'})
           .then(res => res.json())
           .then(projects => this.setState({ projects: projects }));
     }
     
     newLoader() {
-    fetch('/passwords', {mode: 'cors'})
+    fetch('/api/passwords', {mode: 'cors'})
         .then(res => res.json())
         .then(newProjects => this.setState((state, props) => ({projects: this.state.projects.concat(newProjects)})))
     }

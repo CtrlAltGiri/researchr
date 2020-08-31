@@ -1,3 +1,4 @@
+const router = require('./routes/router');
 const express = require('express');
 const mongoose = require('mongoose');
 const session = require('express-session');
@@ -12,7 +13,7 @@ const app = express();
 const PORT = process.env.PORT || 8080;
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: true })); 
+app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public/"));
 app.use(express.static("client/build"))
 
@@ -177,6 +178,7 @@ app.get("/passwords", cors(), function(req, res){
         ];
     res.json(a);
 });
+
 
 // Email verification functionality
 app.get('/verify',function(req,res){

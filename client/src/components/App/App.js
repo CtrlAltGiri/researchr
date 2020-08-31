@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import Header from '../Header/Header';
 import ProjectSection from '../ProjectSection/ProjectSection';
-import { Switch , Route } from 'react-router-dom';
+import Profile from '../Profile/Profile';
+import { Switch, Route } from 'react-router-dom';
 
-function Cray(){
+function Cray() {
   return (
     <h1>
       Giridhar
@@ -12,17 +13,17 @@ function Cray(){
 }
 
 function App(props) {
-
   return (
     <div>
       <Header />
       <Switch>
-          <Route path ="/" component={ProjectSection} exact/>
-          <Route path ="/profile" component={Cray} />
+        <Route path="/platform" component={ProjectSection} exact />
+        <Route path="/platform/profile" component={Profile} />
+        <Route path="/platform/applications" component={Cray} />
+        <Route path="/platform/faq" component={Cray} />
       </Switch>
     </div>
   );
-
 }
 
 export default App;
