@@ -42,6 +42,8 @@ html(lang='en')
                 |                             Sign in
             if wrongCreds
               h1.font-bold.mt-4.text-red-500 Incorrect Username or Password
+            else if unverified
+              h1.font-bold.mt-4.text-red-500 Please verify your college email id first or Signup again
             hr.mt-6.border-gray-300
             div
               p.text-gray-500.text-center.font-semibold.mt-4 Continue with
