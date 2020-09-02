@@ -3,15 +3,21 @@ import {Step1, Step2, Step3, Step4} from './Steps';
 
 function CreateProfile(props) {
 
+
+    // TODO (Giri): The initial states of these are to be set after the initial GET to the server
+    // to see previous completion.
     const [step, setStep] = useState(2);
     const [completedStep, setCompletedStep] = useState(1);
     const [showError, setShowError] = useState(false);
     const [completeFormState, setCompleteFormState] = useState({step1: {}, step2: {}, step3: {}, step4: {}});
 
     function updateCompletedStep(newStep, formState){
+
+        setCompleteFormState({...completeFormState, ["step" + newStep]: formState});
+        // TODO (Giri) : Make a post request here and make sure the server checks the values before pusing.
+        // Reuturn an error code and based on that show error to the user.
         setStep(newStep + 1);
         setCompletedStep(newStep);
-        setCompleteFormState({...completeFormState, ["step" + newStep]: formState});
         setShowError(false)
     }
 

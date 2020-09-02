@@ -1,0 +1,34 @@
+import React from 'react';
+
+function TealButton(props){
+    return(
+        <button className={`text-white bg-teal-500 border-0 py-2 px-8 focus:outline-none hover:bg-teal-600 rounded text-lg ${props.extraClass}`} 
+        onClick={props.submitForm}>
+            {props.text}
+        </button>
+    );
+}
+
+function Error(props){
+
+    return(
+        <p className="text-red-500 text-2xl">{props.text}</p>
+    )
+}
+
+function Title(props){
+
+    return (<p className="mb-4 text-xl text-gray-900 font-medium title-font">{props.text}</p>)
+}
+
+function TextField(props){
+    return(
+        <div className={props.extraClass}>
+            <p className="text-l text-gray-700 px-1 mb-1 font-medium">{props.text}</p>
+            <input type="text" onChange={props.onChange} className="outline-none focus:border-teal-500 border-2 rounded-lg py-1 px-2" name={props.name} value={props.value} />            
+        </div>
+    );
+}
+
+
+export {TealButton, Error, Title, TextField};
