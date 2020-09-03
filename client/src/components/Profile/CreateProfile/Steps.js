@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
-import School from './Utils/Step2/School'
-import College from './Utils/Step2/College';
-import {TealButton, Error} from '../../General/Form/FormComponents';
+import AddExperience from './Utils/AddExperience';
+import School from './Utils/School';
+import CollegeModal from './Utils/CollegeModal';
+import WorkModal from './Utils/WorkModal';
+import ProjectModal from './Utils/ProjectModal';
+import { TealButton, Error } from '../../General/Form/FormComponents';
+import TagInput from '../../General/TagInput/TagInput';
 import '../../Header/svg.css'
 
 function Step1(props) {
@@ -88,20 +92,93 @@ function Step2(props) {
                 school={schoolState}
                 setSchoolState={setSchoolState}
             />
-            <College
-                college={collegeState}
-                setCollegeState={setCollegeState}
+
+            <AddExperience
+                mainObject={collegeState}
+                setMainObject={setCollegeState}
+                requiredFields={['college', 'branch', 'degree', 'yog', 'cgpa']}
+                shownFields={['degree', 'branch', 'cgpa', 'yog', 'experience']}
+                shownFieldsDesc={["Degree", "Branch", "CGPA", "Year of Graduation", "Experience"]}
+                heading="college"
+                title="University"
+                modal={CollegeModal}
             />
-            {collegeState.length > 0 && <TealButton extraClass="flex mx-auto mt-6" submitForm={submitOuterForm} text={"Next"}/>}
+
+            {collegeState.length > 0 && <TealButton extraClass="flex mx-auto mt-6" submitForm={submitOuterForm} text={"Next"} />}
             {outerErrorShow && <Error text="Please ensure all fields are filled" />}
         </div>
     )
 }
 
 function Step3(props) {
+
+    const [workExperiences, setWorkExperiences] = useState(props.formData.workExperiences || []);
+    const [projects, setProjects] = useState(props.formData.projects || []);
+
+    function submitOuterForm(event) {
+        //TODO (giri): Check the values entered before making the call.
+        let finalObj = {
+            workExperiences: workExperiences,
+            projects: projects
+        }
+        props.updateCompletedStep(3, finalObj);
+    }
+
+    return (
+        <div className="mb-8">
+            <AddExperience
+                mainObject={workExperiences}
+                setMainObject={setWorkExperiences}
+                requiredFields={['company', 'position', 'startDate', 'endDate', 'proof', 'tags']}
+                shownFields={['position', 'startDate', 'endDate', 'experience', 'tags']}
+                shownFieldsDesc={["Position", "Start Date", "End Date", 'Experience', 'ResearchR Tags']}
+                heading="company"
+                title="Work Experience"
+                extraClass="mb-8"
+                modal={WorkModal}
+            />
+
+            <AddExperience
+                mainObject={projects}
+                setMainObject={setProjects}
+                requiredFields={['title', 'proof', 'tags', 'professor', 'designation', 'college', 'duration']}
+                shownFields={['experience', 'tags', 'professor', 'designation', 'college', 'duration']}
+                shownFieldsDesc={["Experience", "Tags", "Professor", "Designation of Professor", "College Associated", "Duration"]}
+                heading="title"
+                title="Projects"
+                modal={ProjectModal}
+            />
+
+            <TealButton extraClass="flex mx-auto mt-6" submitForm={submitOuterForm} text={"Next"} />
+        </div>
+    )
 }
 
 function Step4(props) {
+
+    const [tags, setTags] = useState(props.tags)
+
+    function submitOuterForm(event) {
+        let finalObj = {
+            tags: tags,
+        }
+        props.updateCompletedStep(4, finalObj);
+    }
+
+    return (
+        <div>
+            <TagInput
+                extraClass="w-1/2 mx-auto"
+                text="Interest tags"
+                onChange={(e) => setTags(e.target.value)}
+                fieldExtraClass="w-full"
+                name="tagInput"
+                value={tags}
+            />
+
+            <TealButton extraClass="flex mx-auto mt-6" submitForm={submitOuterForm} text={"Complete"} />
+        </div>
+    )
 
 }
 

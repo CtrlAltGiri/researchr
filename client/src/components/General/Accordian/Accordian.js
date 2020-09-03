@@ -16,7 +16,7 @@ function Accordian(props) {
                 return <Accordians
                     values={object}
                     index={index}
-                    uniqueNumber={"Accoridan" + index}
+                    uniqueNumber={props.heading + index}
                     heading={object[props.heading]}
                     description={props.description}
                     active={active}
@@ -51,7 +51,7 @@ function Accordians(props) {
                 <input className="absolute opacity-0" id={props.uniqueNumber} type="radio" name="tabs" onClick={(e) => reverseActive(e, props.active, props.setActive)} />
                 <label className="block p-5 leading-normal cursor-pointer" htmlFor={props.uniqueNumber}>{props.heading}</label>
                 <div className="tab-content overflow-hidden border-l-2 bg-grey-lightest border-indigo leading-normal">
-                    <p className="p-5">{AccordianDescription(props.values, props.description, props.labels)}</p>
+                    <div className="p-5">{AccordianDescription(props.values, props.description, props.labels)}</div>
                     <div className="flex justify-around pb-4">
                         <button className="focus:outline-none" onClick={(e) => props.editCallBack(props.values, props.index)}>Edit</button>
                         <button className="text-red-500 focus:outline-none" onClick={(e) => props.deleteCallBack(props.index)}>Delete</button>
@@ -67,7 +67,10 @@ function AccordianDescription(props, values, descValues){
     return(
         <div>
             {values.map((value, index) => {
-                return <p>{descValues[index] + ": " + props[value]}</p>
+                if(props[value] !== undefined && !(props[value].length === 1 && props[value][0] === '-')) //  check for '-' lol
+                    return <p>{descValues[index] + ": " + props[value]}</p>
+                else
+                    return "";
             })}
         </div>
     );
