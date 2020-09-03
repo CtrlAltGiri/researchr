@@ -69,7 +69,7 @@ function Step2(props) {
 
     function submitOuterForm(event) {
         //TODO (giri): Check if entered values are numeric
-        if (schoolState.grade10 !== "" && schoolState.grade12 !== "") {
+        if (schoolState.grade10 !== "" && schoolState.grade12 !== "" && collegeState.length > 0) {
             let finalObj = {
                 school: schoolState,
                 college: collegeState
@@ -99,7 +99,6 @@ function Step2(props) {
 }
 
 function Step3(props) {
-
 }
 
 function Step4(props) {

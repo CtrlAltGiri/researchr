@@ -10,11 +10,11 @@ const slideValues = {
 
 function ProjectPage(props) {
 
-    let {projectId} = useParams();
-    {
-        // use this to render appropriate page.
-        // useEffect( () => {// call API with this projectId}) 
-    }
+    // let {projectId} = useParams();
+    // {
+    //     // use this to render appropriate page.
+    //     // useEffect( () => {// call API with this projectId}) 
+    // }
     const [slider, setSlider] = useState(slideValues.DESCRIPTION);
 
     return (
@@ -25,9 +25,9 @@ function ProjectPage(props) {
                         <h2 className="text-sm title-font text-gray-500 tracking-widest">DR GIRIDHAR BALACHANDRAN</h2>
                         <h1 className="text-gray-900 text-3xl title-font font-medium mb-4">API Extraction of boolean values using Support Vector Machines</h1>
                         <div className="flex mb-4 justify-between items-center pr-8">
-                            <a className={`py-2 text-lg px-1 cursor-pointer ${slider === slideValues.DESCRIPTION ? "text-teal-500" : ""}`} onClick={(e) => { setSlider(slideValues.DESCRIPTION) }}>Description</a>
-                            <a className={`py-2 text-lg px-1 cursor-pointer ${slider === slideValues.SKILLS ? "text-teal-500" : ""}`} onClick={(e) => { setSlider(slideValues.SKILLS) }}>Skills</a>
-                            <a className={`py-2 text-lg px-1 cursor-pointer ${slider === slideValues.DETAILS ? "text-teal-500" : ""}`} onClick={(e) => { setSlider(slideValues.DETAILS) }}>Details</a>
+                            <a className={`py-2 text-lg px-1 cursor-pointer ${slider === slideValues.DESCRIPTION ? "text-teal-500" : ""}`} onClick={(e) => { setSlider(slideValues.DESCRIPTION) }} href="#">Description</a>
+                            <a className={`py-2 text-lg px-1 cursor-pointer ${slider === slideValues.SKILLS ? "text-teal-500" : ""}`} onClick={(e) => { setSlider(slideValues.SKILLS) }} href="#">Skills</a>
+                            <a className={`py-2 text-lg px-1 cursor-pointer ${slider === slideValues.DETAILS ? "text-teal-500" : ""}`} onClick={(e) => { setSlider(slideValues.DETAILS) }} href="#">Details</a>
                         </div>
 
                         {slider === slideValues.DESCRIPTION ?

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import ExperienceSection from './ExperienceSection';
-import { PromiseProvider } from 'mongoose';
 
 function Profile(props) {
 

@@ -1,19 +1,27 @@
 import React, { useState } from 'react';
 import CollegeModal from './CollegeModal';
 import Accordian from '../../../../General/Accordian/Accordian';
-import {Title} from '../../../../General/Form/FormComponents'
+import { Title } from '../../../../General/Form/FormComponents'
 
-// TODO (Giri): Have to let them edit the university and college stuff.
 function College(props) {
 
     const [formState, setFormState] = useState({});
     const [showError, setshowError] = useState(false);
     const [modalOpen, setModalOpen] = useState(false);
+    const [editMode, setEditMode] = useState(-1);
 
     function submitInnerForm(event) {
         event.preventDefault();
-        if (formState.hasOwnProperty('college') && formState.hasOwnProperty('branch') && formState.hasOwnProperty('degree') && formState.hasOwnProperty('yog') && formState.hasOwnProperty('experience')) {
-            props.setCollegeState([...props.college, formState]); 
+        if (formState.hasOwnProperty('college') && formState.hasOwnProperty('branch') && formState.hasOwnProperty('degree') && formState.hasOwnProperty('yog') && formState.hasOwnProperty('cgpa')) {
+            // New University being added, nothing is edited.
+            if (editMode === -1) {
+                props.setCollegeState([...props.college, formState]);
+            }
+            else {
+                let tempVar = props.college;
+                tempVar[editMode] = formState;
+                props.setCollegeState(tempVar)
+            }
             setModalOpen(false);
             setshowError(false);
             setFormState({});
@@ -31,12 +39,36 @@ function College(props) {
         setFormState({ ...formState, [name]: value });
     }
 
+    function editCollege(item, index) {
+        setEditMode(index)
+        setFormState(item);
+        setModalOpen(true);
+    }
+
+    function deleteCollege(index) {
+        let tempVar = [...props.college];
+        if (index > -1) {
+            tempVar.splice(index, 1);
+        }
+        props.setCollegeState(tempVar);
+        setFormState({})
+    }
 
     return (
         <div>
-            <Title text={'University'}/>
-            {props.college.length > 0 ? 
-                <Accordian college={props.college} heading={"college"} description={"experience"} /> : ""}
+            <Title text={'University'} />
+            {
+                props.college.length > 0 ?
+                    <Accordian
+                        mainObject={props.college}
+                        heading={"college"}
+                        description={["degree", "branch", "cgpa", "yog", "experience"]}
+                        labels={["Degree", "Branch", "CGPA", "Year of Graduation", "Experiences"]}
+                        editCallBack={editCollege}
+                        deleteCallBack={deleteCollege}
+                    />
+                    : ""
+            }
 
             <button className="flex focus:outline-none" onClick={(e) => setModalOpen(true)}>
                 <svg className="svg-icon" viewBox="0 0 20 20">
@@ -50,6 +82,8 @@ function College(props) {
                 showError={showError}
                 modalOpen={modalOpen}
                 setModalOpen={setModalOpen}
+                formState={formState}
+                setEditMode={setEditMode}
             />
 
         </div>
