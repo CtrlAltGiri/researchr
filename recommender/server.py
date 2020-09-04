@@ -9,7 +9,7 @@ from waitress import serve
 app = Flask(__name__)
 
 #TODO(aditya): Get this url from env file
-app.config['MONGO_URI'] = 'mongodb://localhost:27017/mainDB'
+app.config['MONGO_URI'] = 'mongodb://localhost:27017/main'
 
 mainDB = PyMongo(app)
 
