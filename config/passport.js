@@ -1,13 +1,13 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const mongoose = require('mongoose');
-const Users = require('../models/Users');
+const Students = require('../models/students');
 
 passport.use("local", new LocalStrategy({
-    usernameField: 'email',
+    usernameField: 'c_email',
     passwordField: 'password',
-}, (email, password, done) => {
-    Users.findOne({ email })
+}, (c_email, password, done) => {
+    Students.findOne({ c_email })
         .then((user) => {
             if(!user || !user.validatePassword(password)) {
                 return done(null, false, { errors: { 'email or password': 'is invalid' } });
@@ -21,7 +21,7 @@ passport.serializeUser(function(user, done) {
 });
 
 passport.deserializeUser(function(id, done) {
-    Users.findById(id, function(err, user) {
+    Students.findById(id, function(err, user) {
         done(err, user);
     });
 })

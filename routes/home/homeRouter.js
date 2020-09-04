@@ -1,9 +1,7 @@
-const express = require('express');
-const homeRouter = express.Router();
-const Users = require('../../models/Users');
+const homeRouter = require('express').Router();
+const Students = require('../../models/students');
 const path = require('path');
 const passport = require('../../config/passport');
-const sendGrid = require('sendgrid').mail;
 const { sendVerificationEmail } = require('../../utils/email/sendgirdEmailHelper'); 
 
 homeRouter.route("/").get(function (req, res) {
@@ -72,7 +70,7 @@ homeRouter.route('/signup')
 
     // check if email is already registered in the database
     //TODO(aditya): Write this logic in a better way
-    Users.findOne({'email': req.body.c_email}, function(err, result) {
+    Students.findOne({'c_email': req.body.c_email}, function(err, result) {
         if (err){
             console.log(err);
             return;
@@ -84,7 +82,7 @@ homeRouter.route('/signup')
         }
         // if email verification has not been done, remove existing doc in collection and allow signup again
         else if(result){
-            Users.deleteOne({ _id: result._id}, function(err, obj) {
+            Students.deleteOne({ _id: result._id}, function(err, obj) {
                 if(err){
                     console.log("Failed to remove entry from collection")
                     console.log(err);
@@ -95,8 +93,8 @@ homeRouter.route('/signup')
             });
         }
         // add user to database
-        const finalUser = new Users({
-            email: req.body.c_email,
+        const finalUser = new Students({
+            c_email: req.body.c_email,
             password: req.body.password,
             active: false
         });
@@ -120,7 +118,7 @@ homeRouter.route('/signup')
 });
 
 homeRouter.get('/verify',function(req,res){
-    Users.findOne({ verifyHash:  req.query.token})
+    Students.findOne({ verifyHash:  req.query.token})
         .then((user) => {
             if(!user) {
                 // invalid verify link
@@ -135,7 +133,7 @@ homeRouter.get('/verify',function(req,res){
             }
             // link verified for user
             //TODO(aditya): remove verifyHash from document once a user is verified
-            Users.findByIdAndUpdate(
+            Students.findByIdAndUpdate(
                 {_id: user._id},
                 {
                     $unset: {verifyHash: 1},

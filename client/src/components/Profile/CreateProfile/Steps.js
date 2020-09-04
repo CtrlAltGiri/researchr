@@ -7,6 +7,8 @@ import ProjectModal from './Utils/ProjectModal';
 import { TealButton, Error } from '../../General/Form/FormComponents';
 import TagInput from '../../General/TagInput/TagInput';
 import '../../Header/svg.css'
+import {Link} from 'react-router-dom';
+import CompleteGif from '../../../assets/images/profilePage/complete.gif'
 
 function Step1(props) {
 
@@ -182,4 +184,16 @@ function Step4(props) {
 
 }
 
-export { Step1, Step2, Step3, Step4 };
+function CompleteStep(){
+
+    return (
+        <div className="flex flex-col text-center w-full">
+                <img src={CompleteGif} className="mx-auto" height="120px" width="120px"/>
+                <h1 className="text-xl font-medium title-font mb-4 text-gray-900">You have completed your researchR profile!</h1>
+                <p className="lg:w-2/3 mx-auto leading-relaxed text-base">You can now apply for all projects.</p>
+                <Link to="/platform" className="text-teal-700 mt-12">Go back to platform</Link>
+        </div>
+    )
+}
+
+export { Step1, Step2, Step3, Step4, CompleteStep };

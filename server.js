@@ -3,7 +3,6 @@ const express = require('express');
 const mongoose = require('mongoose');
 const session = require('express-session');
 const passport = require('./config/passport');
-const crypto = require('crypto');
 require('./config/passport');
 require('dotenv').config();
 
@@ -32,7 +31,6 @@ app.use(passport.session());
 app.use("/platform", router.platform);
 app.use("/api", router.api);
 app.use("/", router.home);
-
 
 app.listen(PORT, function(){
     console.log('Server started on port ' + PORT);

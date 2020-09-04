@@ -2,49 +2,49 @@ const mongoose = require('mongoose');
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 
-const UsersSchema = new mongoose.Schema({
-    email: String,
+const StudentsSchema = new mongoose.Schema({
+    c_email: String,
     hash: String,
     salt: String,
     active: Boolean,
     verifyHash: String
 });
 
-UsersSchema.methods.setPassword = function(password) {
+StudentsSchema.methods.setPassword = function(password) {
     this.salt = crypto.randomBytes(16).toString('hex');
     this.hash = crypto.pbkdf2Sync(password, this.salt, 10000, 512, 'sha512').toString('hex');
 };
 
-UsersSchema.methods.setVerifyHash = function() {
+StudentsSchema.methods.setVerifyHash = function() {
     this.verifyHash = crypto.randomBytes(128).toString('hex');
     return this.verifyHash;
 };
 
-UsersSchema.methods.validatePassword = function(password) {
+StudentsSchema.methods.validatePassword = function(password) {
     const hash = crypto.pbkdf2Sync(password, this.salt, 10000, 512, 'sha512').toString('hex');
     return this.hash === hash;
 };
 
-UsersSchema.methods.generateJWT = function() {
+StudentsSchema.methods.generateJWT = function() {
     const today = new Date();
     const expirationDate = new Date(today);
     expirationDate.setDate(today.getDate() + 60);
 
     return jwt.sign({
-        email: this.email,
+        email: this.c_email,
         id: this._id,
         exp: parseInt(expirationDate.getTime() / 1000, 10),
     }, 'secret');
 }
 
-UsersSchema.methods.toAuthJSON = function() {
+StudentsSchema.methods.toAuthJSON = function() {
     return {
         _id: this._id,
-        email: this.email,
+        email: this.c_email,
         token: this.generateJWT(),
     };
 };
 
-const Users = mongoose.model('Users', UsersSchema);
+const Students = mongoose.model('students', StudentsSchema);
 
-module.exports = Users;
+module.exports = Students;

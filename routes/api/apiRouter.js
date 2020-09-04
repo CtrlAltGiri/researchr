@@ -1,7 +1,11 @@
 const express = require('express');
 const apiRouter = express.Router();
+const Students = require('../../models/students');
+const { default: Axios } = require('axios');
+const axios = require('axios');
+// /api/
 
-apiRouter.route("/:endpoint")
+/*apiRouter.route("/:endpoint")
     .get(function (req, res) {
         // authenticate first.
         console.log(req.params.endpoint);
@@ -60,18 +64,77 @@ apiRouter.route("/:endpoint")
                     url: "iitb.ac.in"
                 }],
 
-                education:[
-                    {
-                        name: "Manipal Institute of Technology",
-                        title: "BTech. Computer Science of Engineering",
-                        cgpa: 9.55,
-                        url: 'manipal.edu',
-                        description: "Where i learn everything bham"
-                    }
-                ]
+                education:[{
+                    name: "Manipal Institute of Technology",
+                    title: "BTech. Computer Science of Engineering",
+                    cgpa: 9.55,
+                    url: 'manipal.edu',
+                    description: "Where i learn everything bham"
+                }]
             };
             res.json(a);
         }
-    })
+    });
+
+*/
+apiRouter.route("/profile/createProfile")
+    .post(function(req, res){
+
+        // TODO (Giri): req.isAuthenticated() is needed. Also change this to session student ID.
+        const studId = req.body.id;
+        console.log(studId)
+
+        Students.findOne({'_id': studId}, function(err, result) {
+            if (err){
+                console.log(err);
+                return;
+            }
+            if(result){
+                console.log("Result: ", result);
+            }
+        });
+
+        switch(req.body.step){
+            case 1:
+                console.log(req.body.value)
+                break;
+            case 2:
+                console.log(req.body.value)
+                console.log(req.body.value.college)
+                break;
+            case 3:
+                console.log(req.body)
+                console.log(req.body.value.workExperiences)
+                console.log(req.body.value.projects)
+                break;
+            case 4:
+                console.log(req.body.tags)
+                break;
+            default:
+                res.status(404);
+                res.send("failed");
+        }
+        res.status(200);
+        res.send('success')
+    }); 
+
+
+apiRouter.route("/projects")
+.get(function(req, res){
+
+    axios.post("http://localhost:5000/recommender", {
+            filters: {
+                "work_from_home": true,
+                "start_month": 1
+            } ,
+            user_id: "5f522f72a5b06cb5b19c55e7",
+            page_index: 2 
+        }).then(function(response){
+            console.log("got");  
+            res.send(response.data);
+        }).catch(function(err){
+            res.send(err);
+        })
+})
 
 module.exports = apiRouter;
