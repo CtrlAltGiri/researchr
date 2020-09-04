@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
-import CollegeModal from './CollegeModal';
-import Accordian from '../../General/Accordian/Accordian';
-import Dropdown from "../../General/Dropdown/Dropdown";
+import AddExperience from './Utils/AddExperience';
+import School from './Utils/School';
+import CollegeModal from './Utils/CollegeModal';
+import WorkModal from './Utils/WorkModal';
+import ProjectModal from './Utils/ProjectModal';
+import { TealButton, Error } from '../../General/Form/FormComponents';
+import TagInput from '../../General/TagInput/TagInput';
 import '../../Header/svg.css'
 
 function Step1(props) {
@@ -58,145 +62,123 @@ function Step1(props) {
 
 function Step2(props) {
 
-    const [completeFormState, setCompleteFormState] = useState([])
-    const [formState, setFormState] = useState({});
-    const [showError, setshowError] = useState(false);
-    const [modalOpen, setModalOpen] = useState(false);
-    const [schoolState, setSchoolState] = useState({
+    const [collegeState, setCollegeState] = useState(props.formData.college || [])
+    const [schoolState, setSchoolState] = useState(props.formData.school || {
         scoring10: "Percentage",
         scoring12: "Percentage",
         grade10: "",
         grade12: ""
-    })
+    });
+    const [outerErrorShow, setOuterErrorShow] = useState(false);
 
-    function submitInnerForm(event) {
-        event.preventDefault();
-        if (formState.hasOwnProperty('college') && formState.hasOwnProperty('branch') && formState.hasOwnProperty('degree') && formState.hasOwnProperty('yog') && formState.hasOwnProperty('experience')) {
-            setCompleteFormState([...completeFormState, formState]);
-            setModalOpen(false);
-            setshowError(false);
-            setFormState({});
-        }
-        else {
-            setshowError(true)
-        }
-    }
-
-    function changeInput(event) {
-        const target = event.target;
-        const value = target.type === 'checkbox' ? target.checked : target.value;
-        const name = target.name;
-
-        setFormState({ ...formState, [name]: value });
-    }
-
-    function changeDropdown(event, newItem){
-        setSchoolState({...schoolState, [event.target.name]: newItem});
-    }
-
-    function changeSchoolInput(event){
-        const target = event.target;
-        const value = target.value;
-        const name = target.name;
-
-        setSchoolState({...schoolState, [name]: value});
-    }
-
-    function submitOuterForm(event){
+    function submitOuterForm(event) {
         //TODO (giri): Check if entered values are numeric
-        if(schoolState.grade10 !== "" && schoolState.grade12 !== ""){
+        if (schoolState.grade10 !== "" && schoolState.grade12 !== "" && collegeState.length > 0) {
             let finalObj = {
                 school: schoolState,
-                college: completeFormState
+                college: collegeState
             }
+            setOuterErrorShow(false);
             props.updateCompletedStep(2, finalObj);
         }
-        else{
-            console.log("Show outer error");
+        else {
+            setOuterErrorShow(true);
         }
     }
 
     return (
-
         <div className="mb-8">
-
-            <p className="mb-8 text-xl text-gray-900 font-medium title-font">School</p>
-            <div className="flex flex-row flex-wrap mb-16 justify-around">
-
-                <div>
-                    <p className="text-l text-gray-700 px-1 mb-1 font-medium">10th Score</p>
-                    <input type="text" onChange={changeSchoolInput} className="outline-none focus:border-teal-500 border-2 rounded-lg py-1 px-2" name="grade10"></input>
-                </div>
-                <div className="mb-16 md:mb-0">
-                    <p className="text-l text-gray-700 mb-1 font-medium">Scoring</p>
-                    <Dropdown
-                        name={schoolState.scoring10}
-                        uniqueName={"scoring10"}
-                        menuItems={["CGPA", "Percentage"]}
-                        setDropdown={changeDropdown}
-                    />
-                </div>
-                <div>
-                    <p className="text-l text-gray-700 px-1 mb-1 font-medium">12th Score</p>
-                    <input type="text" onChange={changeSchoolInput} className="outline-none focus:border-teal-500 border-2 rounded-lg py-1 px-2" name="grade12"></input>
-                </div>
-                <div>
-                    <p className="text-l text-gray-700 mb-1 font-medium">Scoring</p>
-                    <Dropdown
-                        name={schoolState.scoring12}
-                        uniqueName={"scoring12"}
-                        menuItems={["CGPA", "Percentage"]}
-                        setDropdown={changeDropdown}
-                    />
-                </div>
-            </div>
-
-
-
-            <p className="mb-4 text-xl text-gray-900 font-medium title-font">University</p>
-
-
-            {completeFormState.length > 0 ? (<div className="w-full md:w-3/5 my-4 shadow-md">{completeFormState.map((college, index) => {
-                return <Accordian
-                    key={index}
-                    uniqueNumber={"Accoridan" + index}
-                    heading={college.college}
-                    description={college.experience}
-                />
-            })
-            }
-            </div>)
-                : ""}
-
-
-            <button className="flex" onClick={(e) => setModalOpen(true)}>
-                <svg class="svg-icon" viewBox="0 0 20 20">
-                    <path fill="none" d="M13.388,9.624h-3.011v-3.01c0-0.208-0.168-0.377-0.376-0.377S9.624,6.405,9.624,6.613v3.01H6.613c-0.208,0-0.376,0.168-0.376,0.376s0.168,0.376,0.376,0.376h3.011v3.01c0,0.208,0.168,0.378,0.376,0.378s0.376-0.17,0.376-0.378v-3.01h3.011c0.207,0,0.377-0.168,0.377-0.376S13.595,9.624,13.388,9.624z M10,1.344c-4.781,0-8.656,3.875-8.656,8.656c0,4.781,3.875,8.656,8.656,8.656c4.781,0,8.656-3.875,8.656-8.656C18.656,5.219,14.781,1.344,10,1.344z M10,17.903c-4.365,0-7.904-3.538-7.904-7.903S5.635,2.096,10,2.096S17.903,5.635,17.903,10S14.365,17.903,10,17.903z"></path>
-                </svg>
-            </button>
-
-
-            {completeFormState.length > 0 && <button className="flex mx-auto text-white mt-6 bg-teal-500 border-0 py-2 px-8 focus:outline-none hover:bg-teal-600 rounded text-lg" onClick={submitOuterForm}>Next</button>}
-
-
-            <CollegeModal
-                submitInnerForm={submitInnerForm}
-                changeInput={changeInput}
-                showError={showError}
-                modalOpen={modalOpen}
-                setModalOpen={setModalOpen}
+            <School
+                school={schoolState}
+                setSchoolState={setSchoolState}
             />
 
+            <AddExperience
+                mainObject={collegeState}
+                setMainObject={setCollegeState}
+                requiredFields={['college', 'branch', 'degree', 'yog', 'cgpa']}
+                shownFields={['degree', 'branch', 'cgpa', 'yog', 'experience']}
+                shownFieldsDesc={["Degree", "Branch", "CGPA", "Year of Graduation", "Experience"]}
+                heading="college"
+                title="University"
+                modal={CollegeModal}
+            />
 
+            {collegeState.length > 0 && <TealButton extraClass="flex mx-auto mt-6" submitForm={submitOuterForm} text={"Next"} />}
+            {outerErrorShow && <Error text="Please ensure all fields are filled" />}
         </div>
     )
 }
 
 function Step3(props) {
 
+    const [workExperiences, setWorkExperiences] = useState(props.formData.workExperiences || []);
+    const [projects, setProjects] = useState(props.formData.projects || []);
+
+    function submitOuterForm(event) {
+        //TODO (giri): Check the values entered before making the call.
+        let finalObj = {
+            workExperiences: workExperiences,
+            projects: projects
+        }
+        props.updateCompletedStep(3, finalObj);
+    }
+
+    return (
+        <div className="mb-8">
+            <AddExperience
+                mainObject={workExperiences}
+                setMainObject={setWorkExperiences}
+                requiredFields={['company', 'position', 'startDate', 'endDate', 'proof', 'tags']}
+                shownFields={['position', 'startDate', 'endDate', 'experience', 'tags']}
+                shownFieldsDesc={["Position", "Start Date", "End Date", 'Experience', 'ResearchR Tags']}
+                heading="company"
+                title="Work Experience"
+                extraClass="mb-8"
+                modal={WorkModal}
+            />
+
+            <AddExperience
+                mainObject={projects}
+                setMainObject={setProjects}
+                requiredFields={['title', 'proof', 'tags', 'professor', 'designation', 'college', 'duration']}
+                shownFields={['experience', 'tags', 'professor', 'designation', 'college', 'duration']}
+                shownFieldsDesc={["Experience", "Tags", "Professor", "Designation of Professor", "College Associated", "Duration"]}
+                heading="title"
+                title="Projects"
+                modal={ProjectModal}
+            />
+
+            <TealButton extraClass="flex mx-auto mt-6" submitForm={submitOuterForm} text={"Next"} />
+        </div>
+    )
 }
 
 function Step4(props) {
+
+    const [tags, setTags] = useState(props.tags)
+
+    function submitOuterForm(event) {
+        let finalObj = {
+            tags: tags,
+        }
+        props.updateCompletedStep(4, finalObj);
+    }
+
+    return (
+        <div>
+            <TagInput
+                extraClass="w-1/2 mx-auto"
+                text="Interest tags"
+                onChange={(e) => setTags(e.target.value)}
+                fieldExtraClass="w-full"
+                name="tagInput"
+                value={tags}
+            />
+
+            <TealButton extraClass="flex mx-auto mt-6" submitForm={submitOuterForm} text={"Complete"} />
+        </div>
+    )
 
 }
 

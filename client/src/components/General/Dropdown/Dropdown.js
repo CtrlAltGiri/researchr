@@ -11,7 +11,7 @@ function Dropdown(props) {
             </button>
             <ul className="dropdown-menu absolute hidden text-gray-700 pt-1">
                 {props.menuItems.map((item, index) => {
-                    return (<li key= {props.uniqueName + index} ><a className="rounded-t bg-gray-200 hover:bg-gray-400 py-2 px-4 block whitespace-no-wrap cursor-pointer" name={props.uniqueName} onClick={(e) => props.setDropdown(e, item)}>{item}</a></li>)
+                    return (<li key= {props.uniqueName + index} ><a className="rounded-t bg-gray-200 hover:bg-gray-400 py-2 px-4 block whitespace-no-wrap cursor-pointer" name={props.uniqueName} onClick={(e) => props.setDropdown(e, item)} href="#">{item}</a></li>)
                 })}
             </ul>
         </div>
