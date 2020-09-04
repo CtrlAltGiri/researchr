@@ -24,7 +24,7 @@ class JSONEncoder(json.JSONEncoder):
         return json.JSONEncoder.default(self, o)
 
 
-@app.route('/recommender/', methods = ['POST', 'GET'])
+@app.route('/recommender/', methods = ['POST'])
 def recommender():
    if request.method == 'POST':
        data = request.get_json()
