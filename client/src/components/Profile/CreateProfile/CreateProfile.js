@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
-import {Step1, Step2, Step3, Step4} from './Steps';
+import {Step1, Step2, Step3, Step4, CompleteStep} from './Steps';
+import axios from 'axios';
 
 function CreateProfile(props) {
 
@@ -10,14 +11,23 @@ function CreateProfile(props) {
     const [showError, setShowError] = useState(false);
     const [completeFormState, setCompleteFormState] = useState({step1: {}, step2: {}, step3: {}, step4: {}});
 
-    function updateCompletedStep(newStep, formState){
-
+    function updateState(newStep, formState){
         setCompleteFormState({...completeFormState, ["step" + newStep]: formState});
-        // TODO (Giri) : Make a post request here and make sure the server checks the values before pusing.
-        // Return an error code and based on that show error to the user.
         setStep(newStep + 1);
         setCompletedStep(newStep);
-        setShowError(false)
+        setShowError(false);
+    }
+
+    function updateCompletedStep(newStep, formState){
+        axios.post('/api/profile/createProfile', {
+            step: newStep,
+            value: formState,
+            id: "5f520db72cc5603eec5b00f3"
+        }).then(function(response){
+            updateState(newStep, formState)
+        }).catch(function(error){
+            setShowError(true);
+        });
     }
 
     return (
@@ -52,7 +62,8 @@ function CreateProfile(props) {
                         </svg>STEP 4
                     </a>
                 </div>
-                {step === 1 ?
+                {
+                    step === 1 ?
                     <Step1 
                         updateCompletedStep={updateCompletedStep}
                         formData={completeFormState.step1}
@@ -72,9 +83,9 @@ function CreateProfile(props) {
                         updateCompletedStep={updateCompletedStep}
                         formData={completeFormState.step4}
                     />:
-                    <h1>DONE</h1>
+                    <CompleteStep />
                 }
-                
+
             </div>
         </section>
     );

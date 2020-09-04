@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
-import Projectile from "./Projectile/Projectile";
+import Projectile from "./Projectile/ProjectileTest";
 import InfiniteScroll from 'react-infinite-scroller';
-
 
 class ProjectSection extends Component{
 
@@ -13,16 +12,16 @@ class ProjectSection extends Component{
         };
     }
 
-    componentDidMount() {
-        fetch('/api/passwords', {mode: 'cors'})
-          .then(res => res.json())
-          .then(projects => this.setState({ projects: projects }));
-    }
+    /*componentDidMount() {
+        fetch('/api/projects', {mode: 'cors'})
+            .then(res => res.json())
+            .then(projects => this.setState({ projects: projects.projects }));
+    }*/
     
     newLoader() {
-    fetch('/api/passwords', {mode: 'cors'})
-        .then(res => res.json())
-        .then(newProjects => this.setState((state, props) => ({projects: this.state.projects.concat(newProjects)})))
+        fetch('/api/projects', {mode: 'cors'})
+            .then(res => res.json())
+            .then(newProjects => this.setState((state, props) => ({projects: this.state.projects.concat(newProjects.projects)})))
     }
 
 

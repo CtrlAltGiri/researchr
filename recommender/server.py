@@ -13,7 +13,6 @@ app.config['MONGO_URI'] = 'mongodb://localhost:27017/main'
 
 mainDB = PyMongo(app)
 
-
 class JSONEncoder(json.JSONEncoder):
     """
     Json encoder to encode ObjectId
