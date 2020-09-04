@@ -4,10 +4,10 @@ const mongoose = require('mongoose');
 const Students = require('../models/students');
 
 passport.use("local", new LocalStrategy({
-    usernameField: 'email',
+    usernameField: 'c_email',
     passwordField: 'password',
-}, (email, password, done) => {
-    Students.findOne({ email })
+}, (c_email, password, done) => {
+    Students.findOne({ c_email })
         .then((user) => {
             if(!user || !user.validatePassword(password)) {
                 return done(null, false, { errors: { 'email or password': 'is invalid' } });

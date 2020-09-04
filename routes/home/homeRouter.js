@@ -70,7 +70,7 @@ homeRouter.route('/signup')
 
     // check if email is already registered in the database
     //TODO(aditya): Write this logic in a better way
-    Students.findOne({'email': req.body.c_email}, function(err, result) {
+    Students.findOne({'c_email': req.body.c_email}, function(err, result) {
         if (err){
             console.log(err);
             return;
@@ -94,7 +94,7 @@ homeRouter.route('/signup')
         }
         // add user to database
         const finalUser = new Students({
-            email: req.body.c_email,
+            c_email: req.body.c_email,
             password: req.body.password,
             active: false
         });
