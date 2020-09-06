@@ -4,6 +4,9 @@ const jwt = require('jsonwebtoken');
 
 const StudentsSchema = new mongoose.Schema({
     c_email: String,
+    p_email: String, 
+    cvElements: Object,
+    TandA: Boolean,
     hash: String,
     salt: String,
     active: Boolean,

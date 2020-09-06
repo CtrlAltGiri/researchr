@@ -10,11 +10,11 @@ function ExperienceSection(props) {
                 {props.experiences && props.experiences.map(experience => {
                     return (
                         <Experience
-                            name={experience.name}
-                            startDate={experience.startDate}
-                            endDate={experience.endDate}
-                            title={experience.title}
-                            description={experience.description}
+                            name={experience[props.name]}
+                            startDate={experience[props.startDate]}
+                            endDate={experience[props.endDate]}
+                            title={experience[props.subtitle]}
+                            description={experience[props.description]}
                             url={experience.url}
                         />
                     );

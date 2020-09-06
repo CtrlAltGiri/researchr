@@ -1,21 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import ExperienceSection from './ExperienceSection';
+import axios from 'axios';
 
 function Profile(props) {
 
     const [profile, setProfile] = useState({});
 
     useEffect(() => {
-        fetch('/api/myprofile', { mode: 'cors' })
-            .then(res => res.json())
-            .then(newProfile => setProfile(newProfile));
-    }, [profile.name]);
+        axios.get('/api/profile/myProfile', {
+            params : {id: "5f52765205ae1e5620e10c5e"}
+        }).then(function(response){
+            setProfile(response.data);
+        })
+    }, []);
 
     return (
-        // <section class="text-gray-700 body-font overflow-hidden">
-        //     <p className="px-12 text-3xl text-center mb-4">Work Experience</p>
-        //     <div class="container px-5 py-8 mx-auto">
-        //         <div class="-my-8">
         <section class="text-gray-700 body-font">
             <div class="container px-5 py-12 mx-auto">
                 <div class="flex flex-wrap w-full mb-12">
@@ -29,16 +28,25 @@ function Profile(props) {
                 <ExperienceSection 
                     type="Work Experience"
                     experiences={profile.workExperiences}
+                    subtitle="company"
+                    name="position"
+                    description="experience"
                 />
 
                 <ExperienceSection 
-                    type="Research Experience"
-                    experiences={profile.researchExperiences}
+                    type="Projects"
+                    experiences={profile.projects}
+                    subtitle="tags"
+                    name="title"
+                    description="experience"
                 /> 
                 
                 <ExperienceSection
                     type="Education"
-                    experiences={profile.education}
+                    experiences={profile.education && profile.education.college}
+                    subtitle="branch"
+                    name="college"
+                    description="experience"
                 />
 
             </div>

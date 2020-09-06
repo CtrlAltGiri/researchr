@@ -28,6 +28,7 @@ homeRouter.route("/login")
                 return next(err);
             }
             if(!user){
+                console.log("NOT FOUND");
                 console.log(info);
                 return res.render("login", { wrongCreds: true, unverified: false });
             }

@@ -8,7 +8,7 @@ function Projectile(props) {
               <div className="flex flex-row flex-wrap">
               <span className="mr-4 py-1 px-3 mb-2 md:mb-0 rounded bg-teal-100 text-teal-500 text-sm font-medium tracking-widest">MachineLearning</span>
               </div>
-              <h2 className="sm:text-3xl text-2xl title-font font-medium text-gray-900 mt-4 mb-4">{props.allItems.name}</h2>
+              <h2 className="sm:text-3xl text-2xl title-font font-medium text-gray-900 mt-4 mb-4">{props.allItems!==undefined ? props.allItems.name : "Error in fetching data"}</h2>
               <p className="leading-relaxed mb-8">The project has been under works since the beginning of the 19th centry. Dr PBS has been working on this since 20th century and I intend to complete it before the end of this world.</p>
               <div className="flex items-center flex-wrap pb-4 mb-4 border-b-2 border-gray-200 mt-auto w-full">
                 <Link to={`platform/project/2944`} className="text-teal-500 inline-flex items-center">Details
