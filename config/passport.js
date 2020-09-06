@@ -1,6 +1,5 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
-const mongoose = require('mongoose');
 const Students = require('../models/students');
 
 passport.use("local", new LocalStrategy({

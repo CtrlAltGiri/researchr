@@ -19,7 +19,6 @@ mainDB = PyMongo(app)
 # number of projects to recommend in one response
 NUM_REC = 50
 
-
 class JSONEncoder(json.JSONEncoder):
     """
     Json encoder to encode ObjectId

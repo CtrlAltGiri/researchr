@@ -31,7 +31,7 @@ function Step1(props) {
     }
 
     function changeInput(event) {
-        setFormState({ ...formState, [event.target.name]: event.target.value })
+        setFormState({ ...formState, [event.target.name]: event.target.checked })
     }
 
     return (
@@ -107,7 +107,6 @@ function Step2(props) {
             />
 
             {collegeState.length > 0 && <TealButton extraClass="flex mx-auto mt-6" submitForm={submitOuterForm} text={"Next"} />}
-            {outerErrorShow && <Error text="Please ensure all fields are filled" />}
         </div>
     )
 }
@@ -152,17 +151,17 @@ function Step3(props) {
             />
 
             <TealButton extraClass="flex mx-auto mt-6" submitForm={submitOuterForm} text={"Next"} />
-        </div>
+       </div>
     )
 }
 
 function Step4(props) {
 
-    const [tags, setTags] = useState(props.tags)
+    const [interestTags, setTags] = useState(props.formData.interestTags)
 
     function submitOuterForm(event) {
         let finalObj = {
-            tags: tags,
+            interestTags: interestTags,
         }
         props.updateCompletedStep(4, finalObj);
     }
@@ -175,9 +174,9 @@ function Step4(props) {
                 onChange={(e) => setTags(e.target.value)}
                 fieldExtraClass="w-full"
                 name="tagInput"
-                value={tags}
+                value={interestTags}
             />
-
+            
             <TealButton extraClass="flex mx-auto mt-6" submitForm={submitOuterForm} text={"Complete"} />
         </div>
     )
@@ -191,7 +190,7 @@ function CompleteStep(){
                 <img src={CompleteGif} className="mx-auto" height="120px" width="120px"/>
                 <h1 className="text-xl font-medium title-font mb-4 text-gray-900">You have completed your researchR profile!</h1>
                 <p className="lg:w-2/3 mx-auto leading-relaxed text-base">You can now apply for all projects.</p>
-                <Link to="/platform" className="text-teal-700 mt-12">Go back to platform</Link>
+                <Link to="/platform" className="text-teal-600 mt-12">Go back to platform</Link>
         </div>
     )
 }

@@ -55,7 +55,7 @@ const axios = require('axios');
                     url: "cevitr.com"
                 }
                 ],
-                researchExperiences:[{
+                projects:[{
                     name: "IIT Bombay",
                     title: "Software Research Intern",
                     startDate: "17th Aug, 2020",
@@ -74,46 +74,56 @@ const axios = require('axios');
             };
             res.json(a);
         }
+    }); 
+
+apiRouter.get('/profile/myProfile', async function(req, res){
+
+    const studId = req.query.id;
+    await Students.findOne({'_id': studId}, function(err, result){
+        if(result !== null)
+            res.send(result.cvElements);
+    })
     });
 
 */
+
 apiRouter.route("/profile/createProfile")
-    .post(function(req, res){
+    .post(async function(req, res){
 
         // TODO (Giri): req.isAuthenticated() is needed. Also change this to session student ID.
         const studId = req.body.id;
-        console.log(studId)
+        console.log("Updating ", studId);
 
-        Students.findOne({'_id': studId}, function(err, result) {
-            if (err){
-                console.log(err);
-                return;
-            }
-            if(result){
-                console.log("Result: ", result);
-            }
-        });
+        let newState = req.body.value, step = req.body.step;
+        let update = {}
 
-        switch(req.body.step){
-            case 1:
-                console.log(req.body.value)
-                break;
-            case 2:
-                console.log(req.body.value)
-                console.log(req.body.value.college)
-                break;
-            case 3:
-                console.log(req.body)
-                console.log(req.body.value.workExperiences)
-                console.log(req.body.value.projects)
-                break;
-            case 4:
-                console.log(req.body.tags)
-                break;
-            default:
-                res.status(404);
-                res.send("failed");
+        if(step === 1){
+            update = {
+                TandA: true
+            }
         }
+        else if(step === 2){
+            update = {
+                "cvElements.education": {
+                    school: req.body.value.school,
+                    college: req.body.value.college
+                }
+            }
+        }
+        else if(step === 3){
+            update = {
+                "cvElements.workExperiences": req.body.value.workExperiences,
+                "cvElements.projects": req.body.value.projects
+            }
+        }
+        else if(step === 4){
+            update = {
+                "cvElements.interestTags": req.body.value.interestTags
+            }
+        }
+
+        await Students.updateOne({'_id': studId}, update);
+
         res.status(200);
         res.send('success')
     }); 
@@ -127,7 +137,7 @@ apiRouter.route("/projects")
                 "work_from_home": true,
                 "start_month": 1
             } ,
-            user_id: "5f522f72a5b06cb5b19c55e7",
+            user_id: "5f52765205ae1e5620e10c5e",
             page_index: 2 
         }).then(function(response){
             console.log("got");  

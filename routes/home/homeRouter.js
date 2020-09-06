@@ -3,6 +3,7 @@ const Students = require('../../models/students');
 const path = require('path');
 const passport = require('../../config/passport');
 const { sendVerificationEmail } = require('../../utils/email/sendgirdEmailHelper'); 
+const { signUpValidator } = require('../../utils/formValidators/signup');
 
 homeRouter.route("/").get(function (req, res) {
     if (!req.isAuthenticated())
@@ -28,6 +29,7 @@ homeRouter.route("/login")
                 return next(err);
             }
             if(!user){
+                console.log("NOT FOUND");
                 console.log(info);
                 return res.render("login", { wrongCreds: true, unverified: false });
             }
@@ -51,21 +53,11 @@ homeRouter.route('/signup')
     res.render('signup', {name: "", email: ""});
 })
 .post(function(req, res){
-    // console.log(req.body);
-    if(!req.body.c_email) {
-        return res.status(422).json({
-            errors: {
-                email: 'is required',
-            },
-        });
-    }
 
-    if(!req.body.password) {
-        return res.status(422).json({
-            errors: {
-                password: 'is required',
-            },
-        });
+    const retVal = !signUpValidator(req.body);
+    if(retVal){
+        res.render('signup', {name:"", email:"", errorMsg:"Some fields were not entered / Error on our end"})
+        return;
     }
 
     // check if email is already registered in the database
