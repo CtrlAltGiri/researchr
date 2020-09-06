@@ -3,10 +3,9 @@ const apiRouter = express.Router();
 const Students = require('../../models/students');
 const { default: Axios } = require('axios');
 const axios = require('axios');
-const ObjectId = require('mongoose').Types.ObjectId;
 // /api/
 
-apiRouter.route("/:endpoint")
+/*apiRouter.route("/:endpoint")
     .get(function (req, res) {
         // authenticate first.
         console.log(req.params.endpoint);
@@ -84,11 +83,9 @@ apiRouter.get('/profile/myProfile', async function(req, res){
         if(result !== null)
             res.send(result.cvElements);
     })
+    });
 
-    res.send("done");
-    console.log("nah nah");
-});
-
+*/
 
 apiRouter.route("/profile/createProfile")
     .post(async function(req, res){
