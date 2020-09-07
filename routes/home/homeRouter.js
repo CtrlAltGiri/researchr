@@ -3,6 +3,7 @@ const Students = require('../../models/students');
 const path = require('path');
 const passport = require('../../config/passport');
 const { sendVerificationEmail } = require('../../utils/email/sendgirdEmailHelper'); 
+const { signUpValidator } = require('../../utils/formValidators/signup');
 
 homeRouter.route("/").get(function (req, res) {
     if (!req.isAuthenticated())
