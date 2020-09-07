@@ -12,7 +12,7 @@ homeRouter.route("/").get(function (req, res) {
         res.redirect('/platform')
     }
 }).post(function (req, res) {
-        res.render('signup', { name: req.body.name, email: req.body.email });
+        res.render('signup', { name: req.body.name, p_email: req.body.email });
     });
 
 homeRouter.route("/login")
@@ -50,13 +50,13 @@ homeRouter.route("/login")
 
 homeRouter.route('/signup')
 .get(function(req,res){
-    res.render('signup', {name: "", email: ""});
+    res.render('signup', {name: "", p_email: ""});
 })
-.post(function(req, res){
+.post(async function(req, res){
 
-    const retVal = !signUpValidator(req.body);
-    if(retVal){
-        res.render('signup', {name:"", email:"", errorMsg:"Some fields were not entered / Error on our end"})
+    const retVal = await signUpValidator(req.body);  
+    if(!retVal){
+        res.render('signup', {name:"", p_email:"", errorMsg:"Please ensure all fields are entered correctly."})
         return;
     }
 
@@ -79,7 +79,7 @@ homeRouter.route('/signup')
                     console.log("Failed to remove entry from collection")
                     console.log(err);
                     //TODO(aditya): Handle error properly
-                    return res.render('signup', {name: "", email: ""});
+                    return res.render('signup', {name: "", p_email: ""});
                 }
                 console.log("1 document deleted");
             });

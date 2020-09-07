@@ -1,16 +1,16 @@
 const {Validator} = require('node-input-validator');
 
-function signUpValidator(formData) {
+async function signUpValidator(formData) {
 
-    console.log(formData);
+    let retVal = true;
     const v = new Validator(formData, {
       c_email: 'required|email',
       password: 'required'
     });
    
-    v.check().then((matched) => {
-        return matched;
-    });
+    retVal = await v.check()
+    console.log("errors - ", v.errors)
+    return retVal;
 }
 
 module.exports = {signUpValidator};
