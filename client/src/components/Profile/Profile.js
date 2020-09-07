@@ -7,9 +7,8 @@ function Profile(props) {
     const [profile, setProfile] = useState({});
 
     useEffect(() => {
-        axios.get('/api/profile/myProfile', {
-            params : {id: "5f52765205ae1e5620e10c5e"}
-        }).then(function(response){
+        axios.get('/api/profile/myProfile')
+        .then(function(response){
             setProfile(response.data);
         })
     }, []);
