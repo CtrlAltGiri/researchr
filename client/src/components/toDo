@@ -2,3 +2,5 @@
 - Allow URL inputs for companies to get logo.
 - Tag Input has to be modified as its own component to allow tag-inputs
 - API for tag input should also be created appropriately.
+- Experience Input should be better.
+- Figure out logo API.

@@ -15,7 +15,8 @@ function ExperienceSection(props) {
                             endDate={experience[props.endDate]}
                             title={experience[props.subtitle]}
                             description={experience[props.description]}
-                            url={experience.url}
+                            url={"microsoft.com"}
+                            research={experience[props.research] ? "Research Project" : "Self Project"}
                         />
                     );
                 })}

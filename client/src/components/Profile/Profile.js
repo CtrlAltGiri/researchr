@@ -27,15 +27,15 @@ function Profile(props) {
                 <ExperienceSection 
                     type="Work Experience"
                     experiences={profile.workExperiences}
-                    subtitle="company"
-                    name="position"
+                    subtitle="position"
+                    name="organization"
                     description="experience"
                 />
 
                 <ExperienceSection 
                     type="Projects"
                     experiences={profile.projects}
-                    subtitle="tags"
+                    research="researchProject"
                     name="title"
                     description="experience"
                 /> 

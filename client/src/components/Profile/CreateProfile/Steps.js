@@ -94,10 +94,7 @@ function Step2(props) {
                 school={schoolState}
                 setSchoolState={setSchoolState}
             />
-
-            {
-                // TODO (Giri): URL input.
-            }
+            
             <AddExperience
                 mainObject={collegeState}
                 setMainObject={setCollegeState}
