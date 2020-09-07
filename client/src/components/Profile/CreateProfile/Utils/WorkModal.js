@@ -43,8 +43,8 @@ function WorkModal(props) {
                     <TextField
                         text="Company"
                         onChange={props.changeInput}
-                        name="company"
-                        value={props.formState.company}
+                        name="organization"
+                        value={props.formState.organization}
                         extraClass="mb-8"
                         fieldExtraClass="w-full md:w-1/2"
                     />

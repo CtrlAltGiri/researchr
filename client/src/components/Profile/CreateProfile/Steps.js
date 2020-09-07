@@ -14,14 +14,14 @@ function Step1(props) {
 
     const [formState, setFormState] = useState({
         truth: props.formData.truth || false,
-        TandA: props.formData.TandA || false
+        TandC: props.formData.TandC || false
     });
 
     const [showError, setshowError] = useState(false);
 
     function submitForm(event) {
         event.preventDefault();
-        if (formState.TandA === false || formState.truth === false) {
+        if (formState.TandC === false || formState.truth === false) {
             setshowError(true);
         }
         else {
@@ -49,8 +49,8 @@ function Step1(props) {
                         <label htmlFor="truth">I will be truthful about everything and can be eliminated from <br className="hidden md:block" />the platform in case of discrepencies</label>
                     </div>
                     <div>
-                        <input onChange={changeInput} id="TandA" type="checkbox" name="TandA" className="p-2 mt-8 mx-2 border-b-2 outline-none" defaultChecked={formState.TandA}></input>
-                        <label htmlFor="TandA">I agree to the terms and conditions.</label>
+                        <input onChange={changeInput} id="TandC" type="checkbox" name="TandC" className="p-2 mt-8 mx-2 border-b-2 outline-none" defaultChecked={formState.TandC}></input>
+                        <label htmlFor="TandC">I agree to the terms and conditions.</label>
                     </div>
 
                     <button type="submit" className="flex mx-auto text-white mt-6 bg-teal-500 border-0 py-2 px-8 focus:outline-none hover:bg-teal-600 rounded text-lg">Next</button>
@@ -94,7 +94,7 @@ function Step2(props) {
                 school={schoolState}
                 setSchoolState={setSchoolState}
             />
-
+            
             <AddExperience
                 mainObject={collegeState}
                 setMainObject={setCollegeState}
@@ -130,10 +130,10 @@ function Step3(props) {
             <AddExperience
                 mainObject={workExperiences}
                 setMainObject={setWorkExperiences}
-                requiredFields={['company', 'position', 'startDate', 'endDate', 'proof', 'tags']}
+                requiredFields={['organization', 'position', 'startDate', 'endDate', 'proof', 'tags']}
                 shownFields={['position', 'startDate', 'endDate', 'experience', 'tags']}
                 shownFieldsDesc={["Position", "Start Date", "End Date", 'Experience', 'ResearchR Tags']}
-                heading="company"
+                heading="organization"
                 title="Work Experience"
                 extraClass="mb-8"
                 modal={WorkModal}
@@ -142,9 +142,9 @@ function Step3(props) {
             <AddExperience
                 mainObject={projects}
                 setMainObject={setProjects}
-                requiredFields={['title', 'proof', 'tags', 'professor', 'designation', 'college', 'duration']}
-                shownFields={['experience', 'tags', 'professor', 'designation', 'college', 'duration']}
-                shownFieldsDesc={["Experience", "Tags", "Professor", "Designation of Professor", "College Associated", "Duration"]}
+                requiredFields={['title', 'proof', 'tags', 'professor', 'college', 'startDate', 'endDate']}
+                shownFields={['experience', 'tags', 'professor', 'college', 'startDate', 'endDate']}
+                shownFieldsDesc={["Experience", "Tags", "Professor", "College Associated", "Start Date", "End Date  "]}
                 heading="title"
                 title="Projects"
                 modal={ProjectModal}
@@ -157,11 +157,11 @@ function Step3(props) {
 
 function Step4(props) {
 
-    const [interestTags, setTags] = useState(props.formData.interestTags)
+    const [interestTags, setTags] = useState(props.formData.interestTags.join(","))
 
     function submitOuterForm(event) {
         let finalObj = {
-            interestTags: interestTags,
+            interestTags: interestTags.split(",")
         }
         props.updateCompletedStep(4, finalObj);
     }

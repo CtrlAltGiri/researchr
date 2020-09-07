@@ -6,26 +6,26 @@ import TagInput from '../../../General/TagInput/TagInput';
 
 function ProjectModal(props) {
 
-    const [checked, setChecked] = useState(props.formState.presentWork || false)
+    const [checked, setChecked] = useState(props.formState.researchProject || false)
 
-    useEffect(function presentlyWorking(){
+    useEffect(() => {
         let anotherChange;
-        let name = "presentWork", value = checked;
+        let name = "researchProject", value = checked;
         if(!checked){
             anotherChange = {
                 "professor": "-",
-                "designation": "-",
                 "college": "-",
-                "duration": "-",
+                "startDate": "-",
+                "endDate": "-",
                 [name]: value
             }
         }
         else{
             anotherChange = {
                 "professor": props.formState.professor.replace('-','') || "",
-                "designation": props.formState.designation.replace('-','') || "",
-                "college":  props.formState.college.replace('-','') || "",
-                "duration": props.formState.duration.replace('-','') || "",
+                "college": props.formState.college.replace('-','') || "",
+                "startDate":  props.formState.startDate.replace('-','') || "",
+                "endDate": props.formState.endDate.replace('-','') || "",
                 [name]: value
             }
         }
@@ -59,13 +59,13 @@ function ProjectModal(props) {
                     <Checkbox
                         text="Is this a research project under a guide?"
                         onChange={(e) => setChecked(!checked)}
-                        name="presentWork"
-                        value={props.formState.presentWork}
+                        name="researchProject"
+                        value={props.formState.researchProject}
                         extraClass="mb-4"
-                        ID="presentWork"
+                        ID="researchProject"
                     />
 
-                    {props.formState.presentWork &&
+                    {props.formState.researchProject &&
                         <div className="flex flex-col md:flex-row mb-8">
 
                             <TextField
@@ -78,16 +78,7 @@ function ProjectModal(props) {
                             />
 
                             <TextField
-                                text="Designation"
-                                onChange={props.changeInput}
-                                name="designation"
-                                value={props.formState.designation}
-                                extraClass="w-full md:w-1/4 mb-2 md:mb-0"
-                                fieldExtraClass="w-full md:w-3/4"
-                            />
-
-                            <TextField
-                                text="Associated College"
+                                text="College"
                                 onChange={props.changeInput}
                                 name="college"
                                 value={props.formState.college}
@@ -96,10 +87,19 @@ function ProjectModal(props) {
                             />
 
                             <TextField
-                                text="Duration of Project"
+                                text="Start Date"
                                 onChange={props.changeInput}
-                                name="duration"
-                                value={props.formState.duration}
+                                name="startDate"
+                                value={props.formState.startDate}
+                                extraClass="w-full md:w-1/4 mb-2 md:mb-0"
+                                fieldExtraClass="w-full md:w-3/4"
+                            />
+
+                            <TextField
+                                text="End Date"
+                                onChange={props.changeInput}
+                                name="endDate"
+                                value={props.formState.endDate}
                                 extraClass="w-full md:w-1/4 mb-2 md:mb-0"
                                 fieldExtraClass="w-full md:w-3/4"
                             />

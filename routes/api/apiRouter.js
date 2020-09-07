@@ -109,7 +109,7 @@ apiRouter.route("/profile/createProfile")
 
             if (step === 1) {
                 update = {
-                    TandA: true
+                    TandC: true
                 }
             }
             else if (step === 2) {
@@ -151,7 +151,7 @@ apiRouter.route("/projects")
                     "start_month": 1
                 },
                 student_id: req.user._id,
-                page_index: 2
+                page_index: 0
             }).then(function (response) {
                 console.log("got");
                 res.send(response.data);

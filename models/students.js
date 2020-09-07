@@ -6,7 +6,7 @@ const StudentsSchema = new mongoose.Schema({
     c_email: String,
     p_email: String, 
     cvElements: Object,
-    TandA: Boolean,
+    TandC: Boolean,
     hash: String,
     salt: String,
     active: Boolean,
