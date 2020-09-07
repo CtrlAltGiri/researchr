@@ -11,7 +11,7 @@ homeRouter.route("/").get(function (req, res) {
         res.redirect('/platform')
     }
 }).post(function (req, res) {
-        res.render('signup', { name: req.body.name, email: req.body.email });
+        res.render('signup', { name: req.body.name, p_email: req.body.email });
     });
 
 homeRouter.route("/login")
@@ -49,24 +49,14 @@ homeRouter.route("/login")
 
 homeRouter.route('/signup')
 .get(function(req,res){
-    res.render('signup', {name: "", email: ""});
+    res.render('signup', {name: "", p_email: ""});
 })
-.post(function(req, res){
-    // console.log(req.body);
-    if(!req.body.c_email) {
-        return res.status(422).json({
-            errors: {
-                email: 'is required',
-            },
-        });
-    }
+.post(async function(req, res){
 
-    if(!req.body.password) {
-        return res.status(422).json({
-            errors: {
-                password: 'is required',
-            },
-        });
+    const retVal = await signUpValidator(req.body);  
+    if(!retVal){
+        res.render('signup', {name:"", p_email:"", errorMsg:"Please ensure all fields are entered correctly."})
+        return;
     }
 
     // check if email is already registered in the database
@@ -88,7 +78,7 @@ homeRouter.route('/signup')
                     console.log("Failed to remove entry from collection")
                     console.log(err);
                     //TODO(aditya): Handle error properly
-                    return res.render('signup', {name: "", email: ""});
+                    return res.render('signup', {name: "", p_email: ""});
                 }
                 console.log("1 document deleted");
             });
