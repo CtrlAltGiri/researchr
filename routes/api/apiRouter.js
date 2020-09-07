@@ -1,7 +1,6 @@
 const express = require('express');
 const apiRouter = express.Router();
 const Students = require('../../models/students');
-const { default: Axios } = require('axios');
 const axios = require('axios');
 // /api/
 
@@ -76,75 +75,93 @@ const axios = require('axios');
         }
     }); 
 
-apiRouter.get('/profile/myProfile', async function(req, res){
-
-    const studId = req.query.id;
-    await Students.findOne({'_id': studId}, function(err, result){
-        if(result !== null)
-            res.send(result.cvElements);
-    })
-    });
-
 */
 
+function notAuthenticated(res){
+    res.status(404).send("Not authenticated");
+    console.log("Not authenticated")
+}
+
+apiRouter.get('/profile/myProfile', async function (req, res) {
+
+    if (req.isAuthenticated()) {
+        const studId = req.user._id;
+        await Students.findOne({ '_id': studId }, function (err, result) {
+            if (result !== null)
+                res.send(result.cvElements);
+        })
+    }
+    else{
+        notAuthenticated(res);
+    }
+});
+
 apiRouter.route("/profile/createProfile")
-    .post(async function(req, res){
+    .post(async function (req, res) {
 
-        // TODO (Giri): req.isAuthenticated() is needed. Also change this to session student ID.
-        const studId = req.body.id;
-        console.log("Updating ", studId);
+        // TODO (Giri): Check every entry that comes in and make sure that its okay.
+        // Otherwise, send appropriate error message to react.
 
-        let newState = req.body.value, step = req.body.step;
-        let update = {}
+        if (req.isAuthenticated()) {
+            const studId = req.user._id;
+            let newState = req.body.value, step = req.body.step;
+            let update = {}
 
-        if(step === 1){
-            update = {
-                TandA: true
-            }
-        }
-        else if(step === 2){
-            update = {
-                "cvElements.education": {
-                    school: req.body.value.school,
-                    college: req.body.value.college
+            if (step === 1) {
+                update = {
+                    TandA: true
                 }
             }
-        }
-        else if(step === 3){
-            update = {
-                "cvElements.workExperiences": req.body.value.workExperiences,
-                "cvElements.projects": req.body.value.projects
+            else if (step === 2) {
+                update = {
+                    "cvElements.education": {
+                        school: newState.school,
+                        college: newState.college
+                    }
+                }
             }
-        }
-        else if(step === 4){
-            update = {
-                "cvElements.interestTags": req.body.value.interestTags
+            else if (step === 3) {
+                update = {
+                    "cvElements.workExperiences": newState.workExperiences,
+                    "cvElements.projects": newState.projects
+                }
             }
+            else if (step === 4) {
+                update = {
+                    "cvElements.interestTags": newState.interestTags
+                }
+            }
+
+            await Students.updateOne({ '_id': studId }, update);
+
+            res.status(200).send('success')
         }
-
-        await Students.updateOne({'_id': studId}, update);
-
-        res.status(200);
-        res.send('success')
-    }); 
+        else{
+            notAuthenticated(res);
+        }
+    });
 
 
 apiRouter.route("/projects")
-.get(function(req, res){
-
-    axios.post("http://localhost:5000/recommender", {
-            filters: {
-                "work_from_home": true,
-                "start_month": 1
-            } ,
-            user_id: "5f52765205ae1e5620e10c5e",
-            page_index: 2 
-        }).then(function(response){
-            console.log("got");  
-            res.send(response.data);
-        }).catch(function(err){
-            res.send(err);
-        })
-})
+    .get(function (req, res) {
+        if (req.isAuthenticated()) {
+            axios.post("http://localhost:5000/recommender", {
+                filters: {
+                    "work_from_home": true,
+                    "start_month": 1
+                },
+                student_id: req.user._id,
+                page_index: 2
+            }).then(function (response) {
+                console.log("got");
+                res.send(response.data);
+            }).catch(function (err) {
+                res.send(err);
+            })
+        }
+        else{
+            notAuthenticated(res);
+        }
+    })
 
 module.exports = apiRouter;

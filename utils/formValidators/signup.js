@@ -5,7 +5,12 @@ async function signUpValidator(formData) {
     let retVal = true;
     const v = new Validator(formData, {
       c_email: 'required|email',
-      password: 'required'
+      p_email: 'required|email',
+      name: 'required',
+      password: 'required',
+      college: 'required',
+      branch: 'required',
+      yog: 'required'
     });
    
     retVal = await v.check()

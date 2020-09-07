@@ -9,14 +9,14 @@ passport.use("local", new LocalStrategy({
     Students.findOne({ c_email })
         .then((user) => {
             if(!user || !user.validatePassword(password)) {
-                return done(null, false, { errors: { 'email or password': 'is invalid' } });
+                return done(null, false, { errors: { 'Email or Password': 'is invalid' } });
             }
             return done(null, user);
         }).catch(done);
 }));
 
 passport.serializeUser(function(user, done) {
-    done(null, user.id);
+    done(null, user._id);
 });
 
 passport.deserializeUser(function(id, done) {

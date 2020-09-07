@@ -42,7 +42,6 @@ homeRouter.route("/login")
                     console.log(err);
                     return next(err); 
                 }
-
                 return res.redirect('/platform');
             });
         })(req, res, next);
@@ -149,6 +148,22 @@ homeRouter.get('/logout', function (req, res) {
     req.logout();
     res.redirect("/");
 });
+
+homeRouter.get('/plsauthenticate', function(req, res){
+    if(process.env.NODE_ENV === 'dev'){
+        const user = {
+           _id : '5f52765205ae1e5620e10c5e'
+        }
+        req.logIn(user, function (err) {
+            if(err){
+                console.log(err);
+                return;
+            }
+            console.log("Dev authenticated");
+            res.redirect('/platform')
+        })
+    }
+})
 
 homeRouter.get("/test", function (req, res) {
     res.sendFile(path.resolve("views/html/index.html"))

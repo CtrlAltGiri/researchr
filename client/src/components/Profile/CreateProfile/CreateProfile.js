@@ -23,7 +23,6 @@ function CreateProfile(props) {
         axios.post('/api/profile/createProfile', {
             step: newStep,
             value: formState,
-            id: "5f52765205ae1e5620e10c5e"
         }).then(function(response){
             updateState(newStep, formState)
         }).catch(function(error){
@@ -32,15 +31,13 @@ function CreateProfile(props) {
     }
 
     useEffect(()=>{
-        axios.get('/api/profile/myProfile', {
-            params : {id: "5f52765205ae1e5620e10c5e"}
-        })
+        axios.get('/api/profile/myProfile')
         .then(function(response){
             response.data && 
             setCompleteFormState({
                 step1:{
-                    truth: false,
-                    TandA: false
+                    truth: response.data.TandA || false,
+                    TandA: response.data.TandA || false
                 },
                 step2:{
                     school: response.data.education.school || {},
