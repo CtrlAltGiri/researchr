@@ -11,12 +11,6 @@ class ProjectSection extends Component{
           hasMore: true
         };
     }
-
-    /*componentDidMount() {
-        fetch('/api/projects', {mode: 'cors'})
-            .then(res => res.json())
-            .then(projects => this.setState({ projects: projects.projects }));
-    }*/
     
     newLoader() {
         fetch('/api/projects', {mode: 'cors'})

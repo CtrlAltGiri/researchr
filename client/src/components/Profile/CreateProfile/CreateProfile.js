@@ -36,8 +36,8 @@ function CreateProfile(props) {
             response.data && 
             setCompleteFormState({
                 step1:{
-                    truth: response.data.TandA || false,
-                    TandA: response.data.TandA || false
+                    truth: response.data.TandC || false,
+                    TandC: response.data.TandC || false
                 },
                 step2:{
                     school: response.data.education.school || {},

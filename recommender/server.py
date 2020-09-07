@@ -55,7 +55,7 @@ def error_handler(err_type: str, message: str, status_code: int = 500):
 def recommender():
     if request.method == 'POST':
         data = request.get_json()
-        print(data)
+        #print(data)
         if 'student_id' not in data:
             return error_handler("InvalidRequest", "No student_id in request")
         # students collection in main
