@@ -106,3 +106,5 @@ dist
 venv/
 .idea/
 *.pyc
+
+index.css
