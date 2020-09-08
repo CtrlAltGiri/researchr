@@ -1,11 +1,20 @@
 .svg-icon {
     width: 2.5em;
     height: 2.5em;
-  }
+}
+
+.svg-icon-small{
+    width: 1.5em;
+    height: 1.5em;
+}
+
+.svg-icon-small path {
+  fill: red;
+}
   
-  .svg-icon path {
+.svg-icon path {
     fill: #38b2ac;
-  }
+}
   
 #menu-toggle:checked + #menu {
     display: block;

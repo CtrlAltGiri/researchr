@@ -157,24 +157,19 @@ function Step3(props) {
 
 function Step4(props) {
 
-    const [interestTags, setTags] = useState(props.formData.interestTags.join(","))
+    const [interestTags, setTags] = useState(props.formData.interestTags || [])
 
     function submitOuterForm(event) {
-        let finalObj = {
-            interestTags: interestTags.split(",")
-        }
-        props.updateCompletedStep(4, finalObj);
+        props.updateCompletedStep(4, interestTags);
     }
 
     return (
         <div>
             <TagInput
-                extraClass="w-1/2 mx-auto"
-                text="Interest tags"
-                onChange={(e) => setTags(e.target.value)}
-                fieldExtraClass="w-full"
-                name="tagInput"
-                value={interestTags}
+                text="Enter Interest tags"
+                extraClass="flex justify-center px-16 mx-auto flex-col"
+                updateTags={setTags}
+                chosenTags={interestTags}
             />
             
             <TealButton extraClass="flex mx-auto mt-6" submitForm={submitOuterForm} text={"Complete"} />
