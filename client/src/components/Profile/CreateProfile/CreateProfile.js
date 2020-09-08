@@ -10,7 +10,7 @@ function CreateProfile(props) {
     const [step, setStep] = useState(1);
     const [completedStep, setCompletedStep] = useState(0);
     const [showError, setShowError] = useState("");
-    const [completeFormState, setCompleteFormState] = useState({step1: {}, step2: {}, step3: {}, step4: {}});
+    const [completeFormState, setCompleteFormState] = useState({step1: {}, step2: {}, step3: {}, step4: []});
 
     function updateState(newStep, formState){
         setCompleteFormState({...completeFormState, ["step" + newStep]: formState});
@@ -48,7 +48,7 @@ function CreateProfile(props) {
                     projects: response.data.projects || []
                 },
                 step4:{
-                    interestTags: response.data.interestTags || ""
+                    interestTags: response.data.interestTags || []
                 }
             })
         })

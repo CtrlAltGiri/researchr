@@ -127,11 +127,11 @@ function ProjectModal(props) {
 
                     <TagInput
                         text="ResearchR tags"
-                        onChange={props.changeInput}
-                        name="tags"
-                        value={props.formState.tags}
                         extraClass="mb-8"
                         fieldExtraClass="w-full md:w-1/2"
+                        name="tags"
+                        updateTags={props.updateTags}
+                        chosenTags={props.formState.tags}
                     />
 
                     <TealButton

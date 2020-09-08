@@ -1,17 +1,27 @@
-import React, {useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import Header from '../Header/Header';
 import ProjectSection from '../ProjectSection/ProjectSection';
 import ProjectPage from '../ProjectSection/ProjectPage/ProjectPage';
 import Profile from '../Profile/Profile';
 import CreateProfile from '../Profile/CreateProfile/CreateProfile';
 import { Switch, Route } from 'react-router-dom';
+import TagInput from '../General/TagInput/TagInput'
 import axios from 'axios';
 
 function Cray() {
+
+  function updateTags(gg){
+    //console.log(gg);
+    return;
+  }
+
   return (
-    <h1>
-      Giridhar
-    </h1>
+    <TagInput
+      text="Enter tags"
+      extraClass="flex justify-center px-16 mx-auto flex-col"
+      updateTags={updateTags}
+      chosenTags={undefined}
+    />
   )
 }
 

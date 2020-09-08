@@ -26,11 +26,6 @@ function AddExperience(props){
 
     function submitInnerForm(event) {
         event.preventDefault();
-
-        // TODO (Giri): Remove once TagInput works properly.
-        if(formState.tags){
-            formState.tags = formState.tags.split(',');
-        }
         if (FormCheck(props.requiredFields, formState)){
             if (editMode === -1) {
                 props.setMainObject([...props.mainObject, formState]);
@@ -63,9 +58,6 @@ function AddExperience(props){
 
     function editExperience(item, index) {
         setEditMode(index)
-        if(item.tags){
-            item.tags = item.tags.join(",");
-        }
         setFormState(item);
         setModalOpen(true);
     }
@@ -84,6 +76,10 @@ function AddExperience(props){
         setEditMode(-1);
         setFormState({});
         setshowError(false);
+    }
+
+    function updateTags(newTags){
+        setFormState({...formState, ['tags']: newTags})
     }
 
     const ModalComponent = props.modal;
@@ -118,6 +114,7 @@ function AddExperience(props){
                 closeModal={closeModal}
                 setModalOpen={setModalOpen}
                 formState={formState}
+                updateTags={updateTags}
             />}
 
         </div>

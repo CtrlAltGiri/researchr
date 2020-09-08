@@ -68,7 +68,7 @@ function AccordianDescription(props, values, descValues){
         <div>
             {values.map((value, index) => {
                 if(props[value] !== undefined && !(props[value].length === 1 && props[value][0] === '-')) //  check for '-' lol
-                    return <p>{descValues[index] + ": " + props[value]}</p>
+                    return <p key={descValues[index]}>{descValues[index] + ": " + props[value]}</p>
                 else
                     return "";
             })}
