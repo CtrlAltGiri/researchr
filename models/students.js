@@ -10,7 +10,9 @@ const StudentsSchema = new mongoose.Schema({
     hash: String,
     salt: String,
     active: Boolean,
-    verifyHash: String
+    verifyHash: String,
+    resetHash: String,
+    resetExpires: Date
 });
 
 StudentsSchema.methods.setPassword = function(password) {
@@ -21,6 +23,13 @@ StudentsSchema.methods.setPassword = function(password) {
 StudentsSchema.methods.setVerifyHash = function() {
     this.verifyHash = crypto.randomBytes(128).toString('hex');
     return this.verifyHash;
+};
+
+// setting hash for reset password flow
+StudentsSchema.methods.setResetHash = function() {
+    this.resetHash = crypto.randomBytes(128).toString('hex');
+    this.resetExpires = Date.now() + 3600000; // 1 hour
+    return this.resetHash;
 };
 
 StudentsSchema.methods.validatePassword = function(password) {
