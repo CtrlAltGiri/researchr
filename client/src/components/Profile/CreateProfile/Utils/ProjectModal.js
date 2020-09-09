@@ -3,6 +3,7 @@ import ReactModal from 'react-modal';
 import '../../../Header/svg.css';
 import { TextField, Title, Label, TealButton, Error, Checkbox } from '../../../General/Form/FormComponents';
 import TagInput from '../../../General/TagInput/TagInput';
+import MonthYear from '../../../General/Dropdown/MonthYear'
 
 function ProjectModal(props) {
 
@@ -24,13 +25,14 @@ function ProjectModal(props) {
             anotherChange = {
                 "professor": props.formState.professor.replace('-','') || "",
                 "college": props.formState.college.replace('-','') || "",
-                "startDate":  props.formState.startDate.replace('-','') || "",
-                "endDate": props.formState.endDate.replace('-','') || "",
+                "startDate":  props.formState.startDate.toString().replace('-','') || "",
+                "endDate": props.formState.endDate.toString().replace('-','') || "",
                 [name]: value
             }
         }
         props.changeInput({}, anotherChange);
     }, [checked])
+
 
     return (
         <ReactModal
@@ -66,14 +68,14 @@ function ProjectModal(props) {
                     />
 
                     {props.formState.researchProject &&
-                        <div className="flex flex-col md:flex-row mb-8">
+                        <div className="flex flex-col md:flex-row md:flex-wrap mb-8">
 
                             <TextField
                                 text="Under the guidance of"
                                 onChange={props.changeInput}
                                 name="professor"
                                 value={props.formState.professor}
-                                extraClass="w-full md:w-1/4 mb-2 md:mb-0"
+                                extraClass="w-full md:w-1/2 mb-2"
                                 fieldExtraClass="w-full md:w-3/4"
                             />
 
@@ -82,26 +84,28 @@ function ProjectModal(props) {
                                 onChange={props.changeInput}
                                 name="college"
                                 value={props.formState.college}
-                                extraClass="w-full md:w-1/4 mb-2 md:mb-0"
+                                extraClass="w-full md:w-1/2 mb-2"
                                 fieldExtraClass="w-full md:w-3/4"
                             />
 
-                            <TextField
-                                text="Start Date"
-                                onChange={props.changeInput}
+                            <MonthYear
                                 name="startDate"
-                                value={props.formState.startDate}
-                                extraClass="w-full md:w-1/4 mb-2 md:mb-0"
-                                fieldExtraClass="w-full md:w-3/4"
+                                onChange={props.changeDropdown}
+                                date={props.formState.startDate}
+                                extraClass="w-full md:w-1/2 mb-2"
+                                innerClass="flex"
+                                fieldExtraClass="w-full md:w-3/4 mr-24"
+                                text="Start Date"
                             />
 
-                            <TextField
-                                text="End Date"
-                                onChange={props.changeInput}
+                            <MonthYear
                                 name="endDate"
-                                value={props.formState.endDate}
-                                extraClass="w-full md:w-1/4 mb-2 md:mb-0"
-                                fieldExtraClass="w-full md:w-3/4"
+                                onChange={props.changeDropdown}
+                                date={props.formState.endDate}
+                                extraClass="w-full md:w-1/2 mb-2"
+                                innerClass="flex"
+                                fieldExtraClass="w-full md:w-3/4 mr-24"
+                                text="End Date"
                             />
 
                         </div>
@@ -132,6 +136,7 @@ function ProjectModal(props) {
                         name="tags"
                         updateTags={props.updateTags}
                         chosenTags={props.formState.tags}
+                        maxNumberOfTags={2}
                     />
 
                     <TealButton
