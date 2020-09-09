@@ -32,11 +32,9 @@ const sendVerificationEmail = (to, name, token) => {
     return new Promise(function (resolve, reject) {
         sg.API(request, function (error, response) {
             if (error) {
-                console.log(error);
                 return reject(error);
             }
             else {
-                console.log(response);
                 return resolve(response);
             }
         });
@@ -74,11 +72,9 @@ const sendPasswordResetEmail = (to, token) => {
     return new Promise(function (resolve, reject) {
         sg.API(request, function (error, response) {
             if (error) {
-                console.log(error);
                 return reject(error);
             }
             else {
-                console.log(response);
                 return resolve(response);
             }
         });

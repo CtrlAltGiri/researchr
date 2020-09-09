@@ -2,6 +2,9 @@ const homeRouter = require('express').Router();
 const Students = require('../../models/students');
 const path = require('path');
 const passport = require('../../config/passport');
+const { resetValidator } = require("../../utils/formValidators/reset");
+const { forgotValidator } = require("../../utils/formValidators/forgot");
+const { logInValidator } = require("../../utils/formValidators/login");
 const { sendVerificationEmail } = require('../../utils/email/sendgirdEmailHelper');
 const { sendPasswordResetEmail } = require('../../utils/email/sendgirdEmailHelper');
 const { signUpValidator } = require('../../utils/formValidators/signup');
@@ -23,7 +26,17 @@ homeRouter.route("/login")
         else
             res.render("login", { wrongCreds: false, unverified: false });
     })
-    .post(function (req, res, next) {
+    .post(async function (req, res, next) {
+        // this validator just checks the email validity
+        const values = await logInValidator(req.body);
+        const retVal = values[0]
+        const error = values[1]
+        if(!retVal){
+            return res.render("login", { wrongCreds: false, unverified: false, errorMsg: error.c_email.message });
+        }
+
+        //validation successful
+        //continue here
         passport.authenticate('local', {}, function (err, user, info) {
             if(err){ 
                 console.log(err);
@@ -54,12 +67,23 @@ homeRouter.route('/signup')
     })
     .post(async function(req, res){
 
-        const retVal = await signUpValidator(req.body);
+        const values = await signUpValidator(req.body);
+        const retVal = values[0]
+        const errors = values[1]
         if(!retVal){
-            res.render('signup', {name:"", p_email:"", errorMsg:"Please ensure all fields are entered correctly."})
-            return;
+            return res.render('signup', {
+                name:req.body.name,
+                p_email:req.body.p_email,
+                c_email: req.body.c_email,
+                college:req.body.college,
+                branch:req.body.branch,
+                yog:req.body.yog,
+                errorMsg:"Please ensure all fields are entered correctly.",
+                errors: errors
+            });
         }
 
+        // validation successful
         // check if email is already registered in the database
         //TODO(aditya): Write this logic in a better way
         Students.findOne({'c_email': req.body.c_email}, function(err, result) {
@@ -100,11 +124,9 @@ homeRouter.route('/signup')
             // add user to database and send a verification email
             return finalUser.save()
                 .then(() => {
-                    //TODO(aditya): Not sure what to do with the 'r' here
-                    sendVerificationEmail(req.body.c_email, req.body.name, token).then(r => console.log("promise", r));
-                    // res.json({ user: finalUser.toAuthJSON() });
+                    sendVerificationEmail(req.body.c_email, req.body.name, token).then(r => console.log(r)).catch(function (err){ console.log(err)});
                     //TODO(aditya): Make a webpage for this. Maybe with a resend verification link?
-                    res.end("<h1>A verification link has been sent to your college email id. Please verify it to continue to our platform.</h1>");
+                    res.end("<h1>A verification link has been sent to your college email id. Please verify it to continue to our platform. . Please signup again if you do not receive the email within 10 minutes.</h1>");
                 });
         });
     });
@@ -168,11 +190,18 @@ homeRouter.get('/plsauthenticate', function(req, res){
 // router for forgot password flow
 homeRouter.route('/forgot')
     .get(function(req,res){
-        res.render('forgot', {name: "", p_email: ""});
+        res.render('forgot', {c_email: ""});
     })
-    .post(function(req, res){
-        //TODO(aditya): validate req.body.c_email
+    .post(async function(req, res){
+        // this validator just checks the email validity
+        const values = await forgotValidator(req.body);
+        const retVal = values[0]
+        const error = values[1]
+        if(!retVal){
+            return res.render("forgot", { c_email: req.body.c_email, errorMsg: error.c_email.message });
+        }
 
+        // validation successful
         // check if email is already registered in the database
         Students.findOne({'c_email': req.body.c_email}, function(err, result) {
             if (err) {
@@ -185,7 +214,7 @@ homeRouter.route('/forgot')
             }
             // Student found but has not verified email yet
             if (result && !result.active) {
-                return res.end("<h1>Please verify your email first or signup again</h1>");
+                return res.render('forgot', {c_email:"", errorMsg:"Please verify your email address first or signup again"});
             }
             // valid flow
             else if (result && result.active) {
@@ -196,9 +225,9 @@ homeRouter.route('/forgot')
                 return result.save()
                     .then(() => {
                         //TODO(aditya): Not sure what to do with the 'r' here and remove token logging once email sender has been set
-                        sendPasswordResetEmail(req.body.c_email, token).then(r => console.log("promise", r));
+                        sendPasswordResetEmail(req.body.c_email, token).then(r => console.log(r)).catch(function (err){ console.log(err)});
                         console.log(token);
-                        res.end("<h1>A password reset link has been sent to your college email id.</h1>");
+                        res.render('forgot', {c_email:"", errorMsg:"A password reset link has been sent to your college email address"});
                     });
             }
         });
@@ -212,21 +241,36 @@ homeRouter.route('/reset')
                 if (!student) {
                     // invalid reset link
                     console.log("Reset link is invalid or expired");
-                    res.end("<h1>Reset link is invalid or expired</h1>");
-                    return;
+                    return res.render('forgot', {c_email:"", errorMsg:"Password reset link is invalid or has expired"});
                 }
                 return res.render('reset');
             })
     })
-    .post(function(req, res) {
-        console.log(req.query.token)
+    .post(async function(req, res) {
+        // validate the passwords
+        const values = await resetValidator(req.body);
+        const retVal = values[0]
+        const error = values[1]
+        if(!retVal){
+            if('password' in error){
+                return res.render("reset", { errorMsg: error.password.message });
+            }
+            else if('confirm_password' in error){
+                return res.render("reset", { errorMsg: error.confirm_password.message });
+            }
+            else {
+                return res.render("reset", { errorMsg: "Error in resetting password. Please try again." });
+            }
+        }
+
+        // validation successful
+        // continue here
         Students.findOne({resetHash: req.query.token, resetExpires: {$gt: Date.now()}})
             .then((student) => {
                 if (!student) {
                     // invalid reset link
                     console.log("Password Reset link is invalid or expired");
-                    res.end("<h1>Reset link is invalid or expired</h1>");
-                    return;
+                    return res.render('forgot', {c_email:"", errorMsg:"Password reset link is invalid or has expired"});
                 }
                 //assume student is already active otherwise wouldn't have got a reset link
 
