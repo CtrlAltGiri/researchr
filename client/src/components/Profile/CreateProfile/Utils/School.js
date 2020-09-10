@@ -4,8 +4,8 @@ import { Title, TextField } from '../../../General/Form/FormComponents';
 
 function School(props) {
 
-    function changeDropdown(event, newItem) {
-        props.setSchoolState({ ...props.school, [event.target.name]: newItem });
+    function changeDropdown(newItem, name) {
+        props.setSchoolState({ ...props.school, [name]: newItem });
     }
 
     function changeSchoolInput(event) {
@@ -19,9 +19,9 @@ function School(props) {
 
     return (
         <div>
-            <Title text={'School'}/>
-            <div className="flex flex-row flex-wrap mb-16 justify-around">
-                <div className="flex flex-row">
+            <Title text={'School'} />
+            <div className="flex flex-row flex-wrap mb-16">
+                <div className="flex flex-row w-full md:w-1/2 justify-around">
                     <TextField
                         text="10th Score"
                         onChange={changeSchoolInput}
@@ -29,17 +29,18 @@ function School(props) {
                         value={props.school.grade10}
                     />
 
-                    <div className="mb-16 md:mb-0 ml-8">
-                        <p className="text-l text-gray-700 mb-1 font-medium">Scoring</p>
-                        <Dropdown
-                            name={props.school.scoring10}
-                            uniqueName={"scoring10"}
-                            menuItems={["CGPA", "Percentage"]}
-                            setDropdown={changeDropdown}
-                        />
-                    </div>
+                    <Dropdown
+                        val={props.school.scoring10}
+                        name={"scoring10"}
+                        options={[{ value: "CGPA", label: "CGPA" }, { value: "Percentage", label: "Percentage" }]}
+                        changeDropdown={changeDropdown}
+                        placeholder="Scoring"
+                        extraClass="flex flex-col mx-16 w-1/3 mb-8"
+                        fieldExtraClass="w-full"
+                        text="Class 10 Scoring"
+                    />
                 </div>
-                <div className="flex flex-row">
+                <div className="flex flex-row w-full md:w-1/2 justify-around">
                     <TextField
                         text="12th Score"
                         onChange={changeSchoolInput}
@@ -47,15 +48,15 @@ function School(props) {
                         value={props.school.grade12}
                     />
 
-                    <div className="mb-16 md:mb-0 ml-8">
-                        <p className="text-l text-gray-700 mb-1 font-medium">Scoring</p>
-                        <Dropdown
-                            name={props.school.scoring12}
-                            uniqueName={"scoring12"}
-                            menuItems={["CGPA", "Percentage"]}
-                            setDropdown={changeDropdown}
-                        />
-                    </div>
+                    <Dropdown
+                        val={props.school.scoring12}
+                        name={"scoring12"}
+                        options={[{ value: "CGPA", label: "CGPA" }, { value: "Percentage", label: "Percentage" }]}
+                        changeDropdown={changeDropdown}
+                        placeholder="Scoring"
+                        extraClass="flex flex-col mx-16 w-1/3 mb-8"
+                        text="Class 12 Scoring"
+                    />
                 </div>
             </div>
         </div>

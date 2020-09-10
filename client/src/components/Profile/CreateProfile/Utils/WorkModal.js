@@ -3,27 +3,27 @@ import ReactModal from 'react-modal';
 import '../../../Header/svg.css';
 import { TextField, Title, Label, TealButton, Error, Checkbox } from '../../../General/Form/FormComponents';
 import TagInput from '../../../General/TagInput/TagInput';
-
+import MonthYear from '../../../General/Dropdown/MonthYear';
 
 function WorkModal(props) {
 
-    function presentlyWorking(event){
+    function presentlyWorking(event) {
         let anotherChange;
         let name = event.target.name, value = event.target.checked;
-        if(event.target.checked){
+        if (event.target.checked) {
             anotherChange = {
                 "endDate": "Present",
                 [name]: value
             }
         }
-        else{
+        else {
             anotherChange = {
                 "endDate": "",
                 [name]: value
             }
         }
         props.changeInput(event, anotherChange);
-    }           
+    }
 
     return (
         <ReactModal
@@ -69,23 +69,25 @@ function WorkModal(props) {
                             fieldExtraClass="w-full md:w-3/4"
                         />
 
-                        <TextField
-                            text="Start Date"
-                            onChange={props.changeInput}
+                        <MonthYear
                             name="startDate"
-                            value={props.formState.startDate}
+                            onChange={props.changeDropdown}
+                            date={props.formState.startDate}
+                            text="Start Date"
                             extraClass="w-full mb-2 md:mb-0"
-                            fieldExtraClass="w-full md:w-3/4"
+                            innerClass="flex"
+                            fieldExtraClass="w-full md:w-3/4 mr-12"
                         />
 
-                        {!props.formState.presentWork ? 
-                            <TextField
-                                text="End Date"
-                                onChange={props.changeInput}
+                        {!props.formState.presentWork ?
+                            <MonthYear
                                 name="endDate"
-                                value={props.formState.endDate}
+                                onChange={props.changeDropdown}
+                                date={props.formState.endDate}
+                                text="End Date"
                                 extraClass="w-full mb-2 md:mb-0"
-                                fieldExtraClass="w-full md:w-3/4"
+                                innerClass="flex"
+                                fieldExtraClass="w-full md:w-3/4 mr-12"
                             />
                             : ""
                         }
@@ -93,15 +95,15 @@ function WorkModal(props) {
                     </div>
 
                     <div className="mb-8">
-                        <Label text="Experience Information"/>
-                        <textarea 
-                            onChange={props.changeInput} 
+                        <Label text="Experience Information" />
+                        <textarea
+                            onChange={props.changeInput}
                             className="p-2 min-w-full outline-none focus:border-teal-500 border-2 rounded-lg min-h-1/4"
-                            name="experience" 
-                            value={props.formState.experience} 
+                            name="experience"
+                            value={props.formState.experience}
                         />
                     </div>
-                        
+
                     <TextField
                         text="Link to certificate / Proof (Drive Link)"
                         onChange={props.changeInput}
@@ -118,6 +120,7 @@ function WorkModal(props) {
                         name="tags"
                         updateTags={props.updateTags}
                         chosenTags={props.formState.tags}
+                        maxNumberOfTags={2}
                     />
 
                     <TealButton
@@ -125,8 +128,8 @@ function WorkModal(props) {
                         extraClass="flex mx-auto mt-6"
                         text="Add"
                         submitForm={(e) => props.submitInnerForm(e)}
-                    />  
-                    {props.showError && <Error text="Please enter all required fields" />}
+                    />
+                    <Error text={props.errorText} />
                 </form>
             </div>
         </ReactModal>

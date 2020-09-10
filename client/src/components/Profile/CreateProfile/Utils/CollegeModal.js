@@ -2,6 +2,8 @@ import React from 'react';
 import ReactModal from 'react-modal';
 import '../../../Header/svg.css'
 import { TextField, Title, Label, TealButton, Error } from '../../../General/Form/FormComponents';
+import Dropdown from '../../../General/Dropdown/Dropdown';
+import {colleges, degrees, branches, yog} from '../../../../common/data/collegeData';
 
 function CollegeModal(props) {
 
@@ -20,42 +22,50 @@ function CollegeModal(props) {
                         </svg></button>
                     </div>
 
-                    <TextField
+                    <Dropdown
                         text="College"
-                        onChange={props.changeInput}
+                        changeDropdown={props.changeDropdown}
                         name="college"
-                        value={props.formState.college}
+                        val={props.formState.college}
+                        placeholder="College"
                         extraClass="mb-8"
                         fieldExtraClass="w-full md:w-1/2"
+                        options={colleges}
                     />
 
                     <div className="flex flex-col md:flex-row mb-8">
 
-                        <TextField
-                            text="Degree"
-                            onChange={props.changeInput}
+                        <Dropdown
+                            val={props.formState.degree}
                             name="degree"
-                            value={props.formState.degree}
+                            options={degrees}
+                            changeDropdown={props.changeDropdown}
+                            placeholder="Degree"
                             extraClass="w-full md:w-1/4 mb-2 md:mb-0"
                             fieldExtraClass="w-full md:w-3/4"
+                            text="Degree"
                         />
 
-                        <TextField
-                            text="Branch"
-                            onChange={props.changeInput}
+                        <Dropdown
+                            val={props.formState.branch}
                             name="branch"
-                            value={props.formState.branch}
+                            options={branches}
+                            changeDropdown={props.changeDropdown}
+                            placeholder="Branch"
                             extraClass="w-full md:w-1/4 mb-2 md:mb-0"
                             fieldExtraClass="w-full md:w-3/4"
+                            text="Branch of Study"
                         />
 
-                        <TextField
-                            text="Year of Graduation"
-                            onChange={props.changeInput}
+                        <Dropdown
+                            val={props.formState.yog}
                             name="yog"
-                            value={props.formState.yog}
+                            options={yog}
+                            changeDropdown={props.changeDropdown}
+                            placeholder="YOG"
                             extraClass="w-full md:w-1/4 mb-2 md:mb-0"
                             fieldExtraClass="w-full md:w-3/4"
+                            text="Year of Graduation"
                         />
 
                         <TextField
@@ -70,12 +80,22 @@ function CollegeModal(props) {
                     </div>
 
                     <div className="mb-8">
-                        <Label text="Any additional information"/>
-                        <textarea 
-                            onChange={props.changeInput} 
+                        <Label text="Description" />
+                        <textarea
+                            onChange={props.changeInput}
                             className="p-2 min-w-full outline-none focus:border-teal-500 border-2 rounded-lg min-h-1/4"
-                            name="experience" 
-                            value={props.formState.experience} 
+                            name="experience"
+                            value={props.formState.experience}
+                        />
+                    </div>
+
+                    <div className="mb-8">
+                        <Label text="Coursework (seperate subjects with commas)" />
+                        <textarea
+                            onChange={props.changeInput}
+                            className="p-2 min-w-full outline-none focus:border-teal-500 border-2 rounded-lg min-h-1/4"
+                            name="coursework"
+                            value={props.formState.coursework}
                         />
                     </div>
 
@@ -84,8 +104,8 @@ function CollegeModal(props) {
                         extraClass="flex mx-auto mt-6"
                         text="Add"
                         submitForm={(e) => props.submitInnerForm(e)}
-                    />  
-                    {props.showError && <Error text="Please enter all required fields" />}
+                    />
+                    <Error text={props.errorText} />
                 </form>
             </div>
         </ReactModal>

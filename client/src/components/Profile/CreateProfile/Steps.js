@@ -5,10 +5,12 @@ import CollegeModal from './Utils/CollegeModal';
 import WorkModal from './Utils/WorkModal';
 import ProjectModal from './Utils/ProjectModal';
 import { TealButton, Error } from '../../General/Form/FormComponents';
+import {collegeFormValidator, workFormValidator, projectFormValidator} from '../../../common/formValidators/cvValidator'
 import TagInput from '../../General/TagInput/TagInput';
-import '../../Header/svg.css'
 import {Link} from 'react-router-dom';
+import '../../Header/svg.css'
 import CompleteGif from '../../../assets/images/profilePage/complete.gif'
+
 
 function Step1(props) {
 
@@ -54,7 +56,7 @@ function Step1(props) {
                     </div>
 
                     <button type="submit" className="flex mx-auto text-white mt-6 bg-teal-500 border-0 py-2 px-8 focus:outline-none hover:bg-teal-600 rounded text-lg">Next</button>
-                    {showError && <h1 className="text-red-500 text-2xl mt-4">Please agree to all above conditions</h1>}
+                    {showError && <Error text="Please agree to all above conditions" />}
                 </form>
 
             </div>
@@ -104,6 +106,7 @@ function Step2(props) {
                 heading="college"
                 title="University"
                 modal={CollegeModal}
+                formValidator={collegeFormValidator}
             />
 
             {collegeState.length > 0 && <TealButton extraClass="flex mx-auto mt-6" submitForm={submitOuterForm} text={"Next"} />}
@@ -137,6 +140,7 @@ function Step3(props) {
                 title="Work Experience"
                 extraClass="mb-8"
                 modal={WorkModal}
+                formValidator={workFormValidator}
             />
 
             <AddExperience
@@ -148,6 +152,7 @@ function Step3(props) {
                 heading="title"
                 title="Projects"
                 modal={ProjectModal}
+                formValidator={projectFormValidator}
             />
 
             <TealButton extraClass="flex mx-auto mt-6" submitForm={submitOuterForm} text={"Next"} />
@@ -160,7 +165,10 @@ function Step4(props) {
     const [interestTags, setTags] = useState(props.formData.interestTags || [])
 
     function submitOuterForm(event) {
-        props.updateCompletedStep(4, interestTags);
+        let finalObj = {
+            interestTags: interestTags
+        }
+        props.updateCompletedStep(4, finalObj);
     }
 
     return (
@@ -170,6 +178,7 @@ function Step4(props) {
                 extraClass="flex justify-center px-16 mx-auto flex-col"
                 updateTags={setTags}
                 chosenTags={interestTags}
+                maxNumberOfTags={3}
             />
             
             <TealButton extraClass="flex mx-auto mt-6" submitForm={submitOuterForm} text={"Complete"} />

@@ -1,7 +1,7 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import Accordian from '../../../General/Accordian/Accordian'
-import {Title} from '../../../General/Form/FormComponents';
-import FormCheck from './FormCheck';
+import { Title } from '../../../General/Form/FormComponents';
+import {FormCheck} from '../../../../common/formValidators/cvValidator';
 
 /// <summary> Template for all the adding experiences
 /// Props: 
@@ -17,42 +17,49 @@ import FormCheck from './FormCheck';
 
 /// TODO (Giri): They shouldn't have to press the submit button everytime to get 
 /// update. So everytime innerForm is invoked, call some function that updates main.
-function AddExperience(props){
+function AddExperience(props) {
 
     const [formState, setFormState] = useState({});
-    const [showError, setshowError] = useState(false);
+    const [errorText, setshowError] = useState(false);
     const [modalOpen, setModalOpen] = useState(false);
     const [editMode, setEditMode] = useState(-1);
 
     function submitInnerForm(event) {
         event.preventDefault();
-        if (FormCheck(props.requiredFields, formState)){
-            if (editMode === -1) {
-                props.setMainObject([...props.mainObject, formState]);
+        if (FormCheck(props.requiredFields, formState)) {
+
+            let retVal = props.formValidator(formState);
+            if (retVal === true) {
+                if (editMode === -1) {
+                    props.setMainObject([...props.mainObject, formState]);
+                }
+                else {
+                    let tempVar = [...props.mainObject];
+                    tempVar[editMode] = formState;
+                    props.setMainObject(tempVar)
+
+                }
+                closeModal({});
             }
             else {
-                let tempVar = [...props.mainObject];
-                tempVar[editMode] = formState;
-                props.setMainObject(tempVar)
-                
+                setshowError(retVal);
             }
-            closeModal({});
         }
         else {
-            setshowError(true)
+            setshowError('Please enter all required fields')
         }
     }
 
-    function changeInputEvent(event){
+    function changeInputEvent(event) {
         const target = event.target;
         const value = target.type === 'checkbox' ? target.checked : target.value;
         const name = target.name;
         setFormState({ ...formState, [name]: value })
     }
 
-    function changeInput(event, anotherChange=undefined) {
-        anotherChange !== undefined ? 
-            setFormState({...formState, ...anotherChange}) :
+    function changeInput(event, anotherChange = undefined) {
+        anotherChange !== undefined ?
+            setFormState({ ...formState, ...anotherChange }) :
             changeInputEvent(event);
     }
 
@@ -71,20 +78,26 @@ function AddExperience(props){
         setFormState({})
     }
 
-    function closeModal(event){
+    function closeModal(event) {
         setModalOpen(false);
         setEditMode(-1);
         setFormState({});
-        setshowError(false);
+        setshowError('');
     }
 
-    function updateTags(newTags){
-        setFormState({...formState, ['tags']: newTags})
+    function updateTags(newTags) {
+        setFormState({ ...formState, ['tags']: newTags })
+    }
+
+    function changeDropdown(newDropdown, name) {
+        changeInput({}, {
+            [name]: newDropdown
+        })
     }
 
     const ModalComponent = props.modal;
 
-    return ( 
+    return (
         <div className={props.extraClass}>
             <Title text={props.title} />
             {
@@ -109,12 +122,13 @@ function AddExperience(props){
             {modalOpen && <ModalComponent
                 submitInnerForm={submitInnerForm}
                 changeInput={changeInput}
-                showError={showError}
+                errorText={errorText}
                 modalOpen={modalOpen}
                 closeModal={closeModal}
                 setModalOpen={setModalOpen}
                 formState={formState}
                 updateTags={updateTags}
+                changeDropdown={changeDropdown}
             />}
 
         </div>

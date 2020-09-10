@@ -1,7 +1,10 @@
 import React, {useState, useEffect} from 'react';
 import {Step1, Step2, Step3, Step4, CompleteStep} from './Steps';
 import StepsHeader from './Utils/StepsHeader';
+import {Error} from '../../General/Form/FormComponents';
 import axios from 'axios';
+import {Redirect} from 'react-router-dom';
+
 
 function CreateProfile(props) {
 
@@ -9,8 +12,9 @@ function CreateProfile(props) {
     // to see previous completion.
     const [step, setStep] = useState(1);
     const [completedStep, setCompletedStep] = useState(0);
-    const [showError, setShowError] = useState("");
-    const [completeFormState, setCompleteFormState] = useState({step1: {}, step2: {}, step3: {}, step4: []});
+    const [errorText, setShowError] = useState("");
+    const [redirect, setRedirect] = useState(null);
+    const [completeFormState, setCompleteFormState] = useState({step1: {}, step2: {}, step3: {}, step4: {}});
 
     function updateState(newStep, formState){
         setCompleteFormState({...completeFormState, ["step" + newStep]: formState});
@@ -23,10 +27,12 @@ function CreateProfile(props) {
         axios.post('/api/profile/createProfile', {
             step: newStep,
             value: formState,
-        }).then(function(response){
+        })
+        .then(function(response){
             updateState(newStep, formState)
-        }).catch(function(error){
-            setShowError(error);
+        })
+        .catch(function(error){
+            setShowError(error.response.data);
         });
     }
 
@@ -52,11 +58,18 @@ function CreateProfile(props) {
                 }
             })
         })
+        .catch(function(err){
+            setRedirect('/platform/error');
+        })
     }, []);
+
+
+    if(redirect){
+        return <Redirect to={redirect} />
+    }
 
     return (
         <section className="text-gray-700 body-font">
-            {showError.length > 0 ? <h1 className="text-red-500 text-center text-2xl">{showError}</h1> : ""}
             <div className="container px-5 py-12 mx-auto flex flex-wrap flex-col">
                 
                 <StepsHeader 
@@ -88,7 +101,7 @@ function CreateProfile(props) {
                     />:
                     <CompleteStep />
                 }
-
+                <Error text ={errorText} extraClass="text-center"/>
             </div>
         </section>
     );
