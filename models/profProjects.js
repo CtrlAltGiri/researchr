@@ -4,11 +4,11 @@ const { ObjectID } = require("mongoose");
 const ProfProjectsSchema = new mongoose.Schema({
     name: String,
     desc: String,
-    professorID: ObjectID,
+    // professorID: ObjectID,
     professorName: String,
     professorDesignation: String,
     college: String,
-    views: BigInt,
+    views: Number,
     prereq: Array,
     duration: Number, // in months
     startDate: Date,
@@ -18,6 +18,6 @@ const ProfProjectsSchema = new mongoose.Schema({
     questionnaire: Array
 });
 
-const ProfProjects = mongoose.model('profProjects', ProfProjectsSchema);
+const ProfProjects = mongoose.model('profProjects', ProfProjectsSchema, 'profProjects');
 
 module.exports = ProfProjects;

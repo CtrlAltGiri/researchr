@@ -44,7 +44,6 @@ homeRouter.route("/login")
             }
             if(!user){
                 console.log("NOT FOUND");
-                console.log(info);
                 return res.render("login", { wrongCreds: true, unverified: false });
             }
             // check if user is active i.e. college email id is verified or not
@@ -76,6 +75,7 @@ homeRouter.route('/signup')
                 c_email: req.body.c_email,
                 college:req.body.college,
                 branch:req.body.branch,
+                degree:req.body.degree,
                 yog:req.body.yog,
                 errorMsg:"Please ensure all fields are entered correctly.",
                 errors: errors
@@ -106,9 +106,17 @@ homeRouter.route('/signup')
             }
             // add user to database
             const finalUser = new Students({
+                name: req.body.name,
+                p_email: req.body.p_email,
                 c_email: req.body.c_email,
                 password: req.body.password,
-                active: false
+                college: req.body.college,
+                branch: req.body.branch,
+                degree: req.body.degree,
+                yog: req.body.yog,
+                active: false,
+                TandC: false,
+                completed: false
             });
 
             // set password
@@ -152,7 +160,10 @@ homeRouter.get('/verify',function(req,res){
             {_id: student._id},
             {
                 $unset: {verifyHash: 1},
-                $set: {active: true}
+                $set: {
+                    doj: Date.now(),
+                    active: true
+                }
             },
             { useFindAndModify: false },
             function(err, result){
@@ -161,10 +172,9 @@ homeRouter.get('/verify',function(req,res){
                     return res.redirect('/verify/error');
                 }
                 else{
-                    console.log(result);
+                    console.log("Email has been verified");
                 }
             })
-        console.log("Email has been verified");
         return res.redirect('/platform');
     })
 });
@@ -177,7 +187,7 @@ homeRouter.get('/logout', function (req, res) {
 homeRouter.get('/plsauthenticate', function(req, res){
     if(process.env.NODE_ENV === 'dev'){
         const user = {
-           _id : '5f52765205ae1e5620e10c5e'
+           _id : '5f5a63b97279d802046d6fa9'
         }
         req.logIn(user, function (err) {
             if(err){
