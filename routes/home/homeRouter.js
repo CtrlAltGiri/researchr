@@ -187,7 +187,7 @@ homeRouter.get('/logout', function (req, res) {
 homeRouter.get('/plsauthenticate', function(req, res){
     if(process.env.NODE_ENV === 'dev'){
         const user = {
-           _id : '5f5a63b97279d802046d6fa9'
+           _id : '5f52765205ae1e5620e10c5e'
         }
         req.logIn(user, function (err) {
             if(err){
