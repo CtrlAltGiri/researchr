@@ -1,6 +1,17 @@
-- Add DateTime selectors as needed.
-- Allow URL inputs for companies to get logo.
-- Tag Input has to be modified as its own component to allow tag-inputs
-- API for tag input should also be created appropriately.
+- Add Relevant coursework and uploading of transcripts as needed.
 - Experience Input should be better.
-- Figure out logo API.
+- Figure out logo API (Allow URL inputs for companies to get logo.)
+- Animations while moving from one page to another. V V important.
+- Refactor MonthYear.js to accomodate for Dropdown.js
+
+
+- Figure out mongoose stuff.
+- Error handling for node and for react. What to do.
+- How to make fool proof APIs
+
+
+Things for tomorrow:
+
+1. Finish off CV flow with validations. - allow for outer error and inner error.
+2. Start working on applying flow - click apply project and show the questionaire.
+3. Discuss API flow w Adi

@@ -12,10 +12,11 @@
     "react-infinite-scroller": "^1.2.4",
     "react-modal": "^3.11.2",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "3.4.3"
+    "react-scripts": "3.4.3",
+    "react-select": "^3.1.0"
   },
   "scripts": {
-    "start": "npm run watch:css && react-scripts start",
+    "start": "react-scripts start",
     "build": "npm run build:css && react-scripts build && npm run move",
     "move": " move .\\build\\index.html .\\build\\platform.html",
     "test": "react-scripts test",

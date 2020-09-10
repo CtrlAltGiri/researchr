@@ -82,6 +82,12 @@ function AddExperience(props){
         setFormState({...formState, ['tags']: newTags})
     }
 
+    function changeDropdown(newDropdown, name){
+        changeInput({}, {
+            [name]: newDropdown
+        })
+    }
+
     const ModalComponent = props.modal;
 
     return ( 
@@ -115,6 +121,7 @@ function AddExperience(props){
                 setModalOpen={setModalOpen}
                 formState={formState}
                 updateTags={updateTags}
+                changeDropdown={changeDropdown}
             />}
 
         </div>

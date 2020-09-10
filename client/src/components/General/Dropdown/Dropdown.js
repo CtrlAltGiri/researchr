@@ -1,5 +1,6 @@
-import React from 'react';
-import './Dropdown.css'
+import React, {useState, useEffect} from 'react';
+import Select from 'react-select';
+import {Label} from '../Form/FormComponents'
 
 function Dropdown(props) {
 
@@ -11,11 +12,60 @@ function Dropdown(props) {
             </button>
             <ul className="dropdown-menu absolute hidden text-gray-700 pt-1">
                 {props.menuItems.map((item, index) => {
-                    return (<li key= {props.uniqueName + index} ><a className="rounded-t bg-gray-200 hover:bg-gray-400 py-2 px-4 block whitespace-no-wrap cursor-pointer" name={props.uniqueName} onClick={(e) => props.setDropdown(e, item)} href="#">{item}</a></li>)
+                    return (<li key={props.uniqueName + index} ><a className="rounded-t bg-gray-200 hover:bg-gray-400 py-2 px-4 block whitespace-no-wrap cursor-pointer" name={props.uniqueName} onClick={(e) => props.setDropdown(e, item)} href="#">{item}</a></li>)
                 })}
             </ul>
         </div>
     )
 }
 
-export default Dropdown;
+
+function Dropdowns(props) {
+
+    const customStyles = {
+        control: (base, state) => ({
+            ...base,
+            boxShadow: state.isFocused ? 0 : 0,
+            borderColor: state.isFocused ? '#2c7a7b' : base.borderColor,
+            '&:hover': { borderColor: state.isFocused ? '#2c7a7b' : '#38b2ac' },
+        }),
+
+        option: (base, state) => ({
+            ...base,
+            backgroundColor: state.isFocused ? '#4fd1c5' : 'white',
+            '&:hover': { backgroundColor: state.isFocused ? '#4fd1c5' : 'white' },
+            color: state.isSelected ? 'black' : 'black'
+        }),
+
+        container: base => ({
+            ...base,
+            flex: 1
+        }),
+    };
+
+    const [val, setVal] = useState(props.val || "-");
+    useEffect(() => { 
+        props.changeDropdown(val, props.name);
+    }, [val])
+
+    return (
+
+        <div className={props.extraClass}>
+            <Label text={props.text} />
+            <Select
+                className={props.fieldExtraClass}
+                styles={customStyles}
+                value={props.options && props.options.find(item => item.value === val)}
+                onChange={(newVal) => { setVal(newVal.value) }}
+                options={props.options}
+                placeholder={props.placeholder}
+                components={{
+                    IndicatorSeparator: () => null
+                }}
+            />
+        </div>
+    )
+
+}
+
+export default Dropdowns;

@@ -1,18 +1,25 @@
-const express = require('express');
-const apiRouter = express.Router();
+const apiRouter = require('express').Router();
 const Students = require('../../models/students');
 const axios = require('axios');
 const allTags = require('../../utils/data/tags')
-// /api/
+const upload = require('../../config/upload').upload
+const Grid = require('gridfs-stream');
+const mongoose = require('mongoose')
 
 function notAuthenticated(res) {
     res.status(404).send("Not authenticated");
     console.log("Not authenticated")
 }
 
+apiRouter.get("/", function (req, res) {
+    if (req.isAuthenticated())
+        next()
+    else {
+        notAuthenticated();
+    }
+})
 
 apiRouter.get('/profile/myProfile', async function (req, res) {
-
     if (req.isAuthenticated()) {
         const studId = req.user._id;
         await Students.findOne({ '_id': studId }, function (err, result) {
@@ -30,10 +37,12 @@ apiRouter.route("/profile/createProfile")
 
         // TODO (Giri): Check every entry that comes in and make sure that its okay.
         // Otherwise, send appropriate error message to react.
+        // Especially tags. 2 tags / project. 3 interest tags.
 
         if (req.isAuthenticated()) {
             const studId = req.user._id;
             let newState = req.body.value, step = req.body.step;
+            console.log(newState.interestTags)
             let update = {}
 
             if (step === 1) {
@@ -57,7 +66,7 @@ apiRouter.route("/profile/createProfile")
             }
             else if (step === 4) {
                 update = {
-                    "cvElements.interestTags": newState
+                    "cvElements.interestTags": newState.interestTags
                 }
             }
 
@@ -113,9 +122,45 @@ apiRouter.get("/platform/tagQuery", function (req, res) {
 
         res.status(200).send(responseTags);
     }
-    else{
+    else {
         notAuthenticated(res);
     }
 });
+
+apiRouter.route("/testUpload")
+    .post(upload, function (req, res) {
+        res.status(200).send("done");
+    })
+    .get(function (req, res) {
+        var gfs = new Grid(mongoose.connection.db, mongoose.mongo);
+        gfs.collection('uploads');
+
+        gfs.files.findOne({ filename: req.user._id }, function (err, file) {
+            if (!file || file.length === 0) {
+                res.status(404).send("Not found / Error")
+                return;
+            }
+        })
+
+        readstream = gfs.createReadStream({
+            filename: req.user._id
+        })
+        readstream.on('error', function (err) {
+            console.log('An error occurred!', err);
+            throw err;
+        });
+
+        readstream.pipe(res);
+
+    })
+    .delete(function (req, res) {
+        gfs.files.findOne({ filename: req.user._id }, function (err, file) {
+            gfs.remove({ _id: file._id.toString(), root: 'uploads' }, (err, gridStore) => {
+                if (err) {
+                    return res.status(404).json({ err: err });
+                }
+            })
+        })
+    })
 
 module.exports = apiRouter;

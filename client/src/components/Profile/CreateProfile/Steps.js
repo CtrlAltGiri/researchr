@@ -160,7 +160,10 @@ function Step4(props) {
     const [interestTags, setTags] = useState(props.formData.interestTags || [])
 
     function submitOuterForm(event) {
-        props.updateCompletedStep(4, interestTags);
+        let finalObj = {
+            interestTags: interestTags
+        }
+        props.updateCompletedStep(4, finalObj);
     }
 
     return (
@@ -170,6 +173,7 @@ function Step4(props) {
                 extraClass="flex justify-center px-16 mx-auto flex-col"
                 updateTags={setTags}
                 chosenTags={interestTags}
+                maxNumberOfTags={3}
             />
             
             <TealButton extraClass="flex mx-auto mt-6" submitForm={submitOuterForm} text={"Complete"} />
