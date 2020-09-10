@@ -5,7 +5,7 @@ import { Label } from '../Form/FormComponents';
 // changeInput, date, name, extraClass
 function MonthYear(props) {
 
-    let tempMonth, finalDate = new Date(props.date.split("/")[1], props.date.split("/")[0]);
+    let tempMonth, finalDate = props.date ? new Date(props.date.split("/")[1], props.date.split("/")[0]) : undefined;
     if(finalDate){
         tempMonth = finalDate.getMonth();
         if(tempMonth < 10){
@@ -16,7 +16,7 @@ function MonthYear(props) {
         }
     }
     const [month, setMonth] = useState(finalDate && tempMonth || '-')
-    const [year, setYear] = useState(finalDate &&   finalDate.getFullYear() || '-')
+    const [year, setYear] = useState(finalDate && finalDate.getFullYear() || '-')
 
     const customStyles = {
         control: (base, state) => ({

@@ -129,7 +129,7 @@ function WorkModal(props) {
                         text="Add"
                         submitForm={(e) => props.submitInnerForm(e)}
                     />
-                    {props.showError && <Error text="Please enter all required fields" />}
+                    <Error text={props.errorText} />
                 </form>
             </div>
         </ReactModal>
