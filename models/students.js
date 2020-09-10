@@ -3,9 +3,16 @@ const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 
 const StudentsSchema = new mongoose.Schema({
+    name: String,
+    college: String,
+    degree: String,
+    branch: String,
+    doj: Date,
+    lastLogin: Date,
     c_email: String,
-    p_email: String, 
+    p_email: String,
     cvElements: Object,
+    completed: Boolean,
     TandC: Boolean,
     hash: String,
     salt: String,
