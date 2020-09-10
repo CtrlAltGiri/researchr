@@ -4,80 +4,113 @@ const axios = require('axios');
 const allTags = require('../../utils/data/tags')
 const upload = require('../../config/upload').upload
 const Grid = require('gridfs-stream');
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
+const { collegeFormValidator, workFormValidator, projectFormValidator } = require('../../client/src/common/formValidators/cvValidator')
 
 function notAuthenticated(res) {
     res.status(404).send("Not authenticated");
     console.log("Not authenticated")
 }
 
-apiRouter.get("/", function (req, res) {
+apiRouter.all("*", function (req, res, next) {
     if (req.isAuthenticated())
-        next()
-    else {
-        notAuthenticated();
-    }
+        next('route')
+    else
+        res.status(404).end(() => console.log("Not authenticated"));
 })
 
-apiRouter.get('/profile/myProfile', async function (req, res) {
-    if (req.isAuthenticated()) {
-        const studId = req.user._id;
-        await Students.findOne({ '_id': studId }, function (err, result) {
-            if (result !== null)
-                res.send(result.cvElements);
-        })
-    }
-    else {
-        notAuthenticated(res);
-    }
+apiRouter.get('/profile/myProfile', function (req, res) {
+    const studId = req.user._id;
+    Students.findOne({ '_id': studId }, function (err, obj) {
+        if (err) { console.log(err); res.status(404).send("Failed") }
+        res.send(obj.cvElements);
+    });
 });
 
 apiRouter.route("/profile/createProfile")
-    .post(async function (req, res) {
+    .post(function (req, res) {
 
-        // TODO (Giri): Check every entry that comes in and make sure that its okay.
-        // Otherwise, send appropriate error message to react.
-        // Especially tags. 2 tags / project. 3 interest tags.
+        let verification = true, validate = "";
+        const studId = req.user._id;
+        let newState = req.body.value, step = req.body.step;
+        let update = {}
 
-        if (req.isAuthenticated()) {
-            const studId = req.user._id;
-            let newState = req.body.value, step = req.body.step;
-            console.log(newState.interestTags)
-            let update = {}
+        if (step === 1) {
+            update = {
+                TandC: true
+            }
+        }
+        else if (step === 2) {
 
-            if (step === 1) {
-                update = {
-                    TandC: true
+            let colleges = newState.college;
+            colleges.every((college, index) => {
+                validate = collegeFormValidator(college);
+                if (!(validate === true)) {
+                    verification = false;
+                    return false;
+                }
+                return true;
+            })
+
+            update = {
+                "cvElements.education": {
+                    school: newState.school,
+                    college: newState.college
                 }
             }
-            else if (step === 2) {
-                update = {
-                    "cvElements.education": {
-                        school: newState.school,
-                        college: newState.college
+        }
+        else if (step === 3) {
+
+            let works = newState.workExperiences;
+            let projects = newState.projects;
+
+            works.every((work, index) => {
+                validate = workFormValidator(work);
+                if (!(validate === true)) {
+                    verification = false;
+                    return false;
+                }
+                return true;
+            })
+
+            if (verification === true) {
+                projects.every((project, index) => {
+                    validate = projectFormValidator(project);
+                    if (!(validate === true)) {
+                        verification = false;
+                        return false;
                     }
-                }
+                    return true;
+                })
             }
-            else if (step === 3) {
-                update = {
-                    "cvElements.workExperiences": newState.workExperiences,
-                    "cvElements.projects": newState.projects
-                }
+            update = {
+                "cvElements.workExperiences": newState.workExperiences,
+                "cvElements.projects": newState.projects
             }
-            else if (step === 4) {
-                update = {
-                    "cvElements.interestTags": newState.interestTags
-                }
-            }
+        }
+        else if (step === 4) {
 
-            await Students.updateOne({ '_id': studId }, update);
+            // TODO (Giri): Update the status of the student as completed,
+            // if he has education marked in his profile.
+            update = {
+                "cvElements.interestTags": newState.interestTags
+            }
+        }
 
-            res.status(200).send('success')
+        if (verification === true) {
+            Students.updateOne({ '_id': studId }, update, function (err, raw) {
+                if (err) {
+                    res.status(404).send("Failed");
+                }
+                else {
+                    res.status(200).send('Successfully updated.')
+                }
+            });
         }
         else {
-            notAuthenticated(res);
+            res.status(404).send(validate)
         }
-    });
+    })
 
 
 apiRouter.route("/projects")
@@ -104,27 +137,20 @@ apiRouter.route("/projects")
 
 apiRouter.get("/platform/tagQuery", function (req, res) {
 
-    if (req.isAuthenticated()) {
-        const query = req.query.text;
-
-        const responseTags = []
-        allTags.forEach((tag) => {
-            tag.split("-").every(function (miniTag) {
-                if (miniTag.startsWith(query)) {
-                    responseTags.push(tag);
-                    return false;
-                }
-                else {
-                    return true;
-                }
-            })
+    const responseTags = []
+    allTags.forEach((tag) => {
+        tag.split("-").every(function (miniTag) {
+            if (miniTag.startsWith(query)) {
+                responseTags.push(tag);
+                return false;
+            }
+            else {
+                return true;
+            }
         })
+    })
 
-        res.status(200).send(responseTags);
-    }
-    else {
-        notAuthenticated(res);
-    }
+    res.status(200).send(responseTags);
 });
 
 apiRouter.route("/testUpload")

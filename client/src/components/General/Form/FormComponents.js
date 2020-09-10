@@ -14,7 +14,7 @@ function TealButton(props) {
 function Error(props) {
 
     return (
-        <p className="text-red-500 text-2xl">{props.text}</p>
+        <p className={`text-red-500 text-xl ${props.extraClass}`}>{props.text}</p>
     )
 }
 

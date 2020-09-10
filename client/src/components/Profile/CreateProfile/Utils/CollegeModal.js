@@ -3,6 +3,7 @@ import ReactModal from 'react-modal';
 import '../../../Header/svg.css'
 import { TextField, Title, Label, TealButton, Error } from '../../../General/Form/FormComponents';
 import Dropdown from '../../../General/Dropdown/Dropdown';
+import {colleges, degrees, branches, yog} from '../../../../common/data/collegeData';
 
 function CollegeModal(props) {
 
@@ -29,7 +30,7 @@ function CollegeModal(props) {
                         placeholder="College"
                         extraClass="mb-8"
                         fieldExtraClass="w-full md:w-1/2"
-                        options={[{ value: "Manipal Institute of Technology", label: "Manipal Institute of Technology" }]}
+                        options={colleges}
                     />
 
                     <div className="flex flex-col md:flex-row mb-8">
@@ -37,7 +38,7 @@ function CollegeModal(props) {
                         <Dropdown
                             val={props.formState.degree}
                             name="degree"
-                            options={[{ value: "BTech.", label: "BTech." }, { value: "MTech.", label: "MTech." }]}
+                            options={degrees}
                             changeDropdown={props.changeDropdown}
                             placeholder="Degree"
                             extraClass="w-full md:w-1/4 mb-2 md:mb-0"
@@ -48,7 +49,7 @@ function CollegeModal(props) {
                         <Dropdown
                             val={props.formState.branch}
                             name="branch"
-                            options={[{ value: "CSE", label: "CSE" }, { value: "Electronics", label: "Electronics" }]}
+                            options={branches}
                             changeDropdown={props.changeDropdown}
                             placeholder="Branch"
                             extraClass="w-full md:w-1/4 mb-2 md:mb-0"
@@ -59,7 +60,7 @@ function CollegeModal(props) {
                         <Dropdown
                             val={props.formState.yog}
                             name="yog"
-                            options={[{ value: "2020", label: "2020" }, { value: "2021", label: "2021" }]}
+                            options={yog}
                             changeDropdown={props.changeDropdown}
                             placeholder="YOG"
                             extraClass="w-full md:w-1/4 mb-2 md:mb-0"
@@ -104,7 +105,7 @@ function CollegeModal(props) {
                         text="Add"
                         submitForm={(e) => props.submitInnerForm(e)}
                     />
-                    {props.showError && <Error text="Please enter all required fields" />}
+                    <Error text={props.errorText} />
                 </form>
             </div>
         </ReactModal>
