@@ -8,8 +8,9 @@ niv.addCustomMessages({
     'name.maxLength': 'Name cannot exceed more than 50 characters',
     'password.same': 'The passwords do not match',
     'yog.dateFormat': 'The Year of Graduation must be a valid year',
-    'college.maxLength': 'Name cannot exceed more than 50 characters',
-    'branch.maxLength': 'Name cannot exceed more than 50 characters'
+    'college.maxLength': 'College Name cannot exceed more than 50 characters',
+    'branch.maxLength': 'Branch Name cannot exceed more than 50 characters',
+    'degree.maxLength': 'Degree cannot exceed more than 50 characters'
 });
 
 async function signUpValidator(formData) {
@@ -22,6 +23,7 @@ async function signUpValidator(formData) {
         password: 'required|string|same:confirm_password',
         confirm_password: 'required|string',
         college: 'required|string|maxLength:50',
+        degree: 'required|string|maxLength:50',
         branch: 'required|string|maxLength:50',
         yog: 'required|dateFormat:YYYY'
     });

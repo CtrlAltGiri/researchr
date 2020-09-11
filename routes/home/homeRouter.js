@@ -66,7 +66,6 @@ homeRouter.route("/login")
             }
             if(!user){
                 console.log("NOT FOUND");
-                console.log(info);
                 return res.render("login", { wrongCreds: true, unverified: false });
             }
             // check if user is active i.e. college email id is verified or not
@@ -88,7 +87,6 @@ homeRouter.route('/signup')
         res.render('signup', {name: "", p_email: ""});
     })
     .post(async function(req, res){
-
         const values = await signUpValidator(req.body);
         const retVal = values[0]
         const errors = values[1]
@@ -99,6 +97,7 @@ homeRouter.route('/signup')
                 c_email: req.body.c_email,
                 college:req.body.college,
                 branch:req.body.branch,
+                degree:req.body.degree,
                 yog:req.body.yog,
                 errorMsg:"Please ensure all fields are entered correctly.",
                 errors: errors
@@ -107,34 +106,39 @@ homeRouter.route('/signup')
 
         // validation successful
         // check if email is already registered in the database
-        //TODO(aditya): Write this logic in a better way
         Students.findOne({'c_email': req.body.c_email}, function(err, result) {
             if (err){
                 console.log(err);
-                return;
+                return res.redirect('/signup/error');
             }
-            // return back to signup page and highlight email box saying email is already in use
+            // return back to signup page and show email is already in use
             if(result && result.active){
-                //TODO(aditya)
-                return res.end("<h1>Email has already been registered with us</h1>");
+                return res.render('signup', {errorMsg: "This email has already been registered with us"});
             }
             // if email verification has not been done, remove existing doc in collection and allow signup again
             else if(result){
-                Students.deleteOne({ _id: result._id}, function(err, obj) {
+                Students.deleteOne({ _id: result._id}, function(err, result) {
                     if(err){
                         console.log("Failed to remove entry from collection")
                         console.log(err);
-                        //TODO(aditya): Handle error properly
-                        return res.render('signup', {name: "", p_email: ""});
+                        return res.redirect('/signup/error');
                     }
                     console.log("1 document deleted");
                 });
             }
             // add user to database
             const finalUser = new Students({
+                name: req.body.name,
+                p_email: req.body.p_email,
                 c_email: req.body.c_email,
                 password: req.body.password,
-                active: false
+                college: req.body.college,
+                branch: req.body.branch,
+                degree: req.body.degree,
+                yog: req.body.yog,
+                active: false,
+                TandC: false,
+                completed: false
             });
 
             // set password
@@ -144,48 +148,57 @@ homeRouter.route('/signup')
             let token = finalUser.setVerifyHash();
 
             // add user to database and send a verification email
-            return finalUser.save()
-                .then(() => {
-                    sendVerificationEmail(req.body.c_email, req.body.name, token).then(r => console.log(r)).catch(function (err){ console.log(err)});
-                    //TODO(aditya): Make a webpage for this. Maybe with a resend verification link?
-                    res.end("<h1>A verification link has been sent to your college email id. Please verify it to continue to our platform. . Please signup again if you do not receive the email within 10 minutes.</h1>");
-                });
+            return finalUser.save({}, function (err, result){
+                if(err){
+                    console.log(err);
+                    return res.redirect('/signup/error');
+                }
+                sendVerificationEmail(req.body.c_email, req.body.name, token).then(r => console.log(r)).catch(function (err){ console.log(err)});
+                //TODO(aditya): Make a proper webpage for this
+                res.render('signUpComplete');
+            })
         });
     });
 
 homeRouter.get('/verify',function(req,res){
-    Students.findOne({ verifyHash:  req.query.token})
-        .then((user) => {
-            if(!user) {
-                // invalid verify link
-                console.log("Invalid verification link");
-                res.end("<h1>Bad Request</h1>");
-                return;
-            }
-            if(user && user.active) {
-                console.log("Email has already been verified");
-                res.end("<h1>Already verified</h1>");
-                return;
-            }
-            // link verified for student
-            Students.findByIdAndUpdate(
-                {_id: user._id},
-                {
-                    $unset: {verifyHash: 1},
-                    $set: {active: true}
-                },
-                { useFindAndModify: false },
-                function(err, result){
-                    if(err){
-                        res.send(err)
-                    }
-                    else{
-                        console.log(result)
-                    }
-                })
-            console.log("Email has been verified");
-            return res.redirect('/platform');
-        })
+    Students.findOne({ verifyHash:  req.query.token}, function (err, student) {
+        if(err) {
+            console.log(err);
+            return res.redirect('/verify/error');
+        }
+        if(!student) {
+            // invalid verify link
+            console.log("Invalid verification link");
+            res.end("<h1>Bad Request</h1>");
+            return;
+        }
+        if(student && student.active) {
+            console.log("Email has already been verified");
+            res.end("<h1>Already verified</h1>");
+            return;
+        }
+        // link verified for student
+        Students.findByIdAndUpdate(
+            {_id: student._id},
+            {
+                $unset: {verifyHash: 1},
+                $set: {
+                    doj: Date.now(),
+                    active: true
+                }
+            },
+            { useFindAndModify: false },
+            function(err, result){
+                if(err){
+                    console.log(err);
+                    return res.redirect('/verify/error');
+                }
+                else{
+                    console.log("Email has been verified");
+                }
+            })
+        return res.redirect('/platform');
+    })
 });
 
 // router for forgot password flow
@@ -207,7 +220,7 @@ homeRouter.route('/forgot')
         Students.findOne({'c_email': req.body.c_email}, function(err, result) {
             if (err) {
                 console.log(err);
-                return;
+                return res.redirect('/forgot/error');
             }
             // No student with the given email found
             if (!result) {
@@ -223,13 +236,16 @@ homeRouter.route('/forgot')
                 // set reset password hash and get the token for email
                 let token = result.setResetHash();
 
-                return result.save()
-                    .then(() => {
-                        //TODO(aditya): Not sure what to do with the 'r' here and remove token logging once email sender has been set
-                        sendPasswordResetEmail(req.body.c_email, token).then(r => console.log(r)).catch(function (err){ console.log(err)});
-                        console.log(token);
-                        res.render('forgot', {c_email:"", errorMsg:"A password reset link has been sent to your college email address"});
-                    });
+                return result.save({}, function (err, result){
+                    if(err){
+                        console.log(err);
+                        return res.redirect('/forgot/error');
+                    }
+                    //TODO(aditya): Not sure what to do with the 'r' here and remove token logging once email sender has been set
+                    sendPasswordResetEmail(req.body.c_email, token).then(r => console.log(r)).catch(function (err){ console.log(err)});
+                    console.log(token);
+                    res.render('forgot', {c_email:"", errorMsg:"A password reset link has been sent to your college email address"});
+                })
             }
         });
     });
@@ -237,15 +253,18 @@ homeRouter.route('/forgot')
 
 homeRouter.route('/reset')
     .get(function(req,res) {
-        Students.findOne({resetHash: req.query.token, resetExpires: {$gt: Date.now()}})
-            .then((student) => {
-                if (!student) {
-                    // invalid reset link
-                    console.log("Reset link is invalid or expired");
-                    return res.render('forgot', {c_email:"", errorMsg:"Password reset link is invalid or has expired"});
-                }
-                return res.render('reset');
-            })
+        Students.findOne({resetHash: req.query.token, resetExpires: {$gt: Date.now()}}, function (err, student){
+            if(err) {
+                console.log(err);
+                return res.redirect('/reset/error');
+            }
+            if (!student){
+                // invalid reset link
+                console.log("Reset link is invalid or expired");
+                return res.render('forgot', {c_email:"", errorMsg:"Password reset link is invalid or has expired"});
+            }
+            return res.render('reset');
+        })
     })
     .post(async function(req, res) {
         // validate the passwords
@@ -259,39 +278,66 @@ homeRouter.route('/reset')
             else if('confirm_password' in error){
                 return res.render("reset", { errorMsg: error.confirm_password.message });
             }
-            else {
+            else{
                 return res.render("reset", { errorMsg: "Error in resetting password. Please try again." });
             }
         }
 
         // validation successful
         // continue here
-        Students.findOne({resetHash: req.query.token, resetExpires: {$gt: Date.now()}})
-            .then((student) => {
-                if (!student) {
-                    // invalid reset link
-                    console.log("Password Reset link is invalid or expired");
-                    return res.render('forgot', {c_email:"", errorMsg:"Password reset link is invalid or has expired"});
-                }
-                //assume student is already active otherwise wouldn't have got a reset link
+        Students.findOne({resetHash: req.query.token, resetExpires: {$gt: Date.now()}}, function (err, student){
+            if(err){
+                console.log(err);
+                return res.redirect('/reset/error');
+            }
+            if (!student) {
+                // invalid reset link
+                console.log("Password Reset link is invalid or expired");
+                //TODO(aditya): Make separate page for this
+                return res.render('forgot', {c_email:"", errorMsg:"Password reset link is invalid or has expired"});
+            }
+            //assume student is already active otherwise wouldn't have got a reset link
 
-                //set new password
-                student.setPassword(req.body.password);
-                student.resetHash = undefined;
-                student.resetExpires = undefined;
-                student.save()
-                    .then(() => {
-                        //TODO(aditya): Send an email with password change confirmation
-                        console.log("Password has been reset");
-                        return res.redirect('/login');
-                    });
+            //set new password
+            student.setPassword(req.body.password);
+            student.resetHash = undefined;
+            student.resetExpires = undefined;
+            student.save({}, function (err, result){
+                if(err){
+                    console.log(err);
+                    return res.redirect('/reset/error');
+                }
+                //TODO(aditya): Send an email with password change confirmation
+                console.log("Password has been reset");
+                return res.redirect('/login');
             })
+        })
     });
 
 homeRouter.get('/logout', function (req, res) {
     req.logout();
     res.redirect("/");
 });
+
+
+//////// ERROR ROUTES
+
+homeRouter.get('/signup/error', function (req, res){
+    res.render('error');
+})
+
+homeRouter.get('/verify/error', function (req, res){
+    res.render('error');
+})
+
+homeRouter.get('/forgot/error', function (req, res){
+    res.render('error');
+})
+
+homeRouter.get('/reset/error', function (req, res){
+    res.render('error');
+})
+
 
 
 ////////   TEST APIs
@@ -315,6 +361,5 @@ homeRouter.get('/plsauthenticate', function(req, res){
         })
     }
 })
-
 
 module.exports = homeRouter;

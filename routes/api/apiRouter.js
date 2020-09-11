@@ -1,5 +1,6 @@
 const apiRouter = require('express').Router();
 const Students = require('../../models/students');
+const ProfProjects = require('../../models/profProjects');
 const axios = require('axios');
 const allTags = require('../../utils/data/tags')
 const upload = require('../../config/upload').upload
@@ -60,7 +61,6 @@ apiRouter.route("/profile/createProfile")
             }
         }
         else if (step === 3) {
-
             // TODO (Giri): What happens if both are NULL?
 
             let works = newState.workExperiences;
@@ -114,7 +114,6 @@ apiRouter.route("/profile/createProfile")
         }
     })
 
-
 apiRouter.route("/project/:projectID")
 .get(function(req, res){
     
@@ -124,24 +123,15 @@ apiRouter.route("/project/:projectID")
 
 apiRouter.route("/projects")
     .get(function (req, res) {
-        if (req.isAuthenticated()) {
-            axios.post("http://localhost:5000/recommender", {
-                filters: {
-                    "work_from_home": true,
-                    "start_month": 1
-                },
-                student_id: req.user._id,
-                page_index: 0
-            }).then(function (response) {
-                console.log("got");
-                res.send(response.data);
-            }).catch(function (err) {
-                res.send(err);
-            })
-        }
-        else {
-            notAuthenticated(res);
-        }
+        // query all prof projects with application close date > cur date
+        ProfProjects.find({applicationCloseDate: {$gt: Date.now()}}, function (err, projects){
+            if(err){
+                console.log(err);
+                return res.status(404).send("Failed");
+            }
+            // send all projects to front end
+            return res.send(projects);
+        })
     })
 
 apiRouter.get("/platform/tagQuery", function (req, res) {
