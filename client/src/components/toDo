@@ -10,15 +10,7 @@
 - How to make fool proof APIs
 
 
-Things for tomorrow:
-
-1. Finish off CV flow with validations. - allow for outer error and inner error.
-2. Start working on applying flow - click apply project and show the questionaire.
-3. Discuss API flow w Adi
-
-
 Others:
-
 1. Error page.
 2. Router default redirect.
 3. Project does not exist in the backend.

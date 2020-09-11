@@ -1,14 +1,28 @@
-const express = require('express');
+const platformRouter = require('express').Router();
 const path = require('path');
 
-const platformRouter = express.Router()
-platformRouter.get("/*", function(req, res){
-    if (req.isAuthenticated()) {
-        res.sendFile(path.resolve(__dirname, "../..", "client/build/platform.html"));
+/*
+
+function routeBasedOnUserType(req, res, next){
+    if(req.isAuthenticated()){
+        if(req.user.userType === "Student"){
+            res.redirect("/student")
+        }
+        else if(req.user.userType === "Professor"){
+            res.redirect("/professor");
+        }
     }
-    else {
+    else{
         res.redirect("/login");
     }
-});
+}
+
+*/
+
+function routeBasedOnUserType(req, res, next){
+    res.redirect("/student");
+}
+
+platformRouter.get("/", routeBasedOnUserType);
 
 module.exports = platformRouter;

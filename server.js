@@ -31,6 +31,8 @@ mongoose.set("useCreateIndex", true);
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use("/student", router.student);
+app.use("/professor", router.professor);
 app.use("/platform", router.platform);
 app.use("/api", router.api);
 app.use("/", router.home);

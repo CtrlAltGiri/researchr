@@ -59,7 +59,7 @@ function CreateProfile(props) {
             })
         })
         .catch(function(err){
-            setRedirect('/platform/error');
+            setRedirect('/error');
         })
     }, []);
 
