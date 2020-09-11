@@ -357,7 +357,7 @@ homeRouter.get('/plsauthenticate', function(req, res){
                 return;
             }
             console.log("Dev authenticated");
-            res.redirect('/platform')
+            res.send("done");
         })
     }
 })
