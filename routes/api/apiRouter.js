@@ -140,8 +140,8 @@ apiRouter.route("/project/:projectID")
         // get student id from req
         let studentID = req.user._id;
         // query mongoDB's profProjects collection to return the project details
-        // first check if such a project exists and if its open
-        ProfProjects.findOne({_id: projectID}, function (err, project){
+        // first check if such a project exists and if its open and also increment its views by 1
+        ProfProjects.findOneAndUpdate({_id: projectID}, {$inc: {views: 1}}, {new: true}, function (err, project){
             if(err){
                 console.log(err);
                 return res.status(404).send("Failed");
@@ -156,9 +156,10 @@ apiRouter.route("/project/:projectID")
             project.apply = project.applicationCloseDate >= Date.now;
             if(project.apply === false){
                 // send project to the front end with apply = false
+                project.errorMsg = "This project is no longer accepting new applicants";
                 return res.status(200).send(project);
             }
-            //else if project can still be applied to check if student has already applied for it
+            //else if project can still be applied to, check if student has already applied for it
             Applications.findOne({_id: studentID, 'profApplications.projectID': projectID}, function (err, result){
                 if(err){
                     console.log(err);
@@ -168,6 +169,27 @@ apiRouter.route("/project/:projectID")
                 if(result){
                     console.log("Already applied for this project");
                     project.apply = false;
+                    project.errorMsg = "You have already applied for this project";
+                    return res.status(200).send(project);
+                }
+            })
+            // final check: check if student has completed his CV
+            Students.findOne({_id: studentID}, function (err, student){
+                if(err){
+                    console.log(err);
+                    return res.status(404).send("Failed");
+                }
+                // no student with given id exists in mongoDB
+                if(!student){
+                    console.log("No student found with id ", studentID);
+                    return res.status(404).send("Failed");
+                }
+                // if student has not completed his CV
+                if(student && !student.completed){
+                    console.log("Not completed CV id: ", studentID);
+                    project.apply = false;
+                    project.errorMsg = "Please complete your profile first";
+                    return res.status(200).send(project);
                 }
             })
             // send project to the front end with apply = true/false
@@ -178,17 +200,17 @@ apiRouter.route("/project/:projectID")
         //check if request is valid
         if(!req.body.answers || !req.body.sop){
             console.log("Invalid application request");
-            return res.status(404).send("Failed");
+            return res.status(404).send("Both answers and SOP are required");
         }
         // check if all answers are valid
         if(answersFormCheck(req.body.answers) === false){
             console.log("Invalid answers");
-            return res.status(404).send("Failed");
+            return res.status(404).send("Answers not validated");
         }
         // check if sop is valid
         if(sopFormCheck(req.body.sop) === false){
             console.log("Invalid answers");
-            return res.status(404).send("Failed");
+            return res.status(404).send("SOP not validated");
         }
         // checked if request is valid
         // get the projects id from request params
@@ -196,20 +218,7 @@ apiRouter.route("/project/:projectID")
         // get student id from req
         let studentID = req.user._id;
 
-        // first check if the student has already applied for the project
-        Applications.findOne({_id: studentID, 'profApplications.projectID': projectID}, function (err, result){
-            if(err){
-                console.log(err);
-                return res.status(404).send("Failed");
-            }
-            // check if result is not null which means that the student has already applied for this project
-            if(result){
-                console.log("Already applied for this project");
-                return res.status(404).send("Already applied");
-            }
-        })
-
-        // now check if given projectID exists and its applications are still open
+        // first check if given projectID exists and its applications are still open
         ProfProjects.findOne({_id: projectID, applicationCloseDate: {$gt: Date.now()}}, function (err, project){
             if(err){
                 console.log(err);
@@ -222,7 +231,38 @@ apiRouter.route("/project/:projectID")
             }
         })
 
-        // no application found && valid project => allow student to apply for the project
+        // now check if the student has already applied for the project
+        Applications.findOne({_id: studentID, 'profApplications.projectID': projectID}, function (err, result){
+            if(err){
+                console.log(err);
+                return res.status(404).send("Failed");
+            }
+            // check if result is not null which means that the student has already applied for this project
+            if(result){
+                console.log("Already applied for this project");
+                return res.status(404).send("Already applied");
+            }
+        })
+
+        // final check: check if student has completed his CV
+        Students.findOne({_id: studentID}, function (err, student){
+            if(err){
+                console.log(err);
+                return res.status(404).send("Failed");
+            }
+            // no student with given id exists in mongoDB
+            if(!student){
+                console.log("No student found with id ", studentID);
+                return res.status(404).send("Failed");
+            }
+            // if student has not completed his CV
+            if(student && !student.completed){
+                console.log("Not completed CV, student id: ", studentID);
+                return res.status(404).send("Profile CV not completed");
+            }
+        })
+
+        // no application found && valid project && CV completed => allow student to apply for the project
         Applications.updateOne(
             {_id: ObjectID(studentID)},
             {
