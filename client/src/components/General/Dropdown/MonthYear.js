@@ -15,8 +15,8 @@ function MonthYear(props) {
             tempMonth = tempMonth.toString();
         }
     }
-    const [month, setMonth] = useState(finalDate && tempMonth || '-')
-    const [year, setYear] = useState(finalDate && finalDate.getFullYear() || '-')
+    const [month, setMonth] = useState((finalDate && tempMonth) || '-')
+    const [year, setYear] = useState( (finalDate && finalDate.getFullYear()) || '-')
 
     const customStyles = {
         control: (base, state) => ({

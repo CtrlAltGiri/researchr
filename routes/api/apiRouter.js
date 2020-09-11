@@ -61,6 +61,8 @@ apiRouter.route("/profile/createProfile")
         }
         else if (step === 3) {
 
+            // TODO (Giri): What happens if both are NULL?
+
             let works = newState.workExperiences;
             let projects = newState.projects;
 
@@ -112,6 +114,13 @@ apiRouter.route("/profile/createProfile")
         }
     })
 
+
+apiRouter.route("/project/:projectID")
+.get(function(req, res){
+    
+    let projectID = req.params.projectID;
+    res.status(200).send(["What is your name?", "What is your age?", "Are you a homosexual?"])
+})
 
 apiRouter.route("/projects")
     .get(function (req, res) {

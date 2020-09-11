@@ -9,15 +9,37 @@ const { sendVerificationEmail } = require('../../utils/email/sendgirdEmailHelper
 const { sendPasswordResetEmail } = require('../../utils/email/sendgirdEmailHelper');
 const { signUpValidator } = require('../../utils/formValidators/signup');
 
-homeRouter.route("/").get(function (req, res) {
+/*
+
+    MAJOR REFACTORING (ADI)
+
+    1. Convert /login to /login/student and create a new route 
+       /login/professor and in PUG, ensure it hits the right endpoints.
+    
+    2. Convert /signup to /signup/student and create new route /signup/professor
+       and in PUG, ensure both hit different endpoints.
+
+    3. Convert /verify -> /verify/student and /verify/professor.
+
+    4. Convert /forgot -> /forgot/student and /forgot/professor.
+
+    5. Convert /reset -> /reset/student and /reset/professor
+
+    6. Make sure all the endpoints are hit correctly from the HTML forms.
+
+*/
+
+homeRouter.route("/")
+.get(function (req, res) {
     if (!req.isAuthenticated())
         res.render('homepage');
     else {
         res.redirect('/platform')
     }
-}).post(function (req, res) {
-        res.render('signup', { name: req.body.name, p_email: req.body.email });
-    });
+})
+.post(function (req, res) {
+    res.render('signup', { name: req.body.name, p_email: req.body.email });
+});
 
 homeRouter.route("/login")
     .get(function (req, res) {
@@ -37,7 +59,7 @@ homeRouter.route("/login")
 
         //validation successful
         //continue here
-        passport.authenticate('local', {}, function (err, user, info) {
+        passport.authenticate('local-student', {}, function (err, user, info) {
             if(err){ 
                 console.log(err);
                 return next(err);
@@ -166,27 +188,6 @@ homeRouter.get('/verify',function(req,res){
         })
 });
 
-homeRouter.get('/logout', function (req, res) {
-    req.logout();
-    res.redirect("/");
-});
-
-homeRouter.get('/plsauthenticate', function(req, res){
-    if(process.env.NODE_ENV === 'dev'){
-        const user = {
-           _id : '5f52765205ae1e5620e10c5e'
-        }
-        req.logIn(user, function (err) {
-            if(err){
-                console.log(err);
-                return;
-            }
-            console.log("Dev authenticated");
-            res.redirect('/platform')
-        })
-    }
-})
-
 // router for forgot password flow
 homeRouter.route('/forgot')
     .get(function(req,res){
@@ -287,8 +288,33 @@ homeRouter.route('/reset')
             })
     });
 
+homeRouter.get('/logout', function (req, res) {
+    req.logout();
+    res.redirect("/");
+});
+
+
+////////   TEST APIs
+
 homeRouter.get("/test", function (req, res) {
     res.sendFile(path.resolve("views/html/index.html"))
 });
+
+homeRouter.get('/plsauthenticate', function(req, res){
+    if(process.env.NODE_ENV === 'dev'){
+        const user = {
+           _id : '5f52765205ae1e5620e10c5e'
+        }
+        req.logIn(user, function (err) {
+            if(err){
+                console.log(err);
+                return;
+            }
+            console.log("Dev authenticated");
+            res.redirect('/platform')
+        })
+    }
+})
+
 
 module.exports = homeRouter;
