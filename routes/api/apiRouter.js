@@ -116,9 +116,24 @@ apiRouter.route("/profile/createProfile")
 
 apiRouter.route("/project/:projectID")
 .get(function(req, res){
-    
+    // get the projects id from request params
     let projectID = req.params.projectID;
-    res.status(200).send(["What is your name?", "What is your age?", "Are you a homosexual?"])
+    // query mongoDB's profProjects collection to return the project details
+    ProfProjects.findOne({_id: projectID}, function (err, project){
+        if(err){
+            console.log(err);
+            return res.status(404).send("Failed");
+        }
+        // if no project with the given projectID return error
+        if(!project){
+            console.log("No project with id ", projectID);
+            return res.status(404).send("Failed");
+        }
+        // check if project can still be applied to and add the corresponding field 'apply'
+        project.apply = project.applicationCloseDate >= Date.now;
+        // send it to the front end
+        return res.status(200).send(project);
+    })
 })
 
 apiRouter.route("/projects")
@@ -130,7 +145,7 @@ apiRouter.route("/projects")
                 return res.status(404).send("Failed");
             }
             // send all projects to front end
-            return res.send(projects);
+            return res.status(200).send(projects);
         })
     })
 
