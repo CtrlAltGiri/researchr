@@ -16,6 +16,7 @@ class ProjectSection extends Component{
         fetch('/api/projects', {mode: 'cors'})
             .then(res => res.json())
             .then(newProjects => this.setState((state, props) => ({projects: this.state.projects.concat(newProjects.projects)})))
+            .catch(err => console.log(err));
     }
 
 

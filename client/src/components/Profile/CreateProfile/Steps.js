@@ -194,7 +194,7 @@ function CompleteStep(){
                 <img src={CompleteGif} className="mx-auto" height="120px" width="120px"/>
                 <h1 className="text-xl font-medium title-font mb-4 text-gray-900">You have completed your researchR profile!</h1>
                 <p className="lg:w-2/3 mx-auto leading-relaxed text-base">You can now apply for all projects.</p>
-                <Link to="/platform" className="text-teal-600 mt-12">Go back to platform</Link>
+                <Link to="/student" className="text-teal-600 mt-12">Go back to platform</Link>
         </div>
     )
 }
