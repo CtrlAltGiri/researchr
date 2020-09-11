@@ -53,7 +53,7 @@ homeRouter.route("/login")
         const values = await logInValidator(req.body);
         const retVal = values[0]
         const error = values[1]
-        if(!retVal){
+        if(retVal === false){
             return res.render("login", { wrongCreds: false, unverified: false, errorMsg: error.c_email.message });
         }
 
@@ -90,7 +90,7 @@ homeRouter.route('/signup')
         const values = await signUpValidator(req.body);
         const retVal = values[0]
         const errors = values[1]
-        if(!retVal){
+        if(retVal === false){
             return res.render('signup', {
                 name:req.body.name,
                 p_email:req.body.p_email,
@@ -123,7 +123,15 @@ homeRouter.route('/signup')
                         console.log(err);
                         return res.redirect('/signup/error');
                     }
-                    console.log("1 document deleted");
+                    // if it was a successful delete
+                    if(result.deletedCount){
+                        console.log("1 document deleted successfully");
+                    }
+                    // non successful delete
+                    else{
+                        console.log("Failed to delete document from collection")
+                        return res.redirect('/signup/error');
+                    }
                 });
             }
             // add user to database
@@ -153,6 +161,10 @@ homeRouter.route('/signup')
                     console.log(err);
                     return res.redirect('/signup/error');
                 }
+                if(!result){
+                    console.log("Error in saving student to collection");
+                    return res.redirect('/signup/error');
+                }
                 sendVerificationEmail(req.body.c_email, req.body.name, token).then(r => console.log(r)).catch(function (err){ console.log(err)});
                 //TODO(aditya): Make a proper webpage for this
                 res.render('signUpComplete');
@@ -178,7 +190,7 @@ homeRouter.get('/verify',function(req,res){
             return;
         }
         // link verified for student
-        Students.findByIdAndUpdate(
+        Students.updateOne(
             {_id: student._id},
             {
                 $unset: {verifyHash: 1},
@@ -187,17 +199,24 @@ homeRouter.get('/verify',function(req,res){
                     active: true
                 }
             },
-            { useFindAndModify: false },
             function(err, result){
                 if(err){
                     console.log(err);
                     return res.redirect('/verify/error');
                 }
-                else{
+                const { n, nModified } = result;
+                // check if document has been successfully updated in collection
+                if(n && nModified) {
                     console.log("Email has been verified");
+                    console.log("Successfully updated student to active");
+                }
+                // failed update or add
+                else{
+                    console.log("Failed to update student and verify the email");
+                    return res.redirect('/verify/error');
                 }
             })
-        return res.redirect('/platform');
+        return res.redirect('/login');
     })
 });
 
@@ -211,7 +230,7 @@ homeRouter.route('/forgot')
         const values = await forgotValidator(req.body);
         const retVal = values[0]
         const error = values[1]
-        if(!retVal){
+        if(retVal === false){
             return res.render("forgot", { c_email: req.body.c_email, errorMsg: error.c_email.message });
         }
 
@@ -232,7 +251,6 @@ homeRouter.route('/forgot')
             }
             // valid flow
             else if (result && result.active) {
-                console.log(result);
                 // set reset password hash and get the token for email
                 let token = result.setResetHash();
 
@@ -241,7 +259,10 @@ homeRouter.route('/forgot')
                         console.log(err);
                         return res.redirect('/forgot/error');
                     }
-                    //TODO(aditya): Not sure what to do with the 'r' here and remove token logging once email sender has been set
+                    if(!result){
+                        console.log("Error in updating student's reset Hash");
+                        return res.redirect('/forgot/error');
+                    }
                     sendPasswordResetEmail(req.body.c_email, token).then(r => console.log(r)).catch(function (err){ console.log(err)});
                     console.log(token);
                     res.render('forgot', {c_email:"", errorMsg:"A password reset link has been sent to your college email address"});
@@ -271,7 +292,7 @@ homeRouter.route('/reset')
         const values = await resetValidator(req.body);
         const retVal = values[0]
         const error = values[1]
-        if(!retVal){
+        if(retVal === false){
             if('password' in error){
                 return res.render("reset", { errorMsg: error.password.message });
             }
@@ -305,6 +326,10 @@ homeRouter.route('/reset')
             student.save({}, function (err, result){
                 if(err){
                     console.log(err);
+                    return res.redirect('/reset/error');
+                }
+                if(!result){
+                    console.log("Failed to update password for student");
                     return res.redirect('/reset/error');
                 }
                 //TODO(aditya): Send an email with password change confirmation
