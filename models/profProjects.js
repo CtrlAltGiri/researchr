@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const { ObjectID } = require("mongoose");
 
 const ProfProjectsSchema = new mongoose.Schema({
     name: String,
@@ -9,13 +8,13 @@ const ProfProjectsSchema = new mongoose.Schema({
     professorDesignation: String,
     college: String,
     views: Number,
-    prereq: Array,
+    prereq: [ String ],
     duration: Number, // in months
     startDate: Date,
     dateOfCreation: Date,
     applicationCloseDate: Date,
     location: String, // WFH or specific location
-    questionnaire: Array
+    questionnaire: [ String ]
 });
 
 const ProfProjects = mongoose.model('profProjects', ProfProjectsSchema, 'profProjects');

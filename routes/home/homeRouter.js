@@ -8,6 +8,7 @@ const { logInValidator } = require("../../utils/formValidators/login");
 const { sendVerificationEmail } = require('../../utils/email/sendgirdEmailHelper');
 const { sendPasswordResetEmail } = require('../../utils/email/sendgirdEmailHelper');
 const { signUpValidator } = require('../../utils/formValidators/signup');
+const Async = require('async');
 
 /*
 
@@ -104,7 +105,6 @@ homeRouter.route('/signup')
             });
         }
 
-        // validation successful
         // check if email is already registered in the database
         Students.findOne({'c_email': req.body.c_email}, function(err, result) {
             if (err){
@@ -112,11 +112,11 @@ homeRouter.route('/signup')
                 return res.redirect('/signup/error');
             }
             // return back to signup page and show email is already in use
-            if(result && result.active){
+            else if(result && result.active){
                 return res.render('signup', {errorMsg: "This email has already been registered with us"});
             }
             // if email verification has not been done, remove existing doc in collection and allow signup again
-            else if(result){
+            else if(result && !result.active){
                 Students.deleteOne({ _id: result._id}, function(err, result) {
                     if(err){
                         console.log("Failed to remove entry from collection")
@@ -124,8 +124,47 @@ homeRouter.route('/signup')
                         return res.redirect('/signup/error');
                     }
                     // if it was a successful delete
-                    if(result.deletedCount){
+                    else if(result.deletedCount){
                         console.log("1 document deleted successfully");
+                        //TODO(aditya): Find a better logic to implement this and remove redundant code
+
+                        // now add new user to database
+                        const finalUser = new Students({
+                            name: req.body.name,
+                            p_email: req.body.p_email,
+                            c_email: req.body.c_email,
+                            password: req.body.password,
+                            college: req.body.college,
+                            branch: req.body.branch,
+                            degree: req.body.degree,
+                            yog: req.body.yog,
+                            active: false,
+                            TandC: false,
+                            completed: false
+                        });
+
+                        // set password
+                        finalUser.setPassword(req.body.password);
+
+                        // set verification hash and get the token for email
+                        let token = finalUser.setVerifyHash();
+
+                        // add user to database and send a verification email
+                        return finalUser.save({}, function (err, result){
+                            if(err){
+                                console.log(err);
+                                return res.redirect('/signup/error');
+                            }
+                            else if(!result){
+                                console.log("Error in saving student to collection");
+                                return res.redirect('/signup/error');
+                            }
+                            else{
+                                sendVerificationEmail(req.body.c_email, req.body.name, token).then(r => console.log(r)).catch(function (err){ console.log(err)});
+                                //TODO(aditya): Make a proper webpage for this
+                                res.render('signUpComplete');
+                            }
+                        })
                     }
                     // non successful delete
                     else{
@@ -134,41 +173,45 @@ homeRouter.route('/signup')
                     }
                 });
             }
-            // add user to database
-            const finalUser = new Students({
-                name: req.body.name,
-                p_email: req.body.p_email,
-                c_email: req.body.c_email,
-                password: req.body.password,
-                college: req.body.college,
-                branch: req.body.branch,
-                degree: req.body.degree,
-                yog: req.body.yog,
-                active: false,
-                TandC: false,
-                completed: false
-            });
+            else {
+                // add user to database
+                const finalUser = new Students({
+                    name: req.body.name,
+                    p_email: req.body.p_email,
+                    c_email: req.body.c_email,
+                    password: req.body.password,
+                    college: req.body.college,
+                    branch: req.body.branch,
+                    degree: req.body.degree,
+                    yog: req.body.yog,
+                    active: false,
+                    TandC: false,
+                    completed: false
+                });
 
-            // set password
-            finalUser.setPassword(req.body.password);
+                // set password
+                finalUser.setPassword(req.body.password);
 
-            // set verification hash and get the token for email
-            let token = finalUser.setVerifyHash();
+                // set verification hash and get the token for email
+                let token = finalUser.setVerifyHash();
 
-            // add user to database and send a verification email
-            return finalUser.save({}, function (err, result){
-                if(err){
-                    console.log(err);
-                    return res.redirect('/signup/error');
-                }
-                if(!result){
-                    console.log("Error in saving student to collection");
-                    return res.redirect('/signup/error');
-                }
-                sendVerificationEmail(req.body.c_email, req.body.name, token).then(r => console.log(r)).catch(function (err){ console.log(err)});
-                //TODO(aditya): Make a proper webpage for this
-                res.render('signUpComplete');
-            })
+                // add user to database and send a verification email
+                return finalUser.save({}, function (err, result){
+                    if(err){
+                        console.log(err);
+                        return res.redirect('/signup/error');
+                    }
+                    else if(!result){
+                        console.log("Error in saving student to collection");
+                        return res.redirect('/signup/error');
+                    }
+                    else{
+                        sendVerificationEmail(req.body.c_email, req.body.name, token).then(r => console.log(r)).catch(function (err){ console.log(err)});
+                        //TODO(aditya): Make a proper webpage for this
+                        res.render('signUpComplete');
+                    }
+                })
+            }
         });
     });
 
@@ -178,45 +221,48 @@ homeRouter.get('/verify',function(req,res){
             console.log(err);
             return res.redirect('/verify/error');
         }
-        if(!student) {
+        else if(!student) {
             // invalid verify link
             console.log("Invalid verification link");
-            res.end("<h1>Bad Request</h1>");
-            return;
+            return res.end("<h1>Bad Request</h1>");
         }
-        if(student && student.active) {
+        else if(student && student.active) {
+            // student already active
             console.log("Email has already been verified");
-            res.end("<h1>Already verified</h1>");
-            return;
+            return res.end("<h1>Already verified</h1>");
         }
-        // link verified for student
-        Students.updateOne(
-            {_id: student._id},
-            {
-                $unset: {verifyHash: 1},
-                $set: {
-                    doj: Date.now(),
-                    active: true
-                }
-            },
-            function(err, result){
-                if(err){
-                    console.log(err);
-                    return res.redirect('/verify/error');
-                }
-                const { n, nModified } = result;
-                // check if document has been successfully updated in collection
-                if(n && nModified) {
-                    console.log("Email has been verified");
-                    console.log("Successfully updated student to active");
-                }
-                // failed update or add
-                else{
-                    console.log("Failed to update student and verify the email");
-                    return res.redirect('/verify/error');
-                }
-            })
-        return res.redirect('/login');
+        else{
+            // verify the student profile
+            Students.updateOne(
+                {_id: student._id},
+                {
+                    $unset: {verifyHash: 1},
+                    $set: {
+                        doj: Date.now(),
+                        active: true
+                    }
+                },
+                function(err, result){
+                    if(err){
+                        console.log(err);
+                        return res.redirect('/verify/error');
+                    }
+                    else{
+                        const { n, nModified } = result;
+                        // check if document has been successfully updated in collection
+                        if(n && nModified) {
+                            console.log("Email has been verified");
+                            console.log("Successfully updated student to active");
+                            return res.redirect('/login');
+                        }
+                        // failed update or add
+                        else{
+                            console.log("Failed to update student and verify the email");
+                            return res.redirect('/verify/error');
+                        }
+                    }
+                })
+        }
     })
 });
 
@@ -242,11 +288,11 @@ homeRouter.route('/forgot')
                 return res.redirect('/forgot/error');
             }
             // No student with the given email found
-            if (!result) {
+            else if (!result) {
                 return res.render('forgot', {c_email:"", errorMsg:"Seems like you have not signed up yet!"});
             }
             // Student found but has not verified email yet
-            if (result && !result.active) {
+            else if (result && !result.active) {
                 return res.render('forgot', {c_email:"", errorMsg:"Please verify your email address first or signup again"});
             }
             // valid flow
@@ -259,13 +305,15 @@ homeRouter.route('/forgot')
                         console.log(err);
                         return res.redirect('/forgot/error');
                     }
-                    if(!result){
+                    else if(!result){
                         console.log("Error in updating student's reset Hash");
                         return res.redirect('/forgot/error');
                     }
-                    sendPasswordResetEmail(req.body.c_email, token).then(r => console.log(r)).catch(function (err){ console.log(err)});
-                    console.log(token);
-                    res.render('forgot', {c_email:"", errorMsg:"A password reset link has been sent to your college email address"});
+                    else{
+                        sendPasswordResetEmail(req.body.c_email, token).then(r => console.log(r)).catch(function (err){ console.log(err)});
+                        console.log(token);
+                        return res.render('forgot', {c_email:"", errorMsg:"A password reset link has been sent to your college email address"});
+                    }
                 })
             }
         });
@@ -279,12 +327,14 @@ homeRouter.route('/reset')
                 console.log(err);
                 return res.redirect('/reset/error');
             }
-            if (!student){
+            else if (!student){
                 // invalid reset link
                 console.log("Reset link is invalid or expired");
                 return res.render('forgot', {c_email:"", errorMsg:"Password reset link is invalid or has expired"});
             }
-            return res.render('reset');
+            else{
+                return res.render('reset');
+            }
         })
     })
     .post(async function(req, res) {
@@ -311,31 +361,34 @@ homeRouter.route('/reset')
                 console.log(err);
                 return res.redirect('/reset/error');
             }
-            if (!student) {
+            else if (!student) {
                 // invalid reset link
                 console.log("Password Reset link is invalid or expired");
                 //TODO(aditya): Make separate page for this
                 return res.render('forgot', {c_email:"", errorMsg:"Password reset link is invalid or has expired"});
             }
-            //assume student is already active otherwise wouldn't have got a reset link
-
-            //set new password
-            student.setPassword(req.body.password);
-            student.resetHash = undefined;
-            student.resetExpires = undefined;
-            student.save({}, function (err, result){
-                if(err){
-                    console.log(err);
-                    return res.redirect('/reset/error');
-                }
-                if(!result){
-                    console.log("Failed to update password for student");
-                    return res.redirect('/reset/error');
-                }
-                //TODO(aditya): Send an email with password change confirmation
-                console.log("Password has been reset");
-                return res.redirect('/login');
-            })
+            else{
+                //assume student is already active otherwise wouldn't have got a reset link
+                //set new password
+                student.setPassword(req.body.password);
+                student.resetHash = undefined;
+                student.resetExpires = undefined;
+                student.save({}, function (err, result){
+                    if(err){
+                        console.log(err);
+                        return res.redirect('/reset/error');
+                    }
+                    else if(!result){
+                        console.log("Failed to update password for student");
+                        return res.redirect('/reset/error');
+                    }
+                    else{
+                        //TODO(aditya): Send an email with password change confirmation
+                        console.log("Password has been reset");
+                        return res.redirect('/login');
+                    }
+                })
+            }
         })
     });
 
