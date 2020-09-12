@@ -9,7 +9,7 @@
     "start:dev": "concurrently \"nodemon server.js\" \"cd client && npm start\"",
     "start:prod": "npm run build && node server.js",
     "start": "node server.js",
-    "heroku-postbuild": "cd client && npm i && npm run build"
+    "heroku-postbuild": "cd client && npm i && npm run build-heroku"
   },
   "author": "",
   "license": "ISC",
