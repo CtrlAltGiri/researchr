@@ -1,16 +1,50 @@
+NEW FEATURES
+
 - Add uploading of transcripts as needed.
 - Experience Input should be better.
 - Figure out logo API (Allow URL inputs for companies to get logo.)
 - Animations while moving from one page to another. V V important.
-- Refactor MonthYear.js to accomodate for Dropdown.js
+---------------------------------------------------------------------------------------------------------------
+Others
 
-
-- Figure out mongoose stuff.
-- Error handling for node and for react. What to do.
-- How to make fool proof APIs
-
-
-Others:
 1. Error page.
 2. Router default redirect.
-3. Project does not exist in the backend.
+
+------------------------------------------------------------------------------------------------------------------
+Students
+
+A. Landing Project Page.
+
+B. Individual Project Page
+1. What if project not there. Display error.
+
+C. Profile Page
+
+D. Applications Page
+1. Allow POST requests to accept / decline. (WAIT FOR ADI).
+2. See professor details if accepted. (LATER.)
+3. Show time to accept, show professor message.
+
+E. Create CV Page
+1. Mark required and not required fields
+2. Check URLs and also drive links on regex.
+3. Change just url to logoURL
+
+F. Resolve all React warnings.
+
+G. Go through all the API calls and handle errors appropriately.
+--------------------------------------------------------------------------------------------------------------
+Backend
+
+1. THERE IS NO CHECK ON API ROUTER FOR RANDOM VALUES BEING APPLIED TO THE POST.
+Take only the values that are needed -> createProfile. (MAKE STUDENT SCHEMA PROPER.)
+
+2. DateTime check -> not just 7 characters lol.
+
+--------------------------------------------------------------------------------------------------------------
+Refactoring
+
+1. MonthYear.js
+2. ProjectPage.js
+
+---------------------------------------------------------------------------------------------------------------

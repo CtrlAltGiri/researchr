@@ -1,48 +1,42 @@
-import React, {Component} from 'react';
-import Projectile from "./Projectile/ProjectileTest";
+import React, { useState } from 'react';
+import Projectile from "./Projectile/Projectile";
 import InfiniteScroll from 'react-infinite-scroller';
+import axios from 'axios'
 
-class ProjectSection extends Component{
+function ProjectSection() {
 
-    constructor(props){
-        super(props)
-        this.state = {
-          projects: [],
-          hasMore: true
-        };
-    }
-    
-    newLoader() {
-        fetch('/api/projects', {mode: 'cors'})
-            .then(res => res.json())
-            .then(newProjects => this.setState((state, props) => ({projects: this.state.projects.concat(newProjects.projects)})))
-            .catch(err => console.log(err));
+    const [projects, setProjects] = useState([]);
+    const [hasMore, setHasMore] = useState(true);
+
+    function newLoader() {
+        axios.get('/api/projects')
+        .then(res => {
+            setHasMore(false);
+            setProjects([...projects, ...res.data]);
+        })
+        .catch(err => console.log(err));
     }
 
-
-    render(){
-        var items = []
-        this.state.projects.map((item) => {
-            items.push(<Projectile allItems={item} />);
-        });
-
-        return(
-            <section className="text-gray-700 body-font overflow-hidden">
-                <div className="container px-5 py-0 md:py-8 mx-auto">
+    let items = []
+    projects.map((item) => {
+        items.push(<Projectile key={item.name} allItems={item} />);
+    });
+    return (
+        <section className="text-gray-700 body-font overflow-hidden">
+            <div className="container px-5 py-0 md:py-8 mx-auto">
                 <InfiniteScroll
                     pageStart={0}
-                    loadMore={this.newLoader.bind(this)}
-                    hasMore={this.state.hasMore}
-                    loader={<h1>Loading....</h1>}
+                    loadMore={newLoader}
+                    hasMore={hasMore}
+                    loader={<h1 key="LoadingScreen">Loading....</h1>}
                     element={'div'}
                     className="flex flex-row flex-wrap"
                 >
-                        {items}
+                    {items}
                 </InfiniteScroll>
-                </div>
-            </section>
-        );
-    }
+            </div>
+        </section>
+    );
 }
 
 export default ProjectSection;

@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactModal from 'react-modal';
 import '../../../Header/svg.css';
 import { TextField, Title, Label, TealButton, Error, Checkbox } from '../../../General/Form/FormComponents';
@@ -9,10 +9,11 @@ function ProjectModal(props) {
 
     const [checked, setChecked] = useState(props.formState.researchProject || false)
 
+    ReactModal.setAppElement(document.getElementById('root'));
     useEffect(() => {
         let anotherChange;
         let name = "researchProject", value = checked;
-        if(!checked){
+        if (!checked) {
             anotherChange = {
                 "professor": "-",
                 "college": "-",
@@ -21,12 +22,12 @@ function ProjectModal(props) {
                 [name]: value
             }
         }
-        else{
+        else {
             anotherChange = {
-                "professor": props.formState.professor.replace('-','') || "",
-                "college": props.formState.college.replace('-','') || "",
-                "startDate":  props.formState.startDate.toString().replace('-','') || "",
-                "endDate": props.formState.endDate.toString().replace('-','') || "",
+                "professor": props.formState.professor.replace('-', '') || "",
+                "college": props.formState.college.replace('-', '') || "",
+                "startDate": props.formState.startDate.toString().replace('-', '') || "",
+                "endDate": props.formState.endDate.toString().replace('-', '') || "",
                 [name]: value
             }
         }
@@ -121,12 +122,21 @@ function ProjectModal(props) {
                     </div>
 
                     <TextField
-                        text="Link for Proof"
+                        text="Link for Proof (Drive / Github repository)"
                         onChange={props.changeInput}
                         name="proof"
                         value={props.formState.proof}
                         extraClass="mb-8"
                         fieldExtraClass="w-full md:w-1/2"
+                    />
+
+                    <TextField
+                        text="URL (for logo on profile)"
+                        onChange={props.changeInput}
+                        name="url"
+                        value={props.formState.url}
+                        extraClass="w-full md:w-1/2 mb-8"
+                        fieldExtraClass="w-full md:w-3/4"
                     />
 
                     <TagInput

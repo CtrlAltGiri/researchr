@@ -3,6 +3,15 @@
     height: 2.5em;
 }
 
+.svg-icon-teal-small{
+    width:1.8em;
+    height:1.8em;
+}
+
+.svg-icon-teal-small path{
+    fill: #38b2ac;
+}
+
 .svg-icon-small{
     width: 1.5em;
     height: 1.5em;

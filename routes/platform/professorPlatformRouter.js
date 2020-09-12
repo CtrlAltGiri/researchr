@@ -10,7 +10,7 @@ function isProfessor(req, res, next){
     }
 }
 
-platformRouter.get("/*" , /*isProfessor,*/ function(req, res){
+platformRouter.get("/*" , isProfessor, function(req, res){ 
     res.sendFile(path.resolve(__dirname, "../..", "client/build/platform.html"));
 });
 

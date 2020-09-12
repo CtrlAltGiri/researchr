@@ -1,12 +1,13 @@
 import React from 'react';
 import ReactModal from 'react-modal';
 import '../../../Header/svg.css'
-import { TextField, Title, Label, TealButton, Error, CloseButton, TextArea } from '../../../General/Form/FormComponents';
+import { TextField, Title, TealButton, Error, CloseButton, TextArea } from '../../../General/Form/FormComponents';
 import Dropdown from '../../../General/Dropdown/Dropdown';
 import { colleges, degrees, branches, yog } from '../../../../common/data/collegeData';
 
 function CollegeModal(props) {
 
+    ReactModal.setAppElement(document.getElementById('root'));
     return (
         <ReactModal
             isOpen={props.modalOpen}
@@ -89,9 +90,18 @@ function CollegeModal(props) {
                     <TextArea
                         name="coursework"
                         value={props.formState.coursework}
-                        extraClass="mb-8"
+                        extraClass=""
                         text="Coursework (seperate subjects with commas)"
                         onChange={props.changeInput}
+                    />
+
+                    <TextField
+                        text="URL to website (for logo on profile page)"
+                        onChange={props.changeInput}
+                        name="url"
+                        value={props.formState.url}
+                        extraClass="w-full md:w-1/2 mb-8"
+                        fieldExtraClass="w-full md:w-3/4"
                     />
 
                     <TealButton
