@@ -205,48 +205,47 @@ apiRouter.route("/project/:projectID")
                 }
             },
             function (project, callback){
-                // CHECK 3: Check if student has already applied for the given project
+                // CHECK 3: Check if student has already applied for the given project or if he already has an ongoing project
                 // First check if project.apply === false and call callback immediately
                 if(project.apply === false){
                     callback(null, project);
                 }
                 else{
                     // Else do the check 3
-                    Applications.findOne({_id: studentID, 'profApplications.projectID': projectID}, function (err, result){
-                        if(err){
+                    Applications.findOne({_id: studentID}, function (err, studentApplication) {
+                        if (err) {
                             console.log(err);
                             callback("Failed");
                         }
-                        // check if result is not null which means that the student has already applied for this project
-                        else if(result){
-                            console.log("Already applied for this project");
-                            project.apply = false;
-                            project.errorMsg = "You have already applied for this project";
+                        else if (!studentApplication) {
+                            callback(null, project);
                         }
-                        callback(null, project);
-                    })
-                }
-            },
-            function (project, callback){
-                // CHECK 4: Check if student already has an ongoing project
-                // First check if project.apply === false and call callback immediately
-                if(project.apply === false){
-                    callback(null, project);
-                }
-                else{
-                    // Else do the check 4
-                    Applications.findOne({_id: studentID, 'profApplications.status': "ongoing"}, function (err, result){
-                        if(err){
-                            console.log(err);
-                            callback("Failed");
+                        else {
+                            let applications = studentApplication.profApplications;
+                            // Find if any application exists with the given ProjectID
+                            let alreadyApplied = applications.find(element => {
+                                return element.projectID.equals(mongoose.Types.ObjectId(projectID));
+                            })
+                            // Find if any application has a status as ongoing
+                            let ongoing = applications.find(element => {
+                                return element.status === "ongoing";
+                            })
+                            if (alreadyApplied) {
+                                console.log("Already applied for this project");
+                                project.apply = false;
+                                project.errorMsg = "You have already applied for this project";
+                                callback(null, project);
+                            }
+                            else if (ongoing) {
+                                console.log("Already has an ongoing project");
+                                project.apply = false;
+                                project.errorMsg = "You already have an ongoing project";
+                                callback(null, project);
+                            }
+                            else {
+                                callback(null, project);
+                            }
                         }
-                        // check if result is not null which means that the student has already applied for this project
-                        else if(result){
-                            console.log("Already has ongoing project");
-                            project.apply = false;
-                            project.errorMsg = "You already have an ongoing project";
-                        }
-                        callback(null, project);
                     })
                 }
             }
@@ -325,37 +324,33 @@ apiRouter.route("/project/:projectID")
                     }
                 })
             },
-            function (project, callback){
-                //CHECK 3: Check if student has a project that is ongoing
-                Applications.findOne({_id: studentID, 'profApplications.status': "ongoing"}, function (err, result) {
+            function (project, callback) {
+                //CHECK 3: Check if student has already applied for this project or has a project that is ongoing
+                Applications.findOne({_id: studentID}, function (err, studentApplication) {
                     if (err) {
                         console.log(err);
                         callback("Failed");
-                    }
-                    // check if result is not null which means that the student has an ongoing project already
-                    else if (result) {
-                        console.log("Already has an ongoing project");
-                        callback("Already has an ongoing project");
-                    }
-                    else if (!result) {
+                    } else if (!studentApplication) {
                         callback(null, project);
-                    }
-                })
-            },
-            function (project, callback){
-                // CHECK 4: Check if the student has already applied for the project
-                Applications.findOne({_id: studentID, 'profApplications.projectID': projectID}, function (err, result) {
-                    if (err) {
-                        console.log(err);
-                        callback("Failed");
-                    }
-                    // check if result is not null which means that the student has already applied for this project
-                    else if (result) {
-                        console.log("Already applied for this project");
-                        callback("Already applied");
-                    }
-                    else if (!result) {
-                        callback(null, project);
+                    } else {
+                        let applications = studentApplication.profApplications;
+                        // Find if any application exists with the given ProjectID
+                        let alreadyApplied = applications.find(element => {
+                            return element.projectID.equals(mongoose.Types.ObjectId(projectID));
+                        })
+                        // Find if any application has a status as ongoing
+                        let ongoing = applications.find(element => {
+                            return element.status === "ongoing";
+                        })
+                        if (alreadyApplied) {
+                            console.log("Already applied for this project");
+                            callback("Already applied");
+                        } else if (ongoing) {
+                            console.log("Already has an ongoing project");
+                            callback("Already has an ongoing project");
+                        } else {
+                            callback(null, project);
+                        }
                     }
                 })
             },
@@ -576,6 +571,7 @@ apiRouter.route('/applications')
         }
 
         Async.series([
+            // TODO(aditya): Check if this is actually needed. Mostly not needed because of Check 2.
             function (callback){
                 // CHECK 1: Check if given student exists in our mongoDB's students collection
                 Students.findOne({_id: studentID}, function (err, student){
@@ -594,31 +590,14 @@ apiRouter.route('/applications')
                     }
                 })
             },
-            function(callback){
-                // CHECK 2: Check if projectID exists in profProjects collection
-                ProfProjects.findOne({_id: projectID}, function (err, project){
-                    if(err){
-                        console.log(err);
-                        callback("Failed");
-                    }
-                    // if no project with the given projectID or if its a closed project return error
-                    else if(!project){
-                        console.log("No project with id ", projectID);
-                        callback("Invalid project");
-                    }
-                    else if(project){
-                        callback(null, 2);
-                    }
-                })
-            },
             function (callback){
-                // CHECK 3: Check if student has applied for the project and its current status and if change to new status is allowed
+                // CHECK 2: Check if student has applied for the project and its current status and if change to new status is allowed
                 Applications.findOne({_id: studentID, 'profApplications.projectID': projectID}, function (err, result) {
                     if (err) {
                         console.log(err);
                         callback("Failed");
                     }
-                    // check if result is null which means that the student has not applied for this project
+                    // check if result is null which means that the student has not applied for this project/ project does not exist
                     else if (!result) {
                         console.log("Student has not applied for the project");
                         callback("No application found");
@@ -636,12 +615,12 @@ apiRouter.route('/applications')
                         // Allow condition 1
                         if (application.status === "selected" && application.timeToAccept > cur_time && newStatus === "ongoing") {
                             console.log("Allowed condition 1");
-                            callback(null, 31);
+                            callback(null, 21);
                         }
                         // Allow condition 2
                         else if (application.status === "selected" && newStatus === "declined") {
                             console.log("Allowed condition 2");
-                            callback(null, 32);
+                            callback(null, 22);
                         }
                         // Disallow all other changes to status
                         else {
@@ -651,29 +630,72 @@ apiRouter.route('/applications')
                 })
             },
             function (callback){
-                // FINAL step: Make the status update in applications collection
-                Applications.updateOne(
-                    {_id: studentID, 'profApplications.projectID': projectID},
-                    {
-                        $set: {
-                            'profApplications.$.status': newStatus
-                        }
-                    },
-                    function (err, result){
-                        if (err) {
-                            console.log(err);
-                            callback("Failed");
-                        }
-                        else {
-                            const { n, nModified } = result;
-                            if (n && nModified) {
-                                callback(null, "Successful");
+                // FINAL step: Make the status update in applications collection based on newStatus
+                // If newStatus is "ongoing" i.e. student has accepted to work on a project then update its status in DB
+                // and update the status of projects with status as active/selected/interview to cancelled by default
+                if(newStatus === "ongoing") {
+                    Applications.updateOne(
+                        {_id: studentID},
+                        {
+                            $set: {
+                                'profApplications.$[element1].status': newStatus,
+                                'profApplications.$[element].status': "cancelled"
+                            }
+                        },
+                        {
+                            arrayFilters: [
+                                {
+                                    "element.status": {$in: ["active", "selected", "interview"]},
+                                    "element.projectID": {$ne: projectID}
+                                },
+                                {
+                                    "element1.projectID": projectID
+                                }],
+                            multi: true
+                        },
+                        function (err, result) {
+                            if (err) {
+                                console.log(err);
+                                callback("Failed");
+                            } else {
+                                const {n, nModified} = result;
+                                if (n && nModified) {
+                                    callback(null, "Successful");
+                                } else {
+                                    callback("Update failed");
+                                }
+                            }
+                        })
+                }
+                // Else if newStatus is declined then just update the status of the given project in the DB
+                else if(newStatus === "declined"){
+                    Applications.updateOne(
+                        {_id: studentID, 'profApplications.projectID': projectID},
+                        {
+                            $set: {
+                                'profApplications.$.status': newStatus
+                            }
+                        },
+                        function (err, result){
+                            if (err) {
+                                console.log(err);
+                                callback("Failed");
                             }
                             else {
-                                callback("Update failed");
+                                const { n, nModified } = result;
+                                if (n && nModified) {
+                                    callback(null, "Successful");
+                                }
+                                else {
+                                    callback("Update failed");
+                                }
                             }
-                        }
-                    })
+                        })
+                }
+                // Sanity check. Should ideally never enter this else statement.
+                else{
+                    callback("Not supported");
+                }
             }
         ], function (err, result){
             if(err){
