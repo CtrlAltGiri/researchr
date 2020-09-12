@@ -535,31 +535,6 @@ apiRouter.get("/platform/tagQuery", function (req, res) {
     res.status(200).send(responseTags);
 });
 
-apiRouter.get("/applications" ,function(req, res){
-
-    res.status(200).send({
-        active : [{
-            name: "Giridhar Balachandran",
-            college: "IIT Bombay",
-            status: "Active",
-            createDate: "12th July, 2020"
-        }],
-        selected: [{
-            name:"Aditya Vavre",
-            college: "MIT, Manipal",
-            status: "Selected",
-            createDate: "17th May, 2021"
-        }],
-        archived: [{
-            name: "Rahul Humayun",
-            college: "IIT Madras",
-            status: "Ongoing",
-            createDate: "17th August, 2019"
-        }]
-    })
-});
-
-
 
 apiRouter.route("/testUpload")
     .post(upload, function (req, res) {
