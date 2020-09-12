@@ -4,6 +4,7 @@ import ReactModal from 'react-modal';
 import { RedButton, TealButton } from '../General/Form/FormComponents';
 import { Redirect, Link } from 'react-router-dom'
 import '../Header/svg.css'
+import axios from 'axios';
 
 
 function Application(props) {
@@ -16,16 +17,24 @@ function Application(props) {
     ReactModal.setAppElement(document.getElementById('root'));
 
     function applicationChange(){
+        let status;
         if(decision === "accept"){
-            // MAKE POST REQUEST
-            console.log("accept");
+            status = "ongoing"
         }
         else{
-            // MAKE POST REQUEST
-            console.log("decline");
+            status = "declined"
         }
-        setModalOpen(false);
-        setRefresh(true);
+        axios.post("/api/applications", {
+            projectID: props.projID,
+            status: "ongoing"
+        })
+        .then(res => {
+            setModalOpen(false);
+            setRefresh(true);
+        })
+        .catch(err => {
+            props.setError(err.response.data);
+        });
     }
 
     function setButton(decision){
@@ -38,7 +47,7 @@ function Application(props) {
             {/*The below line of code is to ensure they reload the page*/}
             {refresh && <Redirect to='/student'/>}
             <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                <p className="text-gray-900 whitespace-no-wrap text-center"><Link className="underline" to={"/student/project/"+props.link.toString()}>{props.name}</Link></p>
+                <p className="text-gray-900 whitespace-no-wrap text-center"><Link className="underline" to={"/student/project/"+props.projID.toString()}>{props.name}</Link></p>
             </td>
             <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                 <div className="flex flex-none">

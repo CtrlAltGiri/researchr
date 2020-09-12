@@ -30,7 +30,7 @@ function TagInputs(props) {
         else if (val.length === 1 && shouldQuery) {
             axios.get("/api/platform/tagQuery", {
                 params: {
-                    text: val.toLowerCase()
+                    query: val.toLowerCase()
                 }
             })
             .then(function(response) {
