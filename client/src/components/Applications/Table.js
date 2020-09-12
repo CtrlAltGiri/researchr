@@ -36,9 +36,10 @@ function Table(props){
                             professor={app.professorName}
                             status={app.status}
                             selected={props.selected}
-                            link={app.projectID}
+                            projID={app.projectID}
                             key={app.projectID}
                             professorMsg={app.professorMsg}
+                            setError={props.setError}
                           />
                       })}   
                   </tbody>
