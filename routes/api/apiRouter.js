@@ -21,7 +21,7 @@ apiRouter.all("*", function (req, res, next) {
     if (req.isAuthenticated())
         next('route')
     else
-        res.status(404).end(() => console.log("Not authenticated"));
+        res.status(401).send("Not authenticated").end();
 })
 
 apiRouter.get('/profile/myProfile', function (req, res) {
@@ -444,7 +444,7 @@ apiRouter.route('/applications')
                         callback("No student found");
                     }
                     else{
-                        console.log("student: ", student);
+                        console.log("Found applications.");
                         callback(null);
                     }
                 })
@@ -690,6 +690,7 @@ apiRouter.route('/applications')
 apiRouter.get("/platform/tagQuery", function (req, res) {
 
     const responseTags = []
+    const query = req.query.query;
     allTags.forEach((tag) => {
         tag.split("-").every(function (miniTag) {
             if (miniTag.startsWith(query)) {

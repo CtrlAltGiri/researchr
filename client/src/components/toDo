@@ -16,7 +16,6 @@ Students
 A. Landing Project Page.
 
 B. Individual Project Page
-1. What if project not there. Display error.
 
 C. Profile Page
 
@@ -29,6 +28,7 @@ E. Create CV Page
 1. Mark required and not required fields
 2. Check URLs and also drive links on regex.
 3. Change just url to logoURL
+4. Remove a step.
 
 F. Resolve all React warnings.
 
@@ -48,3 +48,13 @@ Refactoring
 2. ProjectPage.js
 
 ---------------------------------------------------------------------------------------------------------------
+Eventually before release
+
+1. Add Branches, Degree, Year of Graduation and College dropdown.
+2. Email verification.
+3. Freeze first college entry in front end.'
+4. Check school cgpa and percentage.
+5. Textarea has to be changed everywhere.
+6. Error page from /createprofile.
+7. If an experience does not have any values, don't show it.
+8. Tell adi that n and nmodified is not always 0.

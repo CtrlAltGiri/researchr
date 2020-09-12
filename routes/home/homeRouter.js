@@ -402,7 +402,7 @@ homeRouter.get("/test", function (req, res) {
 homeRouter.get('/plsauthenticate', function(req, res){
     if(process.env.NODE_ENV === 'dev'){
         const user = {
-           _id : '5f52765205ae1e5620e10c5e'
+           _id : '5f5cbd4464b7f00017fb544f'
         }
         req.logIn(user, function (err) {
             if(err){
