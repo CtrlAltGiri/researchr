@@ -3,8 +3,6 @@
 - Figure out logo API (Allow URL inputs for companies to get logo.)
 - Animations while moving from one page to another. V V important.
 - Refactor MonthYear.js to accomodate for Dropdown.js
-
-
 - Figure out mongoose stuff.
 - Error handling for node and for react. What to do.
 - How to make fool proof APIs
@@ -14,3 +12,29 @@ Others:
 1. Error page.
 2. Router default redirect.
 3. Project does not exist in the backend.
+
+A. Landing Project Page.
+
+B. Individual Project Page
+1. Apply only if complete (check this on apiRouter) - adi.
+
+C. Profile Page
+1. Fail to get image, default image.
+
+D. Applications Page
+1. Allow POST requests to accept / decline.
+2. See professor details if accepted.
+
+E. Create CV Page
+1. Mark required and not required fields
+2. Check URLs and also drive links on regex.
+3. Change just url to logoURL
+
+F. Resolve all React warnings.
+
+
+Backend.
+
+THERE IS NO CHECK ON API ROUTER FOR RANDOM VALUES BEING APPLIED TO THE POST.
+Take only the values that are needed -> createProfile.
+DateTime check -> not just 7 characters lol.

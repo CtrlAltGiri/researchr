@@ -10,7 +10,7 @@ function isStudent(req, res, next){
     }
 }
 
-studentPlatformRouter.get("/*", /*isStudent,*/ function(req, res){
+studentPlatformRouter.get("/*", isStudent, function(req, res){
     res.sendFile(path.resolve(__dirname, "../..", "client/build/platform.html"));
 });
 

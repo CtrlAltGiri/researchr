@@ -11,12 +11,13 @@ function ExperienceSection(props) {
                     return (
                         <Experience
                             name={experience[props.name]}
-                            startDate={experience[props.startDate]}
-                            endDate={experience[props.endDate]}
                             title={experience[props.subtitle]}
                             description={experience[props.description]}
-                            url={"microsoft.com"}
+                            url={experience[props.url]}
                             research={experience[props.research] ? "Research Project" : "Self Project"}
+                            displayParams={props.displayParams}
+                            displayModal={props.displayModal}
+                            experience={experience}
                         />
                     );
                 })}

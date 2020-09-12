@@ -6,7 +6,7 @@ const allTags = require('../../utils/data/tags')
 const upload = require('../../config/upload').upload
 const Grid = require('gridfs-stream');
 const mongoose = require('mongoose');
-const { collegeFormValidator, workFormValidator, projectFormValidator } = require('../../client/src/common/formValidators/cvValidator')
+const { collegeFormValidator, workFormValidator, projectFormValidator } = require('../../client/src/common/formValidators/cvValidator');
 
 function notAuthenticated(res) {
     res.status(404).send("Not authenticated");
@@ -22,9 +22,19 @@ apiRouter.all("*", function (req, res, next) {
 
 apiRouter.get('/profile/myProfile', function (req, res) {
     const studId = req.user._id;
+    const cvOnly = req.query.cvElements;
+    console.log(cvOnly);
     Students.findOne({ '_id': studId }, function (err, obj) {
-        if (err) { console.log(err); res.status(404).send("Failed") }
-        res.send(obj.cvElements);
+        if (err) { console.log(err); res.status(404).send("Error on our end."); return;}
+        obj = obj.toObject();
+        
+        if(!obj.completed && cvOnly === 'false'){
+            res.status(404).send("Profile not completed, please click edit profile to continue.");
+            return;
+        }
+
+        obj = (({ name, c_email, cvElements }) => ({ name, c_email, cvElements }))(obj);
+        res.send(obj);
     });
 });
 
@@ -91,11 +101,9 @@ apiRouter.route("/profile/createProfile")
             }
         }
         else if (step === 4) {
-
-            // TODO (Giri): Update the status of the student as completed,
-            // if he has education marked in his profile.
             update = {
-                "cvElements.interestTags": newState.interestTags
+                "cvElements.interestTags": newState.interestTags,
+                completed: true
             }
         }
 
@@ -166,6 +174,32 @@ apiRouter.get("/platform/tagQuery", function (req, res) {
 
     res.status(200).send(responseTags);
 });
+
+apiRouter.get("/applications" ,function(req, res){
+
+    res.status(200).send({
+        active : [{
+            name: "Giridhar Balachandran",
+            college: "IIT Bombay",
+            status: "Active",
+            createDate: "12th July, 2020"
+        }],
+        selected: [{
+            name:"Aditya Vavre",
+            college: "MIT, Manipal",
+            status: "Selected",
+            createDate: "17th May, 2021"
+        }],
+        archived: [{
+            name: "Rahul Humayun",
+            college: "IIT Madras",
+            status: "Ongoing",
+            createDate: "17th August, 2019"
+        }]
+    })
+});
+
+
 
 apiRouter.route("/testUpload")
     .post(upload, function (req, res) {
