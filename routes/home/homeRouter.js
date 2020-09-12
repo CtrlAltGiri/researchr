@@ -115,63 +115,40 @@ homeRouter.route('/signup')
             else if(result && result.active){
                 return res.render('signup', {errorMsg: "This email has already been registered with us"});
             }
-            // if email verification has not been done, remove existing doc in collection and allow signup again
-            else if(result && !result.active){
-                Students.deleteOne({ _id: result._id}, function(err, result) {
+            // if email exists in database but is not verified then update the existing one with new details
+            else if(result && !result.active) {
+                result.name = req.body.name;
+                result.p_email = req.body.p_email;
+                result.c_email = req.body.c_email;
+                result.password = req.body.password;
+                result.college = req.body.college;
+                result.branch = req.body.branch;
+                result.degree = req.body.degree;
+                result.yog = req.body.yog;
+                result.active = false;
+                result.TandC = false;
+                result.completed = false;
+                // set password
+                result.setPassword(req.body.password);
+                // set verification hash and get the token for email
+                let token = result.setVerifyHash();
+                // add user to database and send a verification email
+                return result.save({}, function (err, updatedResult){
                     if(err){
-                        console.log("Failed to remove entry from collection")
                         console.log(err);
                         return res.redirect('/signup/error');
                     }
-                    // if it was a successful delete
-                    else if(result.deletedCount){
-                        console.log("1 document deleted successfully");
-                        //TODO(aditya): Find a better logic to implement this and remove redundant code
-
-                        // now add new user to database
-                        const finalUser = new Students({
-                            name: req.body.name,
-                            p_email: req.body.p_email,
-                            c_email: req.body.c_email,
-                            password: req.body.password,
-                            college: req.body.college,
-                            branch: req.body.branch,
-                            degree: req.body.degree,
-                            yog: req.body.yog,
-                            active: false,
-                            TandC: false,
-                            completed: false
-                        });
-
-                        // set password
-                        finalUser.setPassword(req.body.password);
-
-                        // set verification hash and get the token for email
-                        let token = finalUser.setVerifyHash();
-
-                        // add user to database and send a verification email
-                        return finalUser.save({}, function (err, result){
-                            if(err){
-                                console.log(err);
-                                return res.redirect('/signup/error');
-                            }
-                            else if(!result){
-                                console.log("Error in saving student to collection");
-                                return res.redirect('/signup/error');
-                            }
-                            else{
-                                sendVerificationEmail(req.body.c_email, req.body.name, token).then(r => console.log(r)).catch(function (err){ console.log(err)});
-                                //TODO(aditya): Make a proper webpage for this
-                                res.render('signUpComplete');
-                            }
-                        })
-                    }
-                    // non successful delete
-                    else{
-                        console.log("Failed to delete document from collection")
+                    else if(!updatedResult){
+                        console.log("Error in saving student to collection");
                         return res.redirect('/signup/error');
                     }
-                });
+                    else{
+                        sendVerificationEmail(req.body.c_email, req.body.name, token).then(r => console.log(r)).catch(function (err){ console.log(err)});
+                        //TODO(aditya): Make a proper webpage for this
+                        res.render('signUpComplete');
+                    }
+                })
+
             }
             else {
                 // add user to database
@@ -191,10 +168,8 @@ homeRouter.route('/signup')
 
                 // set password
                 finalUser.setPassword(req.body.password);
-
                 // set verification hash and get the token for email
                 let token = finalUser.setVerifyHash();
-
                 // add user to database and send a verification email
                 return finalUser.save({}, function (err, result){
                     if(err){

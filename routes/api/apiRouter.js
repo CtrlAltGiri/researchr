@@ -466,7 +466,7 @@ apiRouter.route('/applications')
                         if(!applications){
                             console.log("No applications found");
                             console.log("Returning default response");
-                            callback(null, all_applications);
+                            callback(null, false, all_applications);
                         }
                         // the flow below will happen if student has previously applied before
                         else{
