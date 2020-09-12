@@ -420,10 +420,10 @@ apiRouter.route('/applications')
     // API to view all applications
     .get(function (req, res){
         let studentID = req.user._id;
-
-        Async.series([
+        let cur_time = new Date(); //current time
+        Async.waterfall([
             function (callback){
-                // CHECK 1: check if given student exists in our mongoDB
+                // CHECK 1: Check if given student exists in our mongoDB's students collection
                 Students.findOne({_id: studentID}, function (err, student){
                     if(err){
                         console.log(err);
@@ -436,7 +436,7 @@ apiRouter.route('/applications')
                     }
                     else{
                         console.log("student: ", student);
-                        callback(null, 1);
+                        callback(null);
                     }
                 })
             },
@@ -462,28 +462,93 @@ apiRouter.route('/applications')
                         // the flow below will happen if student has previously applied before
                         else{
                             let cur_applications = applications.profApplications;
-                            console.log("current applications: ", cur_applications);
+                            // active field
                             all_applications.active = cur_applications.filter(function (e){
                                 return e.status === "active";
                             })
-                            all_applications.selected = cur_applications.filter(function (e){
-                                return e.status === "selected";
-                            })
+                            // archived field
                             all_applications.archived = cur_applications.filter(function (e){
-                                return e.status !== "active" && e.status !== "selected";
+                                return (e.status !== "active" && e.status !== "selected" && e.status !== "interview");
                             })
-                            callback(null, all_applications);
+                            // selected field
+                            // has time to accept offer
+                            let cur_selected_true = cur_applications.filter(function (e){
+                                return (e.status === "selected" && e.timeToAccept > cur_time);
+                            })
+                            // time to accept offer has expired but not updated in DB
+                            let cur_selected_false = cur_applications.filter(function (e){
+                                return (e.status === "selected" && e.timeToAccept <= cur_time);
+                            })
+                            // in interview stage as decided by the professor
+                            let cur_interview = cur_applications.filter(function (e){
+                                return e.status === "interview";
+                            })
+                            all_applications.selected = cur_selected_true.concat(cur_interview);
+                            if(cur_selected_false.length > 0) {
+                                // if there are any applications that are not yet updated in the database
+                                console.log("Found applications that are to be updated");
+                                cur_selected_false.forEach(function (element){
+                                    element.status = "declined";
+                                })
+                                all_applications.archived = all_applications.archived.concat(cur_selected_false);
+                                callback(null, true, all_applications);
+                            }
+                            else{
+                                callback(null, false, all_applications);
+                            }
                         }
                     }
                 })
+            },
+            function (update, applications, callback){
+                // Update status of projects whose time to accept has expired to status `declined`. Decided by arg `update`
+                if(update !== true){
+                    callback(null, applications);
+                }
+                else{
+                    // Update status in applications collection in mongoDB
+                    Applications.updateOne(
+                        {_id: studentID},
+                        {
+                            $set: {
+                                'profApplications.$[element].status': "declined"
+                            }
+                        },
+                        {
+                            multi: true,
+                            arrayFilters: [
+                                {"element.status": "selected", "element.timeToAccept": {$lte: cur_time}}
+                            ]
+                        },
+                        function (err, result){
+                            if(err){
+                                console.log(err);
+                                callback("Failed");
+                            }
+                            else{
+                                const { n, nModified } = result;
+                                if (n && nModified) {
+                                    console.log("Update successful");
+                                    callback(null, applications);
+                                }
+                                else {
+                                    // TODO(aditya): If update to DB fails even then send proper response?
+                                    //               Returning error for now.
+                                    callback("Update failed");
+                                }
+                            }
+                        }
+                    )
+                }
             }
-        ],function (err, result){
+        ],function (err, applications){
             if(err){
                 res.status(404).send(err);
             }
             else{
                 // return last element because it will contain the result to be returned i.e. applications
-                res.status(200).send(result[result.length-1]);
+                // res.status(200).send(result[result.length-1]);
+                res.status(200).send(applications);
             }
         })
     })
@@ -492,15 +557,120 @@ apiRouter.route('/applications')
         let studentID = req.user._id;
         let projectID = req.body.projectID;
         let newStatus = req.body.status;
+        let cur_time = new Date();
+        // Do a preliminary check on new status
+        if (
+            newStatus !== "ongoing" &&
+            newStatus !== "declined"
+        ) {
+          return res.status(404).send("Not allowed");
+        }
 
         Async.series([
-            //TODO(aditya): Finish this
+            function (callback){
+                // CHECK 1: Check if given student exists in our mongoDB's students collection
+                Students.findOne({_id: studentID}, function (err, student){
+                    if(err){
+                        console.log(err);
+                        callback("Failed");
+                    }
+                    // if no student found with given ID
+                    else if(!student){
+                        console.log("No student found with id ", studentID);
+                        callback("No student found");
+                    }
+                    else{
+                        console.log("student: ", student);
+                        callback(null, 1);
+                    }
+                })
+            },
+            function(callback){
+                // CHECK 2: Check if projectID exists in profProjects collection
+                ProfProjects.findOne({_id: projectID}, function (err, project){
+                    if(err){
+                        console.log(err);
+                        callback("Failed");
+                    }
+                    // if no project with the given projectID or if its a closed project return error
+                    else if(!project){
+                        console.log("No project with id ", projectID);
+                        callback("Invalid project");
+                    }
+                    else if(project){
+                        callback(null, 2);
+                    }
+                })
+            },
+            function (callback){
+                // CHECK 3: Check if student has applied for the project and its current status and if change to new status is allowed
+                Applications.findOne({_id: studentID, 'profApplications.projectID': projectID}, function (err, result) {
+                    if (err) {
+                        console.log(err);
+                        callback("Failed");
+                    }
+                    // check if result is null which means that the student has not applied for this project
+                    else if (!result) {
+                        console.log("Student has not applied for the project");
+                        callback("No application found");
+                    }
+                    else if (result) {
+                        // get the required application from result
+                        let application = result.profApplications.find(
+                            element => {
+                                return element.projectID.equals(mongoose.Types.ObjectId(projectID));
+                            })
+                        // sanity check. ideally application should not be undefined.
+                        if(!application){
+                            callback("Error in updating status");
+                        }
+                        // Allow condition 1
+                        if (application.status === "selected" && application.timeToAccept > cur_time && newStatus === "ongoing") {
+                            console.log("Allowed condition 1");
+                            callback(null, 31);
+                        }
+                        // Allow condition 2
+                        else if (application.status === "selected" && newStatus === "declined") {
+                            console.log("Allowed condition 2");
+                            callback(null, 32);
+                        }
+                        // Disallow all other changes to status
+                        else {
+                            callback("Status change not allowed");
+                        }
+                    }
+                })
+            },
+            function (callback){
+                // FINAL step: Make the status update in applications collection
+                Applications.updateOne(
+                    {_id: studentID, 'profApplications.projectID': projectID},
+                    {
+                        $set: {
+                            'profApplications.$.status': newStatus
+                        }
+                    },
+                    function (err, result){
+                        if (err) {
+                            console.log(err);
+                            callback("Failed");
+                        }
+                        else {
+                            const { n, nModified } = result;
+                            if (n && nModified) {
+                                callback(null, "Successful");
+                            }
+                            else {
+                                callback("Update failed");
+                            }
+                        }
+                    })
+            }
         ], function (err, result){
             if(err){
                 res.status(404).send(err);
             }
             else{
-                // return last element because it will contain the result to be returned i.e. applications
                 res.status(200).send(result);
             }
         })
