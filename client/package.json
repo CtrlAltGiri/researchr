@@ -19,6 +19,8 @@
     "start": "react-scripts start",
     "build": "npm run build:css && react-scripts build && npm run move",
     "move": " move .\\build\\index.html .\\build\\platform.html",
+    "build-heroku": "npm run build:css && react-scripts build && npm run move",
+    "move-heroku": "mv ./build/index.html ./build/platform.html",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "build:css": "postcss src/assets/tailwind.css -o src/assets/index.css",
