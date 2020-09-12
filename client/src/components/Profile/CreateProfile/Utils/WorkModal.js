@@ -25,6 +25,7 @@ function WorkModal(props) {
         props.changeInput(event, anotherChange);
     }
 
+    ReactModal.setAppElement(document.getElementById('root'));
     return (
         <ReactModal
             isOpen={props.modalOpen}
@@ -111,6 +112,15 @@ function WorkModal(props) {
                         value={props.formState.proof}
                         extraClass="mb-8"
                         fieldExtraClass="w-full md:w-1/2"
+                    />
+
+                    <TextField
+                        text="URL (for logo on profile)"
+                        onChange={props.changeInput}
+                        name="url"
+                        value={props.formState.url}
+                        extraClass="w-full md:w-1/2 mb-8"
+                        fieldExtraClass="w-full md:w-3/4"
                     />
 
                     <TagInput

@@ -26,16 +26,27 @@ apiRouter.all("*", function (req, res, next) {
 
 apiRouter.get('/profile/myProfile', function (req, res) {
     const studId = req.user._id;
+    const cvOnly = req.query.cvElements;
+    console.log(cvOnly);
     Students.findOne({ '_id': studId }, function (err, obj) {
         if(err){
             console.log(err);
             return res.status(404).send("Failed");
         }
+
+        obj = obj.toObject();
         if(!obj){
             console.log("No student found with id ", studId);
             return res.status(404).send("Failed");
         }
-        res.send(obj.cvElements);
+        
+        if(!obj.completed && cvOnly === 'false'){
+            res.status(404).send("Profile not completed, please click edit profile to continue.");
+            return;
+        }
+
+        obj = (({ name, c_email, cvElements }) => ({ name, c_email, cvElements }))(obj);
+        res.send(obj);
     });
 });
 
@@ -102,11 +113,9 @@ apiRouter.route("/profile/createProfile")
             }
         }
         else if (step === 4) {
-
-            // TODO (Giri): Update the status of the student as completed,
-            // if he has education marked in his profile.
             update = {
-                "cvElements.interestTags": newState.interestTags
+                "cvElements.interestTags": newState.interestTags,
+                completed: true
             }
         }
 
@@ -118,7 +127,7 @@ apiRouter.route("/profile/createProfile")
                 }
                 const { n, nModified } = result;
                 // check if document has been successfully updated in collection
-                if(n && nModified){
+                if(n){
                     console.log("Successfully updated student cv");
                     return res.status(200).send("Successfully updated");
                 }
@@ -695,6 +704,7 @@ apiRouter.get("/platform/tagQuery", function (req, res) {
 
     res.status(200).send(responseTags);
 });
+
 
 apiRouter.route("/testUpload")
     .post(upload, function (req, res) {
