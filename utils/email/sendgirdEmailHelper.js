@@ -23,7 +23,7 @@ const sendVerificationEmail = (to, name, token) => {
             content: [
                 {
                     type: 'text/html',
-                    value: `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>researchR</title></head><body><p>Hello ${name}. Click on this link to verify your email <a href='www.google.com'>${hostUrl}/verify?token=${token}</a></p></body></html>`
+                    value: `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>researchR</title></head><body><p>Hello ${name}. Click on this link to verify your email <a href="${hostUrl}/verify?token=${token}">${hostUrl}/verify?token=${token}</a></p></body></html>`
                 }
             ]
         }
@@ -63,7 +63,7 @@ const sendPasswordResetEmail = (to, token) => {
             content: [
                 {
                     type: 'text/html',
-                    value: `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>researchR</title></head><body><p>Click on this link to reset your password <a href='www.google.com'>${hostUrl}/reset?token=${token}</a></p></body></html>`
+                    value: `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>researchR</title></head><body><p>Click on this link to reset your password <a href="${hostUrl}/reset?token=${token}">${hostUrl}/reset?token=${token}</a></p></body></html>`
                 }
             ]
         }
