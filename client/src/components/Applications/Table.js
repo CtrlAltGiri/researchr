@@ -32,10 +32,13 @@ function Table(props){
                       {props.app && props.app.map((app) => {
                           return <Application
                             name={app.name}
-                            createDate={app.createDate}
-                            college={app.college}
+                            createDate={app.doa}
+                            professor={app.professorName}
                             status={app.status}
                             selected={props.selected}
+                            link={app.projectID}
+                            key={app.projectID}
+                            professorMsg={app.professorMsg}
                           />
                       })}   
                   </tbody>

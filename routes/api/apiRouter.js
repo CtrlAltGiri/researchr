@@ -127,7 +127,7 @@ apiRouter.route("/profile/createProfile")
                 }
                 const { n, nModified } = result;
                 // check if document has been successfully updated in collection
-                if(n && nModified){
+                if(n){
                     console.log("Successfully updated student cv");
                     return res.status(200).send("Successfully updated");
                 }

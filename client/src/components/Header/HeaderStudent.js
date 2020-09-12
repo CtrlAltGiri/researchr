@@ -22,9 +22,9 @@ function Header() {
             </div>
             <a href="#" id="profileImage" className="md:ml-4 flex items-center justify-start md:mb-0 mb-4 m-auto md:m-0 cursor-pointer">
                 <label htmlFor="menu-toggle" className="cursor-pointer md:hidden block">
-                    <img className="rounded-full w-10 h-10 border-2 border-transparent hover:border-teal-500" src="/images/aboutus/giri.jpg" alt="Giridhar" />
+                    <img className="rounded-full w-10 h-10 border-2 border-transparent hover:border-teal-500" src="/images/defaultProfile.png" alt="Giridhar" />
                 </label>
-                <img className="rounded-full w-10 h-10 border-2 border-transparent hover:border-teal-500 hidden md:inline" src="/images/aboutus/giri.jpg" alt="Giridhar" />
+                <img className="rounded-full w-10 h-10 border-2 border-transparent hover:border-teal-500 hidden md:inline" src="/images/defaultProfile.png" alt="Giridhar" />
             </a>
         </header>
 

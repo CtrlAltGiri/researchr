@@ -1,29 +1,29 @@
+NEW FEATURES
+
 - Add uploading of transcripts as needed.
 - Experience Input should be better.
 - Figure out logo API (Allow URL inputs for companies to get logo.)
 - Animations while moving from one page to another. V V important.
-- Refactor MonthYear.js to accomodate for Dropdown.js
-- Figure out mongoose stuff.
-- Error handling for node and for react. What to do.
-- How to make fool proof APIs
+---------------------------------------------------------------------------------------------------------------
+Others
 
-
-Others:
 1. Error page.
 2. Router default redirect.
-3. Project does not exist in the backend.
+
+------------------------------------------------------------------------------------------------------------------
+Students
 
 A. Landing Project Page.
 
 B. Individual Project Page
-1. Apply only if complete (check this on apiRouter) - adi.
+1. What if project not there. Display error.
 
 C. Profile Page
-1. Fail to get image, default image.
 
 D. Applications Page
-1. Allow POST requests to accept / decline.
-2. See professor details if accepted.
+1. Allow POST requests to accept / decline. (WAIT FOR ADI).
+2. See professor details if accepted. (LATER.)
+3. Show time to accept, show professor message.
 
 E. Create CV Page
 1. Mark required and not required fields
@@ -32,9 +32,19 @@ E. Create CV Page
 
 F. Resolve all React warnings.
 
+G. Go through all the API calls and handle errors appropriately.
+--------------------------------------------------------------------------------------------------------------
+Backend
 
-Backend.
+1. THERE IS NO CHECK ON API ROUTER FOR RANDOM VALUES BEING APPLIED TO THE POST.
+Take only the values that are needed -> createProfile. (MAKE STUDENT SCHEMA PROPER.)
 
-THERE IS NO CHECK ON API ROUTER FOR RANDOM VALUES BEING APPLIED TO THE POST.
-Take only the values that are needed -> createProfile.
-DateTime check -> not just 7 characters lol.
+2. DateTime check -> not just 7 characters lol.
+
+--------------------------------------------------------------------------------------------------------------
+Refactoring
+
+1. MonthYear.js
+2. ProjectPage.js
+
+---------------------------------------------------------------------------------------------------------------

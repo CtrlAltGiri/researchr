@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { Redirect, useParams } from 'react-router-dom';
 import Skill from './Skill';
 import ReactModal from 'react-modal';
 import { CloseButton, TextArea, Title, TealButton, Error, BackButton } from '../../General/Form/FormComponents'
@@ -17,21 +17,25 @@ function ProjectPage(props) {
     let { projectId } = useParams();
     const [slider, setSlider] = useState(slideValues.DESCRIPTION);
     const [modalOpen, setModalOpen] = useState(false);
-    const [questionaire, setQuestionaire] = useState([]);
+    const [questionnaire, setQuestionnaire] = useState([]);
     const [answers, setAnswers] = useState([]);
     const [step, setStep] = useState(1);
     const [errorText, setError] = useState('');
     const [sop, setSop] = useState();
     const [apply, setApply] = useState(false);
-    const [projDetails, setProjDetails] = useState({})
+    const [projDetails, setProjDetails] = useState({});
+    const [redirect, setRedirect] = useState(false);
 
     useEffect(() => {
 
         axios.get("/api/project/" + projectId.toString())
             .then(res => {
-                setApply(!!res.data.apply);
-                setQuestionaire(res.data.questionaire);
                 setProjDetails(res.data);
+                setApply(res.data.apply);
+                setQuestionnaire(res.data.questionnaire);
+                if(res.data.apply === false){
+                    setError(res.data.errorMsg)
+                }
             })
             .catch(err => {
                 console.log(err);
@@ -44,7 +48,7 @@ function ProjectPage(props) {
         setAnswers(temp);
     }
 
-    function submitQuestionaire(event) {
+    function submitQuestionnaire(event) {
         event.preventDefault();
         let retVal = answersFormCheck(answers)
         if (retVal === true) {
@@ -69,8 +73,9 @@ function ProjectPage(props) {
                 sop: sop
             })
                 .then(res => {
-                    console.log(res);
                     setModalOpen(false);
+                    setRedirect(true);
+                    
                 })
                 .catch(err => {
                     setError("Error in submission of project application. Please store it locally.")
@@ -86,6 +91,7 @@ function ProjectPage(props) {
 
     return (
         <section className="text-gray-700 body-font overflow-hidden">
+            {redirect && <Redirect to="/student/applications" />}
             <div className="container px-5 py-12 mx-auto">
                 <div className="lg:w-4/5 mx-auto flex flex-wrap">
                     <div className="w-full lg:pr-10 lg:py-6 mb-6 lg:mb-0">
@@ -102,7 +108,7 @@ function ProjectPage(props) {
                         {slider === slideValues.DESCRIPTION ?
                             <div>
                                 <p className="leading-relaxed mb-8">{projDetails.desc}</p>
-
+                                <Error text={errorText} />
                             </div>
                             : slider === slideValues.SKILLS ?
                                 <div className="flex flex-wrap w-full sm:mx-auto sm:mb-2 -mx-2">
@@ -151,9 +157,7 @@ function ProjectPage(props) {
                             
                         }
 
-                        {!apply ? <button onClick={(e) => setModalOpen(true)} className="flex ml-auto mt-4 text-white bg-teal-500 border-0 py-2 px-6 focus:outline-none hover:bg-teal-600 rounded">Apply</button> : "" }
-                                 
-
+                        {apply ? <button onClick={(e) => setModalOpen(true)} className="flex ml-auto mt-4 text-white bg-teal-500 border-0 py-2 px-6 focus:outline-none hover:bg-teal-600 rounded">Apply</button> : "" }
                     </div>
                 </div>
             </div>
@@ -166,14 +170,14 @@ function ProjectPage(props) {
                 {step === 1 ?
                     <div>
                         <div className="flex flex-row justify-between">
-                            <Title text="Questionaire set by the professor" />
+                            <Title text="Questionnaire set by the professor" />
                             <CloseButton
                                 onClick={closeModal}
                             />
                         </div>
 
-                        <form className="flex flex-col" onSubmit={submitQuestionaire}>
-                            {questionaire && questionaire.map((question, index) => {
+                        <form className="flex flex-col" onSubmit={submitQuestionnaire}>
+                            {questionnaire && questionnaire.map((question, index) => {
                                 return (
                                     <TextArea
                                         text={question}
@@ -181,12 +185,13 @@ function ProjectPage(props) {
                                         fieldExtraClass="w-full"
                                         onChange={(e) => answerQuestionarire(e, index)}
                                         value={answers[index]}
+                                        key={question + index.toString()}
                                     />
                                 );
                             })}
 
                             <TealButton
-                                text="Submit Questionaire"
+                                text="Submit Questionnaire"
                                 extraClass="mx-auto mt-4"
                                 type="submit"
                             />
