@@ -9,7 +9,9 @@ const ApplicationsSchema = new mongoose.Schema({
             status: String,
             doa: Date,
             answers: [ String ],
-            sop: String
+            sop: String,
+            professorMsg: String,
+            timeToAccept: Date,
         }
     ]
 });
