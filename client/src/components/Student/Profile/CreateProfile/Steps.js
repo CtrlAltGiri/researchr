@@ -5,7 +5,7 @@ import CollegeModal from './Utils/CollegeModal';
 import WorkModal from './Utils/WorkModal';
 import ProjectModal from './Utils/ProjectModal';
 import { TealButton, Error } from '../../../General/Form/FormComponents';
-import {collegeFormValidator, workFormValidator, projectFormValidator} from '../../../../common/formValidators/cvValidator'
+import {schoolFormValidator, collegeFormValidator, workFormValidator, projectFormValidator} from '../../../../common/formValidators/cvValidator'
 import TagInput from '../../../General/TagInput/TagInput';
 import {Link} from 'react-router-dom';
 import CompleteGif from '../../../../assets/images/profilePage/complete.gif'
@@ -26,7 +26,6 @@ function Step1(props) {
             setshowError(true);
         }
         else {
-            // post data here for step1.
             props.updateCompletedStep(1, formState);
         }
     }
@@ -72,20 +71,21 @@ function Step2(props) {
         grade10: "",
         grade12: ""
     });
-    const [outerErrorShow, setOuterErrorShow] = useState(false);
+    const [showError, setOuterErrorShow] = useState('');
 
     function submitOuterForm(event) {
-        //TODO (giri): Check if entered values are numeric
-        if (schoolState.grade10 !== "" && schoolState.grade12 !== "" && collegeState.length > 0) {
+        
+        let retVal = schoolFormValidator(schoolState);
+        if (retVal === true && collegeState.length > 0) {
             let finalObj = {
                 school: schoolState,
                 college: collegeState
             }
-            setOuterErrorShow(false);
+            setOuterErrorShow('');
             props.updateCompletedStep(2, finalObj);
         }
         else {
-            setOuterErrorShow(true);
+            setOuterErrorShow(retVal);
         }
     }
 
@@ -109,6 +109,9 @@ function Step2(props) {
             />
 
             {collegeState.length > 0 && <TealButton extraClass="flex mx-auto mt-6" submitForm={submitOuterForm} text={"Next"} />}
+            <div className="my-4">
+                <Error text={showError} />
+            </div>
         </div>
     )
 }
