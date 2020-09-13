@@ -20,6 +20,48 @@ function checkProofLink(url){
     return true;
 }
 
+function schoolFormValidator(props){
+
+    let scoring = ["Percentage", "CGPA"]
+    let vals = [["scoring10", "grade10"], ["scoring12", "grade12"]];
+    let retVal = true;
+
+    vals.every((val) => {
+        let score = val[0];
+        let grade = val[1];
+        console.log(scoring, props[score])
+        if(!scoring.find(scoreType => scoreType === props[score])){
+            retVal = "Please ensure dropdown is selected correctly for scoring."
+            return false;
+        }
+        else if(isNaN(props[grade]) === true){
+            retVal = "Please enter numeric values for CGPA / Percentage."
+            return false;
+        }
+        else{
+            grade = Number.parseFloat(props[grade]);
+            switch(props[score]){
+                case scoring[0]: 
+                    if(grade < 0 || grade > 100){
+                        retVal = "Please enter a valid percentage value";
+                        return false;
+                    }
+                    break;
+                case scoring[1]:
+                    if(grade < 0 || grade > 10){
+                        retVal = "Please enter a valid CGPA (out of 10).";
+                        return false;
+                    }
+                    break;
+            }
+        }
+
+        return true;
+    })
+
+    return retVal; 
+}
+
 function collegeFormValidator(props){
 
     if(!colleges.find(college => college.value === props.college)){
@@ -99,4 +141,4 @@ function projectFormValidator(props){
     return true;
 }
 
-module.exports = {collegeFormValidator, workFormValidator, projectFormValidator, FormCheck}
+module.exports = {schoolFormValidator, collegeFormValidator, workFormValidator, projectFormValidator, FormCheck}

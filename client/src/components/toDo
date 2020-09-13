@@ -2,59 +2,62 @@ NEW FEATURES
 
 - Add uploading of transcripts as needed.
 - Experience Input should be better.
-- Figure out logo API (Allow URL inputs for companies to get logo.)
+- Autocomplete + Logo API.
 - Animations while moving from one page to another. V V important.
+- Make a beautiful error page :)
 ---------------------------------------------------------------------------------------------------------------
-Others
-
-1. Error page.
-2. Router default redirect.
-
-------------------------------------------------------------------------------------------------------------------
 Students
 
 A. Landing Project Page.
-
-B. Individual Project Page
-
+B. Individual Project Pag
 C. Profile Page
-
 D. Applications Page
-1. Allow POST requests to accept / decline. (WAIT FOR ADI).
-2. See professor details if accepted. (LATER.)
-3. Show time to accept, show professor message.
-
 E. Create CV Page
-1. Mark required and not required fields
-2. Check URLs and also drive links on regex.
-3. Change just url to logoURL
-4. Remove a step.
-
 F. Resolve all React warnings.
 
-G. Go through all the API calls and handle errors appropriately.
 --------------------------------------------------------------------------------------------------------------
 Backend
 
 1. THERE IS NO CHECK ON API ROUTER FOR RANDOM VALUES BEING APPLIED TO THE POST.
 Take only the values that are needed -> createProfile. (MAKE STUDENT SCHEMA PROPER.)
 
-2. DateTime check -> not just 7 characters lol.
+2. Remove all console.logs()
 
 --------------------------------------------------------------------------------------------------------------
 Refactoring
 
 1. MonthYear.js
 2. ProjectPage.js
+3. Export all React-Modals with a close sign elsewhere. (20px top bottom right left works well on mobile.)
+4. Export Table from application table to allow for any one to access.
 
 ---------------------------------------------------------------------------------------------------------------
 Eventually before release
 
-1. Add Branches, Degree, Year of Graduation and College dropdown.
-2. Email verification.
-3. Freeze first college entry in front end.'
-4. Check school cgpa and percentage.
-5. Textarea has to be changed everywhere.
-6. Error page from /createprofile.
-7. If an experience does not have any values, don't show it.
-8. Tell adi that n and nmodified is not always 0.
+1. Add Branches, Degree, Year of Graduation and College dropdown. (Homepage)
+2. Email verification.                                            (SendGrid - Adi)
+3. Freeze first college entry in front end.                       (Front end - long term)
+4. Make the textfield a recommender too (logo API)
+
+--------------------------------------------------------------------------------------------------------------------
+Upcoming:
+
+1. Mark required and non-required fields on application.
+2. Change URL to logoURL on DB and check these URLS too.
+3. Check DateTimes properly
+
+
+5. Check post requests of /applications.
+
+------------------------------------------------------------------------------------------------------------------
+Adi Stuff (Discuss)
+
+1. n and nModified
+2. User checks?
+3. Bug in GET /applications.
+    a. Does not retrieve the selected because of DateTime issue. 
+    b. Undefined?
+    c. Two selected projects don't show up.
+4. Projections on queries. Send only what is needed.
+
+---------------------------------------------------------------------------------------------------------------------

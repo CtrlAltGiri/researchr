@@ -2,6 +2,9 @@ const MAX_WORDS = 150;
 const MAX_SOP_WORDS = 300;
 
 function retWords(str){
+    if(!str){
+        return 0;
+    }
     str = str.replace(/(^\s*)|(\s*$)/gi,"");
     str = str.replace(/[ ]{2,}/gi," ");
     str = str.replace(/\n /,"\n");
