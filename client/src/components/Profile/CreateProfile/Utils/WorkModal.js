@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactModal from 'react-modal';
 import '../../../Header/svg.css';
-import { TextField, Title, Label, TealButton, Error, Checkbox } from '../../../General/Form/FormComponents';
+import { TextField, Title, TextArea, TealButton, Error, Checkbox } from '../../../General/Form/FormComponents';
 import TagInput from '../../../General/TagInput/TagInput';
 import MonthYear from '../../../General/Dropdown/MonthYear';
 
@@ -95,15 +95,13 @@ function WorkModal(props) {
 
                     </div>
 
-                    <div className="mb-8">
-                        <Label text="Experience Information" />
-                        <textarea
-                            onChange={props.changeInput}
-                            className="p-2 min-w-full outline-none focus:border-teal-500 border-2 rounded-lg min-h-1/4"
-                            name="experience"
-                            value={props.formState.experience}
-                        />
-                    </div>
+                    <TextArea
+                        name="experience"
+                        value={props.formState.experience}
+                        extraClass="mb-8"
+                        text="Description"
+                        onChange={props.changeInput}
+                    />
 
                     <TextField
                         text="Link to certificate / Proof (Drive Link)"

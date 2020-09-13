@@ -50,7 +50,7 @@ function Accordians(props) {
             <div className="tab w-full overflow-hidden border-t">
                 <input className="absolute opacity-0" id={props.uniqueNumber} type="radio" name="tabs" onClick={(e) => reverseActive(e, props.active, props.setActive)} />
                 <label className="block p-5 leading-normal cursor-pointer" htmlFor={props.uniqueNumber}>{props.heading}</label>
-                <div className="tab-content overflow-hidden border-l-2 bg-grey-lightest border-indigo leading-normal">
+                <div className="tab-content md:overflow-hidden border-l-2 bg-grey-lightest border-indigo leading-normal">
                     <div className="p-5">{AccordianDescription(props.values, props.description, props.labels)}</div>
                     <div className="flex justify-around pb-4">
                         <button className="focus:outline-none" onClick={(e) => props.editCallBack(props.values, props.index)}>Edit</button>

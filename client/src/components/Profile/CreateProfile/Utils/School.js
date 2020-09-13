@@ -18,15 +18,17 @@ function School(props) {
 
 
     return (
-        <div>
+        <div className="w-full">
             <Title text={'School'} />
             <div className="flex flex-row flex-wrap mb-16">
-                <div className="flex flex-row w-full md:w-1/2 justify-around">
+                <div className="flex flex-row flex-wrap w-full md:w-1/2 justify-around">
                     <TextField
                         text="10th Score"
                         onChange={changeSchoolInput}
                         name="grade10"
                         value={props.school.grade10}
+                        extraClass="w-full md:w-1/3 mb-4"
+                        fieldExtraClass="w-full"
                     />
 
                     <Dropdown
@@ -35,17 +37,19 @@ function School(props) {
                         options={[{ value: "CGPA", label: "CGPA" }, { value: "Percentage", label: "Percentage" }]}
                         changeDropdown={changeDropdown}
                         placeholder="Scoring"
-                        extraClass="flex flex-col mx-16 w-1/3 mb-8"
+                        extraClass="flex flex-col mx-0 md:mx-16 w-full md:w-1/3 mb-8"
                         fieldExtraClass="w-full"
                         text="Class 10 Scoring"
                     />
                 </div>
-                <div className="flex flex-row w-full md:w-1/2 justify-around">
+                <div className="flex flex-row flex-wrap w-full md:w-1/2 justify-around">
                     <TextField
                         text="12th Score"
                         onChange={changeSchoolInput}
                         name="grade12"
                         value={props.school.grade12}
+                        extraClass="w-full md:w-1/3 mb-4"
+                        fieldExtraClass="w-full"
                     />
 
                     <Dropdown
@@ -54,7 +58,7 @@ function School(props) {
                         options={[{ value: "CGPA", label: "CGPA" }, { value: "Percentage", label: "Percentage" }]}
                         changeDropdown={changeDropdown}
                         placeholder="Scoring"
-                        extraClass="flex flex-col mx-16 w-1/3 mb-8"
+                        extraClass="flex flex-col mx-0 md:mx-16 w-full md:w-1/3 mb-8"
                         text="Class 12 Scoring"
                     />
                 </div>

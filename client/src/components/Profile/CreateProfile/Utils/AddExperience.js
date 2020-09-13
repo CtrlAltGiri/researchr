@@ -119,7 +119,7 @@ function AddExperience(props) {
                 </svg>
             </button>
 
-            {modalOpen && <ModalComponent
+            <ModalComponent
                 submitInnerForm={submitInnerForm}
                 changeInput={changeInput}
                 errorText={errorText}
@@ -129,7 +129,7 @@ function AddExperience(props) {
                 formState={formState}
                 updateTags={updateTags}
                 changeDropdown={changeDropdown}
-            />}
+            />
 
         </div>
     );

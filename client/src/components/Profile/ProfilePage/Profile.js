@@ -31,6 +31,8 @@ function Profile(props) {
                 </div>
 
                 {profile.cvElements && <div>
+                    
+                    {profile.cvElements.workExperiences && profile.cvElements.workExperiences.length > 0 && 
                     <ExperienceSection
                         type="Work Experience"
                         experiences={profile.cvElements.workExperiences}
@@ -41,8 +43,9 @@ function Profile(props) {
                         displayModal={['Experience', 'Start Date', 'End Date', 'URL (Proof)', 'Position']}
                         displayParams={['experience', 'startDate', 'endDate', 'proof', 'position']}
                         
-                    />
+                    />}
 
+                    {profile.cvElements.projects && profile.cvElements.projects.length > 0 && 
                     <ExperienceSection
                         type="Projects"
                         experiences={profile.cvElements.projects}
@@ -52,8 +55,9 @@ function Profile(props) {
                         url="url"
                         displayModal={['Experience', 'Start Date', 'End Date', 'URL (Proof)', 'Professor', 'College']}
                         displayParams={['experience', 'startDate', 'endDate', 'proof', 'professor', 'college']}
-                    />
+                    />}
 
+                    {profile.cvElements.education && profile.cvElements.education.college && profile.cvElements.education.college.length > 0 && 
                     <ExperienceSection
                         type="Education"
                         experiences={profile.cvElements.education && profile.cvElements.education.college}
@@ -63,7 +67,7 @@ function Profile(props) {
                         url="url"
                         displayModal={['Degree', 'Year of Graduation', 'CGPA (out of 10)', 'Experience', 'Coursework']}
                         displayParams={['degree', 'yog', 'cgpa', 'experience', 'coursework']}
-                    />
+                    />}
                 </div>
                 }
 
@@ -71,9 +75,10 @@ function Profile(props) {
 
             </div>
 
-            {errorText.length === 0 ? <div className="flex justify-end mr-6 mb-4 underline">
-                <a href="https://clearbit.com">Logos provided by ClearBit</a>
-            </div>:""
+            {
+                errorText.length === 0 ? <div className="flex justify-end mr-6 mb-4 underline">
+                    <a href="https://clearbit.com">Logos provided by ClearBit</a>
+                </div>:""
             }
         </section>
     )

@@ -12,7 +12,7 @@ function Projectile(props) {
   }
 
     return (
-      <div className="p-12 md:w-6/12 flex flex-col items-start">
+      <div className="px-4 py-12 md:p-12 md:w-6/12 flex flex-col items-start">
         <div className="flex flex-row flex-wrap">
           {props.allItems.tags && props.allItems.tags.map(cat => {
             return (<span className="mr-4 py-1 px-3 mb-2 md:mb-0 rounded bg-teal-100 text-teal-500 text-sm font-medium tracking-widest">#{cat}</span>);
