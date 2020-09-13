@@ -24,7 +24,7 @@ function CreateProfile(props) {
     }
 
     function updateCompletedStep(newStep, formState) {
-        axios.post('/api/profile/createProfile', {
+        axios.post('/api/student/profile/createProfile', {
             step: newStep,
             value: formState,
         })
@@ -37,7 +37,7 @@ function CreateProfile(props) {
     }
 
     useEffect(() => {
-        axios.get('/api/profile/myProfile', { params: { cvElements: true } })
+        axios.get('/api/student/profile/myProfile', { params: { cvElements: true } })
             .then(function (response) {
                 let profile = response.data.cvElements;
                 profile && setCompleteFormState({

@@ -12,7 +12,7 @@ function FileInput() {
     function onSubmit(event) {
       event.preventDefault();
       if(file){
-        const url = "/api/testUpload";
+        const url = "/api/student/test/testUpload";
         const formData = new FormData();
         formData.append('file',file)
         const config = {
@@ -30,7 +30,7 @@ function FileInput() {
     }
   
     function brr(event){
-      axios.get('/api/testUpload').then((res) => {
+      axios.get('/api/student/test/testUpload').then((res) => {
         console.log(res);
       }).catch((err) => console.log(err));
     }
@@ -41,7 +41,7 @@ function FileInput() {
         <input type="file" onChange={onFilesAdded} />
         <TealButton type="submit" text="Submit" />
       </form>
-       <a target="_blank" href="/api/testUpload"> GET </a>
+       <a target="_blank" href="/api/student/test/testUpload"> GET </a>
        </div>
     )
 }

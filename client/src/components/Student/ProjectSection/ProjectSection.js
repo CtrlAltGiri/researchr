@@ -11,7 +11,7 @@ function ProjectSection() {
     const [apiError, setApiError] = useState(false);
 
     function newLoader() {
-        axios.get('/api/projects')
+        axios.get('/api/student/projects')
         .then(res => {
             setHasMore(false);
             setProjects([...projects, ...res.data]);

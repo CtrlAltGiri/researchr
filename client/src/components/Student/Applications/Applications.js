@@ -10,7 +10,7 @@ function Applications() {
     const [errorText, setShowError] = useState("")
   
     useEffect(() => {
-        axios.get("/api/applications")
+        axios.get("/api/student/applications")
         .then(res => {
           if(res)
             setApplications(res.data)

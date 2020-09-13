@@ -10,7 +10,7 @@ function Profile(props) {
     const [errorText, setShowError] = useState('');
 
     useEffect(() => {
-        axios.get('/api/profile/myProfile',{params : {cvElements: false}})
+        axios.get('/api/student/profile/myProfile',{params : {cvElements: false}})
             .then(function (response) {
                 setProfile(response.data);
             })

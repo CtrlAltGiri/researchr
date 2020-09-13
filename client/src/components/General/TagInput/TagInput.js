@@ -28,7 +28,7 @@ function TagInputs(props) {
             setSuggestions([]);
         }
         else if (val.length === 1 && shouldQuery) {
-            axios.get("/api/platform/tagQuery", {
+            axios.get("/api/student/test/platform/tagQuery", {
                 params: {
                     query: val.toLowerCase()
                 }

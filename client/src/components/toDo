@@ -21,6 +21,8 @@ Backend
 1. THERE IS NO CHECK ON API ROUTER FOR RANDOM VALUES BEING APPLIED TO THE POST.
 Take only the values that are needed -> createProfile. (MAKE STUDENT SCHEMA PROPER.)
 
+2. Remove all console.logs()
+
 --------------------------------------------------------------------------------------------------------------
 Refactoring
 
@@ -42,7 +44,7 @@ Upcoming:
 
 1. Mark required and non-required fields on application.
 2. Change URL to logoURL on DB and check these URLS too.
-3. Check CGPA (school) and DateTimes properly
+3. Check DateTimes properly
 
 
 5. Check post requests of /applications.

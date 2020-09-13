@@ -28,7 +28,7 @@ function ProjectPage(props) {
 
     useEffect(() => {
 
-        axios.get("/api/project/" + projectId.toString())
+        axios.get("/api/student/project/" + projectId.toString())
             .then(res => {
                 setProjDetails(res.data);
                 setApply(res.data.apply);
@@ -68,7 +68,7 @@ function ProjectPage(props) {
             setError(retVal);
         }
         else {
-            axios.post('/api/project/' + projectId.toString(), {
+            axios.post('/api/student/project/' + projectId.toString(), {
                 answers: answers,
                 sop: sop
             })

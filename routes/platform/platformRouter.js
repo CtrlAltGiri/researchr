@@ -1,5 +1,4 @@
 const platformRouter = require('express').Router();
-const path = require('path');
 
 function routeBasedOnUserType(req, res, next){
     if(req.isAuthenticated()){

@@ -16,7 +16,7 @@ function Application(props) {
 
     function applicationChange(){
         setModalOpen(false);
-        axios.post("/api/applications", {
+        axios.post("/api/student/applications", {
             projectID: props.projID,
             status: decision
         })
