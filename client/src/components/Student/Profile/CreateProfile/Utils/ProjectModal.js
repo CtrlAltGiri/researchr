@@ -1,31 +1,39 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactModal from 'react-modal';
-import '../../../Header/svg.css';
-import { TextField, Title, TextArea, TealButton, Error, Checkbox } from '../../../General/Form/FormComponents';
-import TagInput from '../../../General/TagInput/TagInput';
-import MonthYear from '../../../General/Dropdown/MonthYear';
+import { TextField, Title, TextArea, TealButton, Error, Checkbox } from '../../../../General/Form/FormComponents';
+import TagInput from '../../../../General/TagInput/TagInput';
+import MonthYear from '../../../../General/Dropdown/MonthYear'
 
-function WorkModal(props) {
+function ProjectModal(props) {
 
-    function presentlyWorking(event) {
+    const [checked, setChecked] = useState(props.formState.researchProject || false)
+
+    ReactModal.setAppElement(document.getElementById('root'));
+    useEffect(() => {
         let anotherChange;
-        let name = event.target.name, value = event.target.checked;
-        if (event.target.checked) {
+        let name = "researchProject", value = checked;
+        if (!checked) {
             anotherChange = {
-                "endDate": "Present",
+                "professor": "-",
+                "college": "-",
+                "startDate": "-",
+                "endDate": "-",
                 [name]: value
             }
         }
         else {
             anotherChange = {
-                "endDate": "",
+                "professor": props.formState.professor.replace('-', '') || "",
+                "college": props.formState.college.replace('-', '') || "",
+                "startDate": props.formState.startDate.toString().replace('-', '') || "",
+                "endDate": props.formState.endDate.toString().replace('-', '') || "",
                 [name]: value
             }
         }
-        props.changeInput(event, anotherChange);
-    }
+        props.changeInput({}, anotherChange);
+    }, [checked])
 
-    ReactModal.setAppElement(document.getElementById('root'));
+
     return (
         <ReactModal
             isOpen={props.modalOpen}
@@ -35,66 +43,74 @@ function WorkModal(props) {
                 <form className="flex flex-col" onSubmit={props.submitInnerForm}>
 
                     <div className="flex flex-row justify-between">
-                        <Title text="Enter details of your work experience" />
+                        <Title text="Enter details of your projects" />
                         <button name="close" className="pr-4 focus:outline-none" onClick={(e) => { props.closeModal(e) }}><svg className="svg-icon" viewBox="0 0 20 20">
                             <path d="M10.185,1.417c-4.741,0-8.583,3.842-8.583,8.583c0,4.74,3.842,8.582,8.583,8.582S18.768,14.74,18.768,10C18.768,5.259,14.926,1.417,10.185,1.417 M10.185,17.68c-4.235,0-7.679-3.445-7.679-7.68c0-4.235,3.444-7.679,7.679-7.679S17.864,5.765,17.864,10C17.864,14.234,14.42,17.68,10.185,17.68 M10.824,10l2.842-2.844c0.178-0.176,0.178-0.46,0-0.637c-0.177-0.178-0.461-0.178-0.637,0l-2.844,2.841L7.341,6.52c-0.176-0.178-0.46-0.178-0.637,0c-0.178,0.176-0.178,0.461,0,0.637L9.546,10l-2.841,2.844c-0.178,0.176-0.178,0.461,0,0.637c0.178,0.178,0.459,0.178,0.637,0l2.844-2.841l2.844,2.841c0.178,0.178,0.459,0.178,0.637,0c0.178-0.176,0.178-0.461,0-0.637L10.824,10z"></path>
                         </svg></button>
                     </div>
 
                     <TextField
-                        text="Company"
+                        text="Title of Project"
                         onChange={props.changeInput}
-                        name="organization"
-                        value={props.formState.organization}
+                        name="title"
+                        value={props.formState.title}
                         extraClass="mb-8"
                         fieldExtraClass="w-full md:w-1/2"
                     />
 
                     <Checkbox
-                        text="Do you presently work here?"
-                        onChange={presentlyWorking}
-                        name="presentWork"
-                        value={props.formState.presentWork}
+                        text="Is this a research project under a guide?"
+                        onChange={(e) => setChecked(!checked)}
+                        name="researchProject"
+                        value={props.formState.researchProject}
                         extraClass="mb-4"
-                        ID="presentWork"
+                        ID="researchProject"
                     />
 
-                    <div className="flex flex-col justify-around md:justify-center md:flex-row mb-8">
+                    {props.formState.researchProject &&
+                        <div className="flex flex-col md:flex-row md:flex-wrap mb-8">
 
-                        <TextField
-                            text="Position"
-                            onChange={props.changeInput}
-                            name="position"
-                            value={props.formState.position}
-                            extraClass="w-full mb-2 md:mb-0"
-                            fieldExtraClass="w-full md:w-3/4"
-                        />
+                            <TextField
+                                text="Under the guidance of"
+                                onChange={props.changeInput}
+                                name="professor"
+                                value={props.formState.professor}
+                                extraClass="w-full md:w-1/2 mb-2"
+                                fieldExtraClass="w-full md:w-3/4"
+                            />
 
-                        <MonthYear
-                            name="startDate"
-                            onChange={props.changeDropdown}
-                            date={props.formState.startDate}
-                            text="Start Date"
-                            extraClass="w-full mb-2 md:mb-0"
-                            innerClass="flex"
-                            fieldExtraClass="w-full md:w-3/4 mr-12"
-                        />
+                            <TextField
+                                text="College"
+                                onChange={props.changeInput}
+                                name="college"
+                                value={props.formState.college}
+                                extraClass="w-full md:w-1/2 mb-2"
+                                fieldExtraClass="w-full md:w-3/4"
+                            />
 
-                        {!props.formState.presentWork ?
+                            <MonthYear
+                                name="startDate"
+                                onChange={props.changeDropdown}
+                                date={props.formState.startDate}
+                                extraClass="w-full md:w-1/2 mb-2"
+                                innerClass="flex"
+                                fieldExtraClass="w-full md:w-3/4 mr-24"
+                                text="Start Date"
+                            />
+
                             <MonthYear
                                 name="endDate"
                                 onChange={props.changeDropdown}
                                 date={props.formState.endDate}
-                                text="End Date"
-                                extraClass="w-full mb-2 md:mb-0"
+                                extraClass="w-full md:w-1/2 mb-2"
                                 innerClass="flex"
-                                fieldExtraClass="w-full md:w-3/4 mr-12"
+                                fieldExtraClass="w-full md:w-3/4 mr-24"
+                                text="End Date"
                             />
-                            : ""
-                        }
 
-                    </div>
-
+                        </div>
+                    }
+                    
                     <TextArea
                         name="experience"
                         value={props.formState.experience}
@@ -104,7 +120,7 @@ function WorkModal(props) {
                     />
 
                     <TextField
-                        text="Link to certificate / Proof (Drive Link)"
+                        text="Link for Proof (Drive / Github repository)"
                         onChange={props.changeInput}
                         name="proof"
                         value={props.formState.proof}
@@ -144,4 +160,4 @@ function WorkModal(props) {
     );
 }
 
-export default WorkModal;
+export default ProjectModal;

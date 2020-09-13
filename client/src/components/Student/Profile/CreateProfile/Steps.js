@@ -4,12 +4,11 @@ import School from './Utils/School';
 import CollegeModal from './Utils/CollegeModal';
 import WorkModal from './Utils/WorkModal';
 import ProjectModal from './Utils/ProjectModal';
-import { TealButton, Error } from '../../General/Form/FormComponents';
-import {collegeFormValidator, workFormValidator, projectFormValidator} from '../../../common/formValidators/cvValidator'
-import TagInput from '../../General/TagInput/TagInput';
+import { TealButton, Error } from '../../../General/Form/FormComponents';
+import {collegeFormValidator, workFormValidator, projectFormValidator} from '../../../../common/formValidators/cvValidator'
+import TagInput from '../../../General/TagInput/TagInput';
 import {Link} from 'react-router-dom';
-import '../../Header/svg.css'
-import CompleteGif from '../../../assets/images/profilePage/complete.gif'
+import CompleteGif from '../../../../assets/images/profilePage/complete.gif'
 
 
 function Step1(props) {

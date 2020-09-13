@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import ExperienceSection from './ExperienceSection';
 import {Link} from 'react-router-dom';
 import axios from 'axios';
-import {Error} from '../../General/Form/FormComponents';
+import {Error} from '../../../General/Form/FormComponents';
 
 function Profile(props) {
 

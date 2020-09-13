@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Projectile from "./Projectile/Projectile";
 import InfiniteScroll from 'react-infinite-scroller';
 import axios from 'axios'
-import {Error} from '../General/Form/FormComponents';
+import {Error} from '../../General/Form/FormComponents';
 
 function ProjectSection() {
 

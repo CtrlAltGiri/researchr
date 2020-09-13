@@ -40,6 +40,7 @@ function Table(props){
                             key={app.projectID}
                             professorMsg={app.professorMsg}
                             setError={props.setError}
+                            finalDate={app.timeToAccept}
                           />
                       })}   
                   </tbody>

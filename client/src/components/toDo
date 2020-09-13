@@ -9,15 +9,10 @@ NEW FEATURES
 Students
 
 A. Landing Project Page.
-
-B. Individual Project Page
-
+B. Individual Project Pag
 C. Profile Page
-
 D. Applications Page
-
 E. Create CV Page
-
 F. Resolve all React warnings.
 
 --------------------------------------------------------------------------------------------------------------
@@ -32,6 +27,7 @@ Refactoring
 1. MonthYear.js
 2. ProjectPage.js
 3. Export all React-Modals with a close sign elsewhere. (20px top bottom right left works well on mobile.)
+4. Export Table from application table to allow for any one to access.
 
 ---------------------------------------------------------------------------------------------------------------
 Eventually before release
@@ -39,27 +35,27 @@ Eventually before release
 1. Add Branches, Degree, Year of Graduation and College dropdown. (Homepage)
 2. Email verification.                                            (SendGrid - Adi)
 3. Freeze first college entry in front end.                       (Front end - long term)
+4. Make the textfield a recommender too (logo API)
 
 --------------------------------------------------------------------------------------------------------------------
 Upcoming:
 
-1. Time to accept on applications page.
-2. Mark required and non-required fields on application.
-3. Change URL to logoURL.
-4. Make the textfield a recommender too.
-6. Check CGPA (school)
-7. Create a student folder and put all the shit there.
-8. Refactor that svg thing -> make the name propers.
-9. Bug in /applications. Does not retrieve the selected dudes. 
-10. Check URLs and change the name in DB to logoURL
-11. Make table its own component.
-12. Check post requests of /applications.
-13. Check DateTime properly.
+1. Mark required and non-required fields on application.
+2. Change URL to logoURL on DB and check these URLS too.
+3. Check CGPA (school) and DateTimes properly
+
+
+5. Check post requests of /applications.
 
 ------------------------------------------------------------------------------------------------------------------
 Adi Stuff (Discuss)
 
 1. n and nModified
 2. User checks?
+3. Bug in GET /applications.
+    a. Does not retrieve the selected because of DateTime issue. 
+    b. Undefined?
+    c. Two selected projects don't show up.
+4. Projections on queries. Send only what is needed.
 
 ---------------------------------------------------------------------------------------------------------------------

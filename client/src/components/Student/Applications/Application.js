@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
-import Statusbadge from './Statusbadge';
-import ReactModal from 'react-modal';
-import { RedButton, TealButton } from '../General/Form/FormComponents';
 import { Redirect, Link } from 'react-router-dom'
-import '../Header/svg.css'
 import axios from 'axios';
-
+import ReactModal from 'react-modal';
+import { RedButton, TealButton } from '../../General/Form/FormComponents';
+import Statusbadge from './Statusbadge';
 
 function Application(props) {
 
@@ -17,19 +15,12 @@ function Application(props) {
     ReactModal.setAppElement(document.getElementById('root'));
 
     function applicationChange(){
-        let status;
-        if(decision === "accept"){
-            status = "ongoing"
-        }
-        else{
-            status = "declined"
-        }
+        setModalOpen(false);
         axios.post("/api/applications", {
             projectID: props.projID,
-            status: "ongoing"
+            status: decision
         })
         .then(res => {
-            setModalOpen(false);
             setRefresh(true);
         })
         .catch(err => {
@@ -67,21 +58,22 @@ function Application(props) {
             <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                 <p className="text-gray-900 whitespace-no-wrap text-center">
                     {props.createDate && (new Date(props.createDate).toDateString())}
+                    {props.finalDate && <p className="text-red-500 font-medium">Accept before: {new Date(props.finalDate).toDateString()}</p>}
                 </p>
             </td>
             <td className="py-5 border-b border-gray-200 bg-white text-sm mb-1">
                 <div className="flex items-center mb-2">
                     <Statusbadge badge={props.status} />
                 </div>
-                {props.selected ?
+                {props.status === 'selected' ?
                     <div className="flex justify-around">
-                        <button onClick={(e) => setButton('accept')} className="focus:outline-none">
+                        <button onClick={(e) => setButton('ongoing')} className="focus:outline-none">
                         <svg className="svg-icon-teal-small" viewBox="0 0 20 20">
 							<path fill="none" d="M7.629,14.566c0.125,0.125,0.291,0.188,0.456,0.188c0.164,0,0.329-0.062,0.456-0.188l8.219-8.221c0.252-0.252,0.252-0.659,0-0.911c-0.252-0.252-0.659-0.252-0.911,0l-7.764,7.763L4.152,9.267c-0.252-0.251-0.66-0.251-0.911,0c-0.252,0.252-0.252,0.66,0,0.911L7.629,14.566z"></path>
 						</svg>
                         </button>
-                        <button onClick={(e) => setButton('decline')} className="focus:outline-none">
-                        <svg className="svg-icon-small" viewBox="0 0 20 20">
+                        <button onClick={(e) => setButton('declined')} className="focus:outline-none">
+                        <svg className="svg-icon-red-small" viewBox="0 0 20 20">
 							<path fill="none" d="M15.898,4.045c-0.271-0.272-0.713-0.272-0.986,0l-4.71,4.711L5.493,4.045c-0.272-0.272-0.714-0.272-0.986,0s-0.272,0.714,0,0.986l4.709,4.711l-4.71,4.711c-0.272,0.271-0.272,0.713,0,0.986c0.136,0.136,0.314,0.203,0.492,0.203c0.179,0,0.357-0.067,0.493-0.203l4.711-4.711l4.71,4.711c0.137,0.136,0.314,0.203,0.494,0.203c0.178,0,0.355-0.067,0.492-0.203c0.273-0.273,0.273-0.715,0-0.986l-4.711-4.711l4.711-4.711C16.172,4.759,16.172,4.317,15.898,4.045z"></path>
 						</svg>
                         </button>
@@ -105,11 +97,11 @@ function Application(props) {
                 }}
             >
                 <p className="mb-4">Are you sure you want to {decision}?</p>
-                {decision === 'accept' ? <p className="mb-4">This will result in all other applications being <span className="text-red-500">cancelled.</span></p>
+                {decision === 'ongoing' ? <p className="mb-4">This will result in all other applications being <span className="text-red-500">cancelled.</span></p>
                     : <p className="mb-4">This will move this application to archived (this is <span className="text-red-500">non-reversable</span>)</p>
                 }
 
-                {decision === 'accept' ?
+                {decision === 'ongoing' ?
                     <div className="flex justify-around">
                         <TealButton
                             text="Yes, accept"

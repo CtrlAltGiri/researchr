@@ -1,9 +1,8 @@
 import React from 'react';
 import ReactModal from 'react-modal';
-import '../../../Header/svg.css'
-import { TextField, Title, TealButton, Error, CloseButton, TextArea } from '../../../General/Form/FormComponents';
-import Dropdown from '../../../General/Dropdown/Dropdown';
-import { colleges, degrees, branches, yog } from '../../../../common/data/collegeData';
+import { TextField, Title, TealButton, Error, CloseButton, TextArea } from '../../../../General/Form/FormComponents';
+import Dropdown from '../../../../General/Dropdown/Dropdown';
+import { colleges, degrees, branches, yog } from '../../../../../common/data/collegeData';
 
 function CollegeModal(props) {
 

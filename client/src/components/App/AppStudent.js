@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
-import HeaderStudent from '../Header/HeaderStudent';
-import ProjectSection from '../ProjectSection/ProjectSection';
-import ProjectPage from '../ProjectSection/ProjectPage/ProjectPage';
-import Profile from '../Profile/ProfilePage/Profile';
-import CreateProfile from '../Profile/CreateProfile/CreateProfile';
-import Applications from '../Applications/Applications'
+import Header from '../Header/HeaderStudent';
+import ProjectSection from '../Student/ProjectSection/ProjectSection';
+import ProjectPage from '../Student/ProjectSection/ProjectPage/ProjectPage';
+import Profile from '../Student/Profile/ProfilePage/Profile';
+import CreateProfile from '../Student/Profile/CreateProfile/CreateProfile';
+import Applications from '../Student/Applications/Applications'
 import Error from './Error';
 import { Switch, Route } from 'react-router-dom';
 import axios from 'axios';
@@ -23,7 +23,7 @@ function AppStudent(props) {
   return (
     <div>
 
-      <HeaderStudent />
+      <Header />
       <Switch>
         <Route path="/student" component={ProjectSection} exact />
         <Route path="/student/project/:projectId" component={ProjectPage} />

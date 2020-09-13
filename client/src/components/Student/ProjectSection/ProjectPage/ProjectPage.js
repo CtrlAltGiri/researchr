@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Redirect, useParams } from 'react-router-dom';
 import Skill from './Skill';
 import ReactModal from 'react-modal';
-import { CloseButton, TextArea, Title, TealButton, Error, BackButton } from '../../General/Form/FormComponents'
+import { CloseButton, TextArea, Title, TealButton, Error, BackButton } from '../../../General/Form/FormComponents'
 import axios from 'axios';
-import { answersFormCheck, sopFormCheck } from '../../../common/formValidators/sopValidator';
+import { answersFormCheck, sopFormCheck } from '../../../../common/formValidators/sopValidator';
 
 const slideValues = {
     DESCRIPTION: "desc",

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import Accordian from '../../../General/Accordian/Accordian'
-import { Title } from '../../../General/Form/FormComponents';
-import {FormCheck} from '../../../../common/formValidators/cvValidator';
+import Accordian from '../../../../General/Accordian/Accordian'
+import { Title } from '../../../../General/Form/FormComponents';
+import {FormCheck} from '../../../../../common/formValidators/cvValidator';
 
 /// <summary> Template for all the adding experiences
 /// Props: 

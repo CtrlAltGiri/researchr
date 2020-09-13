@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import ReactModal from 'react-modal';
-import { CloseButton, Title, Label } from '../../General/Form/FormComponents';
+import { CloseButton, Title, Label } from '../../../General/Form/FormComponents';
 
 function ModalElement(props) {
   return (

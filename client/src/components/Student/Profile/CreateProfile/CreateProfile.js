@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Step1, Step2, Step3, Step4, CompleteStep } from './Steps';
 import StepsHeader from './Utils/StepsHeader';
-import { Error } from '../../General/Form/FormComponents';
+import { Error } from '../../../General/Form/FormComponents';
 import axios from 'axios';
 import { Redirect } from 'react-router-dom';
 
