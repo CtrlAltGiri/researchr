@@ -1,7 +1,7 @@
 require('dotenv').config()
 const sg = require('sendgrid')(process.env.SendGridApiKey);
 
-const sendVerificationEmail = (to, name, token) => {
+const sendVerificationEmail = (to, name, token, type) => {
     const hostUrl = process.env.hostURL;
     const request = sg.emptyRequest({
         method: "POST",
@@ -23,7 +23,7 @@ const sendVerificationEmail = (to, name, token) => {
             content: [
                 {
                     type: 'text/html',
-                    value: `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>researchR</title></head><body><p>Hello ${name}. Click on this link to verify your email <a href="${hostUrl}/verify?token=${token}">${hostUrl}/verify?token=${token}</a></p></body></html>`
+                    value: `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>researchR</title></head><body><p>Hello ${name}. Click on this link to verify your email <a href="${hostUrl}/verify/${type}?token=${token}">${hostUrl}/verify?token=${token}</a></p></body></html>`
                 }
             ]
         }
@@ -41,7 +41,7 @@ const sendVerificationEmail = (to, name, token) => {
     });
 };
 
-const sendPasswordResetEmail = (to, token) => {
+const sendPasswordResetEmail = (to, token, type) => {
     const hostUrl = process.env.hostURL;
     const request = sg.emptyRequest({
         method: "POST",
@@ -63,7 +63,7 @@ const sendPasswordResetEmail = (to, token) => {
             content: [
                 {
                     type: 'text/html',
-                    value: `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>researchR</title></head><body><p>Click on this link to reset your password <a href="${hostUrl}/reset?token=${token}">${hostUrl}/reset?token=${token}</a></p></body></html>`
+                    value: `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>researchR</title></head><body><p>Click on this link to reset your password <a href="${hostUrl}/reset/${type}?token=${token}">${hostUrl}/reset?token=${token}</a></p></body></html>`
                 }
             ]
         }

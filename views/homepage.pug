@@ -3,7 +3,7 @@ html(lang='en', style='scroll-behavior: smooth;')
   head
     meta(charset='UTF-8')
     meta(name='viewport', content='width=device-width, initial-scale=1.0')
-    link(rel='stylesheet', href='css/index.css')
+    link(rel='stylesheet', href='/css/index.css')
     title ReSEARCHr
   body
     include includes/header.pug
@@ -21,9 +21,11 @@ html(lang='en', style='scroll-behavior: smooth;')
           form(action="/", method="post" class="flex flex-col")
             input.bg-white.rounded.border.border-gray-400.text-base.px-4.py-2.mb-4(class='focus:outline-none focus:border-teal-500', placeholder='Full Name', type='text', name='name')
             input.bg-white.rounded.border.border-gray-400.text-base.px-4.py-2.mb-4(class='focus:outline-none focus:border-teal-500', placeholder='Email ID', type='email', name='email')
-            button.text-white.bg-teal-500.border-0.py-2.px-8.rounded.text-lg(class='focus:outline-none hover:bg-teal-600' type='submit')
-              | Sign
-              | Up
+            div.flex.flex-row.justify-around
+              button.text-white.bg-teal-500.border-0.py-2.px-8.rounded.text-lg(class='focus:outline-none hover:bg-teal-600' name="type" value="student" type='submit')
+                | Student
+              button.text-white.bg-teal-500.border-0.py-2.px-8.rounded.text-lg(class='focus:outline-none hover:bg-teal-600' name="type" value="professor" type='submit')
+                | Professor
           p.text-xs.text-gray-500.mt-3 We promise not to send you any spam.
     section.text-gray-700.body-font
       .container.px-5.py-12.mx-auto
@@ -34,7 +36,7 @@ html(lang='en', style='scroll-behavior: smooth;')
         .flex.flex-wrap.flex-col.-m-4(class='lg:flex-row')
           .p-4(class='lg:w-1/2')
             .h-full.flex.flex-col.items-center.justify-center.text-center(class='sm:flex-row sm:justify-start sm:text-left')
-              img.flex-shrink-0.rounded-lg.w-48.h-48.object-cover.object-center.mb-4(alt='team', class='sm:mb-0', src='images/aboutus/rahul.jpeg')
+              img.flex-shrink-0.rounded-lg.w-48.h-48.object-cover.object-center.mb-4(alt='team', class='sm:mb-0', src='/images/aboutus/rahul.jpeg')
               .flex-grow(class='sm:pl-8')
                 h2.title-font.font-medium.text-lg.text-gray-900 Rahul Humayun
                 h3.text-gray-500.mb-3 Team Lead
@@ -51,7 +53,7 @@ html(lang='en', style='scroll-behavior: smooth;')
                       path(d='M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z')
           .p-4(class='lg:w-1/2')
             .h-full.flex.flex-col.items-center.justify-center.text-center(class='sm:flex-row sm:justify-start sm:text-left')
-              img.flex-shrink-0.rounded-lg.w-48.h-48.object-cover.object-center.mb-4(alt='team', class='sm:mb-0', src='images/aboutus/adi.jpeg')
+              img.flex-shrink-0.rounded-lg.w-48.h-48.object-cover.object-center.mb-4(alt='team', class='sm:mb-0', src='/images/aboutus/adi.jpeg')
               .flex-grow(class='sm:pl-8')
                 h2.title-font.font-medium.text-lg.text-gray-900 Aditya Vavre
                 h3.text-gray-500.mb-3 Artificial Intelligence
@@ -68,7 +70,7 @@ html(lang='en', style='scroll-behavior: smooth;')
                       path(d='M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z')
           .p-4(class='lg:w-1/2')
             .h-full.flex.flex-col.items-center.justify-center.text-center(class='sm:flex-row sm:justify-start sm:text-left')
-              img.flex-shrink-0.rounded-lg.w-48.h-48.object-cover.object-center.mb-4(alt='team', class='sm:mb-0', src='images/aboutus/giri.jpg')
+              img.flex-shrink-0.rounded-lg.w-48.h-48.object-cover.object-center.mb-4(alt='team', class='sm:mb-0', src='/images/aboutus/giri.jpg')
               .flex-grow(class='sm:pl-8')
                 h2.title-font.font-medium.text-lg.text-gray-900 Giridhar B
                 h3.text-gray-500.mb-3 Software Engineer
@@ -85,7 +87,7 @@ html(lang='en', style='scroll-behavior: smooth;')
                       path(d='M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z')
           .p-4(class='lg:w-1/2')
             .h-full.flex.flex-col.items-center.justify-center.text-center(class='sm:flex-row sm:justify-start sm:text-left')
-              img.flex-shrink-0.rounded-lg.w-48.h-48.object-cover.object-center.mb-4(alt='team', class='sm:mb-0', src='images/aboutus/ashwath.jfif')
+              img.flex-shrink-0.rounded-lg.w-48.h-48.object-cover.object-center.mb-4(alt='team', class='sm:mb-0', src='/images/aboutus/ashwath.jfif')
               .flex-grow(class='sm:pl-8')
                 h2.title-font.font-medium.text-lg.text-gray-900 Ashwath Sajith
                 h3.text-gray-500.mb-3 Finance and Coporate Relations
@@ -119,5 +121,5 @@ html(lang='en', style='scroll-behavior: smooth;')
           input.bg-white.rounded.border.border-gray-400.text-base.px-4.py-2.mb-4(class='focus:outline-none focus:border-teal-500', placeholder='Name', type='text')
           input.bg-white.rounded.border.border-gray-400.text-base.px-4.py-2.mb-4(class='focus:outline-none focus:border-teal-500', placeholder='Email', type='email')
           textarea.bg-white.rounded.border.border-gray-400.h-32.text-base.px-4.py-2.mb-4.resize-none(class='focus:outline-none focus:border-teal-500', placeholder='Message')
-          button.text-white.bg-teal-500.border-0.py-2.px-6.rounded.text-lg(class='focus:outline-none hover:bg-teal-600') Button
+          button.text-white.bg-teal-500.border-0.py-2.px-6.rounded.text-lg(class='focus:outline-none hover:bg-teal-600') Submit
           p.text-xs.text-gray-500.mt-3 We will not spam you, we promise.

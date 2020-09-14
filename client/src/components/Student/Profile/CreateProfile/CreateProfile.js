@@ -13,7 +13,6 @@ function CreateProfile(props) {
     const [step, setStep] = useState(1);
     const [completedStep, setCompletedStep] = useState(0);
     const [errorText, setShowError] = useState("");
-    const [redirect, setRedirect] = useState(null);
     const [completeFormState, setCompleteFormState] = useState({ step1: {}, step2: {}, step3: {}, step4: {} });
 
     function updateState(newStep, formState) {
@@ -42,8 +41,8 @@ function CreateProfile(props) {
                 let profile = response.data.cvElements;
                 profile && setCompleteFormState({
                     step1: {
-                        truth: profile.truth || false,
-                        TandC: profile.TandC || false
+                        truth: profile.truth || true,
+                        TandC: profile.TandC || true
                     },
                     step2: {
                         school: (profile.education && profile.education.school) || {},
@@ -59,15 +58,10 @@ function CreateProfile(props) {
                 })
             })
             .catch(function (err) {
-                console.log(err);
-                setRedirect('/error');
+                setShowError(err.response.data)
             })
     }, []);
 
-
-    if (redirect) {
-        return <Redirect to={redirect} />
-    }
 
     return (
         <section className="text-gray-700 body-font">

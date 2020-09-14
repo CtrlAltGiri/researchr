@@ -40,8 +40,7 @@ function ProjectModal(props) {
             onRequestClose={props.closeModal}
         >
             <div className="flex flex-col w-full">
-                <form className="flex flex-col" onSubmit={props.submitInnerForm}>
-
+                <div className="flex flex-col">
                     <div className="flex flex-row justify-between">
                         <Title text="Enter details of your projects" />
                         <button name="close" className="pr-4 focus:outline-none" onClick={(e) => { props.closeModal(e) }}><svg className="svg-icon" viewBox="0 0 20 20">
@@ -154,7 +153,7 @@ function ProjectModal(props) {
                         submitForm={(e) => props.submitInnerForm(e)}
                     />
                     <Error text={props.errorText} />
-                </form>
+                </div>
             </div>
         </ReactModal>
     );

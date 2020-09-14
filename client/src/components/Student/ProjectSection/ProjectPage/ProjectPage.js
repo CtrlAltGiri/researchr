@@ -117,7 +117,7 @@ function ProjectPage(props) {
                             :
                             <div className="mt-8">
                                 {projDetails.startDate && <div className="flex py-2">
-                                    <span className="text-gray-500">Date Start</span>
+                                    <span className="text-gray-500">Start Date</span>
                                     <span className="ml-auto text-gray-900">{(new Date(projDetails.startDate)).toDateString()}</span>
                                 </div>}
                                 <div className="flex border-t border-gray-300 py-2">

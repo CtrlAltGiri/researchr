@@ -3,6 +3,7 @@ import ReactModal from 'react-modal';
 import { TextField, Title, TealButton, Error, CloseButton, TextArea } from '../../../../General/Form/FormComponents';
 import Dropdown from '../../../../General/Dropdown/Dropdown';
 import { colleges, degrees, branches, yog } from '../../../../../common/data/collegeData';
+import TagInput from '../../../../General/TagInput/TagInput';
 
 function CollegeModal(props) {
 
@@ -13,7 +14,7 @@ function CollegeModal(props) {
             onRequestClose={props.closeModal}
         >
             <div className="flex flex-col w-full">
-                <form className="flex flex-col" onSubmit={props.submitInnerForm}>
+                <div className="flex flex-col">
 
                     <div className="flex flex-row justify-between">
                         <Title text="Enter details of your university experience" />
@@ -85,13 +86,14 @@ function CollegeModal(props) {
                         onChange={props.changeInput}
                     />
 
-
-                    <TextArea
-                        name="coursework"
-                        value={props.formState.coursework}
-                        extraClass=""
-                        text="Coursework (seperate subjects with commas)"
-                        onChange={props.changeInput}
+                    <TagInput
+                        text="Enter coursework"
+                        extraClass="flex flex-col w-full"
+                        fieldExtraClass="w-full"
+                        updateTags={props.updateTags}
+                        chosenTags={props.formState.coursework}    
+                        noSuggestions={true}
+                        heading="Chosen coursework"
                     />
 
                     <TextField
@@ -110,7 +112,7 @@ function CollegeModal(props) {
                         submitForm={(e) => props.submitInnerForm(e)}
                     />
                     <Error text={props.errorText} />
-                </form>
+                </div>
             </div>
         </ReactModal>
     );
