@@ -21,9 +21,11 @@ html(lang='en', style='scroll-behavior: smooth;')
           form(action="/", method="post" class="flex flex-col")
             input.bg-white.rounded.border.border-gray-400.text-base.px-4.py-2.mb-4(class='focus:outline-none focus:border-teal-500', placeholder='Full Name', type='text', name='name')
             input.bg-white.rounded.border.border-gray-400.text-base.px-4.py-2.mb-4(class='focus:outline-none focus:border-teal-500', placeholder='Email ID', type='email', name='email')
-            button.text-white.bg-teal-500.border-0.py-2.px-8.rounded.text-lg(class='focus:outline-none hover:bg-teal-600' type='submit')
-              | Sign
-              | Up
+            div.flex.flex-row.justify-around
+              button.text-white.bg-teal-500.border-0.py-2.px-8.rounded.text-lg(class='focus:outline-none hover:bg-teal-600' name="type" value="student" type='submit')
+                | Student
+              button.text-white.bg-teal-500.border-0.py-2.px-8.rounded.text-lg(class='focus:outline-none hover:bg-teal-600' name="type" value="professor" type='submit')
+                | Professor
           p.text-xs.text-gray-500.mt-3 We promise not to send you any spam.
     section.text-gray-700.body-font
       .container.px-5.py-12.mx-auto
@@ -119,5 +121,5 @@ html(lang='en', style='scroll-behavior: smooth;')
           input.bg-white.rounded.border.border-gray-400.text-base.px-4.py-2.mb-4(class='focus:outline-none focus:border-teal-500', placeholder='Name', type='text')
           input.bg-white.rounded.border.border-gray-400.text-base.px-4.py-2.mb-4(class='focus:outline-none focus:border-teal-500', placeholder='Email', type='email')
           textarea.bg-white.rounded.border.border-gray-400.h-32.text-base.px-4.py-2.mb-4.resize-none(class='focus:outline-none focus:border-teal-500', placeholder='Message')
-          button.text-white.bg-teal-500.border-0.py-2.px-6.rounded.text-lg(class='focus:outline-none hover:bg-teal-600') Button
+          button.text-white.bg-teal-500.border-0.py-2.px-6.rounded.text-lg(class='focus:outline-none hover:bg-teal-600') Submit
           p.text-xs.text-gray-500.mt-3 We will not spam you, we promise.

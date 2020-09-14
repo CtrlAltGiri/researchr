@@ -29,7 +29,6 @@ function schoolFormValidator(props){
     vals.every((val) => {
         let score = val[0];
         let grade = val[1];
-        console.log(scoring, props[score])
         if(!scoring.find(scoreType => scoreType === props[score])){
             retVal = "Please ensure dropdown is selected correctly for scoring."
             return false;

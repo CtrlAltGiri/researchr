@@ -1,9 +1,8 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 function Error(props){
     return (
-        <p>Error, not found.{props.errorCode && props.errorCode}</p>
-        
+        <h1>Error done boys.</h1>  
     );
 }
 

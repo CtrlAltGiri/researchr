@@ -31,7 +31,7 @@ function WorkModal(props) {
             onRequestClose={props.closeModal}
         >
             <div className="flex flex-col w-full">
-                <form className="flex flex-col" onSubmit={props.submitInnerForm}>
+                <div className="flex flex-col">
 
                     <div className="flex flex-row justify-between">
                         <Title text="Enter details of your work experience" />
@@ -137,7 +137,7 @@ function WorkModal(props) {
                         submitForm={(e) => props.submitInnerForm(e)}
                     />
                     <Error text={props.errorText} />
-                </form>
+                </div>
             </div>
         </ReactModal>
     );

@@ -1,60 +1,109 @@
 doctype html
-html(lang='en')
-  head
-    meta(charset='UTF-8')
-    meta(name='viewport', content='width=device-width, initial-scale=1.0')
-    link(rel='stylesheet', href='css/index.css')
-    title Login - ResearchR
-  body
-    include includes/header.pug
-    .min-h-screen.flex.items-center.justify-center.bg-gray-100.py-12.px-4(class='sm:px-6 lg:px-8')
-      .max-w-md.w-full
-        .mb-6
-          h1.text-4xl.leading-9.font-extrabold.text-center re.SearchR
-          h2.mt-6.text-center.text-3xl.leading-9.font-extrabold.text-gray-900
-            | Sign in to your account
-          p.mt-2.text-center.text-sm.leading-5.text-gray-600
-            | or 
-            a.font-medium.text-teal-600.transition.ease-in-out.duration-150(href='/signup', class='hover:text-teal-500 focus:outline-none focus:underline')
-              | create an account for free!
-        .bg-white.p-4.border-gray-300.shadow-lg.border-gray-300.rounded-lg
-          form.mt-2(action='/login', method='POST')
-            .rounded-md.shadow-sm
-              .mb-2
-                p.px-1.mb-1.text-sm.text-gray-600.font-semibold Email
-                input.appearance-none.rounded-none.relative.block.w-full.px-3.py-2.border.border-gray-300.placeholder-gray-500.text-gray-900.rounded-lg(aria-label='Email address', name='c_email', type='email', required='', class='focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5')
-              .mb-2
-                p.px-1.mb-1.text-sm.text-gray-600.font-semibold Password
-                input.appearance-none.rounded-none.relative.block.w-full.px-3.py-2.border.border-gray-300.placeholder-gray-500.text-gray-900.rounded-lg(aria-label='Password', name='password', type='password', required='', class='focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5')
-            .mt-6.flex.items-center.justify-between
-              .flex.items-center
-                input#remember_me.form-checkbox.h-4.w-4.text-teal-600.transition.duration-150.ease-in-out(type='checkbox', name='remember_me')
-                label.ml-2.block.text-sm.leading-5.text-gray-900(for='remember_me')
-                  | Remember me
-              .text-sm.leading-5
-                a.font-medium.text-teal-600.transition.ease-in-out.duration-150(href='/forgot', class='hover:text-teal-500 focus:outline-none focus:underline')
-                  | Forgot your password?
-            .mt-6
-              button.group.relative.w-full.flex.justify-center.py-2.px-4.border.border-transparent.text-sm.leading-5.font-medium.rounded-md.text-white.bg-teal-600.transition.duration-150.ease-in-out(type='submit', class='hover:bg-teal-500 focus:outline-none focus:border-teal-700 focus:shadow-outline-teal active:bg-teal-700')
-                span.absolute.left-0.inset-y-0.flex.items-center.pl-3
-                  svg.h-5.w-5.text-teal-300.transition.ease-in-out.duration-150(class='group-hover:text-teal-400', fill='currentColor', viewBox='0 0 20 20')
-                    path(fill-rule='evenodd', d='M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z', clip-rule='evenodd')
-                |                             Sign in
-            if wrongCreds
-              h1.font-bold.mt-4.text-red-500 Incorrect Username or Password
-            else if unverified
-              h1.font-bold.mt-4.text-red-500 Please verify your college email id first or Signup again
-            h1.font-bold.mt-4.text-red-500 #{errorMsg}
-            hr.mt-6.border-gray-300
-            div
-              p.text-gray-500.text-center.font-semibold.mt-4 Continue with
-              span.flex.mt-6.ml-16.mr-16.justify-between
-                a.text-gray-500(class='hover:text-blue-500', href='https://www.facebook.com')
-                  svg.w-5.h-5(fill='currentColor', stroke-linecap='round', stroke-linejoin='round', stroke-width='2', viewBox='0 0 24 24')
-                    path(d='M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z')
-                a.ml-2.text-gray-500(class='hover:text-blue-300', href='https://twitter.com')
-                  svg.w-5.h-5(fill='currentColor', stroke-linecap='round', stroke-linejoin='round', stroke-width='2', viewBox='0 0 24 24')
-                    path(d='M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z')
-                a.ml-2.text-gray-500(class='hover:text-red-600', href='https://google.com')
-                  svg.w-8.h-8(fill='currentColor', stroke-linecap='round', stroke-linejoin='round', stroke-width='2', viewBox='0 0 24 24')
-                    path(d='M8.937,10.603c-0.383-0.284-0.741-0.706-0.754-0.837c0-0.223,0-0.326,0.526-0.758c0.684-0.56,1.062-1.297,1.062-2.076c0-0.672-0.188-1.273-0.512-1.71h0.286l1.58-1.196h-4.28c-1.717,0-3.222,1.348-3.222,2.885c0,1.587,1.162,2.794,2.726,2.858c-0.024,0.113-0.037,0.225-0.037,0.334c0,0.229,0.052,0.448,0.157,0.659c-1.938,0.013-3.569,1.309-3.569,2.84c0,1.375,1.571,2.373,3.735,2.373c2.338,0,3.599-1.463,3.599-2.84C10.233,11.99,9.882,11.303,8.937,10.603 M5.443,6.864C5.371,6.291,5.491,5.761,5.766,5.444c0.167-0.192,0.383-0.293,0.623-0.293l0,0h0.028c0.717,0.022,1.405,0.871,1.532,1.89c0.073,0.583-0.052,1.127-0.333,1.451c-0.167,0.192-0.378,0.293-0.64,0.292h0C6.273,8.765,5.571,7.883,5.443,6.864 M6.628,14.786c-1.066,0-1.902-0.687-1.902-1.562c0-0.803,0.978-1.508,2.093-1.508l0,0l0,0h0.029c0.241,0.003,0.474,0.04,0.695,0.109l0.221,0.158c0.567,0.405,0.866,0.634,0.956,1.003c0.022,0.097,0.033,0.194,0.033,0.291C8.752,14.278,8.038,14.786,6.628,14.786 M14.85,4.765h-1.493v2.242h-2.249v1.495h2.249v2.233h1.493V8.502h2.252V7.007H14.85V4.765z')
+head
+  meta(charset='UTF-8')
+  meta(name='viewport' content='width=device-width, initial-scale=1.0')
+  link(rel='stylesheet' href='/css/index.css')
+  title Login - ResearchR
+
+body.bg-white
+  include includes/header.pug
+  .mb-8.flex.justify-center.bg-gray-100.px-4(class='sm:px-6 lg:px-2')
+    .max-w-md.w-full
+      .mb-6
+        h2.mt-6.text-center.text-3xl.leading-9.font-bold.text-gray-900 Sign in to your account
+        p.mt-2.text-center.text-sm.leading-5.text-gray-600
+          | or 
+          a.font-medium.text-teal-600.transition.ease-in-out.duration-150(class='hover:text-teal-500 focus:outline-none focus:underline' href='/signup') create an account for free!
+      
+      ul.flex.mb-0.list-none.flex-wrap.pt-6.pb-4.flex-row
+        li.-mb-px.mr-2.flex-auto.text-center.cursor-pointer(class='last:mr-0')
+          a.text-xs.font-bold.uppercase.px-5.py-3.shadow-lg.rounded.border-2.border-teal-600.block.leading-normal.text-white.bg-teal-600(onclick="changeActiveTab(event,'tab-student')")
+            i.fas.fa-space-shuttle.text-base.mr-1
+            |  Student
+        li.-mb-px.mr-2.flex-auto.text-center.cursor-pointer(class='last:mr-0')
+          a.text-xs.font-bold.uppercase.px-5.py-3.shadow-lg.border-2.border-teal-600.rounded.block.leading-normal.text-teal-600.bg-white(onclick="changeActiveTab(event,'tab-professor')")
+            i.fas.fa-cog.text-base.mr-1
+            |  Professor
+      .bg-white.p-1.border-gray-300.shadow-lg.border-gray-300.rounded-lg
+        #tabs-id.flex.flex-wrap
+          .w-full
+            .relative.flex.flex-col.min-w-0.break-words.bg-white.w-full.mb-0.rounded
+              .px-4.py-5.flex-auto
+                .tab-content.tab-space
+                  #tab-student.block
+                    form.mt-2(action='/login/student' method='POST')
+                      .rounded-md
+                        .mb-4
+                          p.px-1.mb-1.text-sm.text-gray-600.font-semibold Email
+                          input.appearance-none.rounded-none.relative.block.w-full.px-3.py-2.border.border-gray-300.placeholder-gray-500.text-gray-900.rounded-lg(class='focus:outline-none focus:shadow-outline-teal focus:border-teal-500 focus:z-10 sm:text-sm sm:leading-5' aria-label='Email address' name='c_email' type='email' required='')
+                        .mb-4
+                          p.px-1.mb-1.text-sm.text-gray-600.font-semibold
+                            | Password
+                          input.appearance-none.rounded-none.relative.block.w-full.px-3.py-2.border.border-gray-300.placeholder-gray-500.text-gray-900.rounded-lg(class='focus:outline-none focus:shadow-outline-teal focus:border-teal-500 focus:z-10 sm:text-sm sm:leading-5' aria-label='Password' name='password' type='password' required='')
+                      .mt-6.flex.items-center.justify-between
+                        .flex.items-center
+                          input#remember_me.form-checkbox.h-4.w-4.text-teal-600.transition.duration-150.ease-in-out(type='checkbox' name='remember_me')
+                          label.ml-2.block.text-sm.leading-5.text-gray-900(for='remember_me') Remember me
+                        .text-sm.leading-5
+                          a.font-medium.text-teal-600.transition.ease-in-out.duration-150(class='hover:text-teal-500 focus:outline-none focus:underline' href='/forgot/student') Forgot your password?
+                      .mt-6
+                        button.group.relative.w-full.flex.justify-center.py-2.px-4.border.border-transparent.text-sm.leading-5.font-medium.rounded-md.text-white.bg-teal-600.transition.duration-150.ease-in-out(class='hover:bg-teal-500 focus:outline-none focus:border-teal-700 focus:shadow-outline-teal active:bg-teal-700' type='submit')
+                          span.absolute.left-0.inset-y-0.flex.items-center.pl-3
+                            svg.h-5.w-5.text-teal-300.transition.ease-in-out.duration-150(class='group-hover:text-teal-400' fill='currentColor' viewbox='0 0 20 20')
+                              path(fill-rule='evenodd' d='M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z' clip-rule='evenodd')
+                          |  Sign in as Student
+                      hr.mt-6.border-gray-300
+                      h1.font-bold.mt-4.text-red-500
+                  #tab-professor.hidden
+                    form.mt-2(action='/login/professor' method='POST')
+                      .rounded-md
+                        .mb-4
+                          p.px-1.mb-1.text-sm.text-gray-600.font-semibold Email
+                          input.appearance-none.rounded-none.relative.block.w-full.px-3.py-2.border.border-gray-300.placeholder-gray-500.text-gray-900.rounded-lg(class='focus:outline-none focus:shadow-outline-teal focus:border-teal-500 focus:z-10 sm:text-sm sm:leading-5' aria-label='Email address' name='c_email' type='email' required='')
+                        .mb-4
+                          p.px-1.mb-1.text-sm.text-gray-600.font-semibold
+                            | Password
+                          input.appearance-none.rounded-none.relative.block.w-full.px-3.py-2.border.border-gray-300.placeholder-gray-500.text-gray-900.rounded-lg(class='focus:outline-none focus:shadow-outline-teal focus:border-teal-500 focus:z-10 sm:text-sm sm:leading-5' aria-label='Password' name='password' type='password' required='')
+                      .mt-6.flex.items-center.justify-between
+                        .flex.items-center
+                          input#remember_me.form-checkbox.h-4.w-4.text-teal-600.transition.duration-150.ease-in-out(type='checkbox' name='remember_me')
+                          label.ml-2.block.text-sm.leading-5.text-gray-900(for='remember_me') Remember me
+                        .text-sm.leading-5
+                          a.font-medium.text-teal-600.transition.ease-in-out.duration-150(class='hover:text-teal-500 focus:outline-none focus:underline' href='/forgot/professor') Forgot your password?
+                      .mt-6
+                        button.group.relative.w-full.flex.justify-center.py-2.px-4.border.border-transparent.text-sm.leading-5.font-medium.rounded-md.text-white.bg-teal-600.transition.duration-150.ease-in-out(class='hover:bg-teal-500 focus:outline-none focus:border-teal-700 focus:shadow-outline-teal active:bg-teal-700' type='submit')
+                          span.absolute.left-0.inset-y-0.flex.items-center.pl-3
+                            svg.h-5.w-5.text-teal-300.transition.ease-in-out.duration-150(class='group-hover:text-teal-400' fill='currentColor' viewbox='0 0 20 20')
+                              path(fill-rule='evenodd' d='M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z' clip-rule='evenodd')
+                          |  Sign in as Professor
+                      hr.mt-6.border-gray-300
+                      if wrongCreds
+                        h1.font-bold.mt-4.text-red-500 Incorrect Username or Password
+                      else if unverified
+                        h1.font-bold.mt-4.text-red-500 Please verify your college email id first or Signup again
+                      h1.font-bold.mt-4.text-red-500 #{errorMsg}
+
+  script(type='text/javascript').
+    function changeActiveTab(event, tabID) {
+    let element = event.target;
+    while (element.nodeName !== "A") {
+    element = element.parentNode;
+    }
+    ulElement = element.parentNode.parentNode;
+    aElements = ulElement.querySelectorAll("li > a");
+    tabContents = document.getElementById("tabs-id").querySelectorAll(".tab-content > div");
+    for (let i = 0; i < aElements.length; i++) {
+    aElements[i].classList.remove("text-white");
+    aElements[i].classList.remove("bg-teal-600");
+    aElements[i].classList.add("text-teal-600");
+    aElements[i].classList.add("bg-white");
+    tabContents[i].classList.add("hidden");
+    tabContents[i].classList.remove("block");
+    }
+    element.classList.remove("text-teal-600");
+    element.classList.remove("bg-white");
+    element.classList.add("text-white");
+    element.classList.add("bg-teal-600");
+    document.getElementById(tabID).classList.remove("hidden");
+    document.getElementById(tabID).classList.add("block");
+    }

@@ -46,9 +46,6 @@ Upcoming:
 2. Change URL to logoURL on DB and check these URLS too.
 3. Check DateTimes properly
 
-
-5. Check post requests of /applications.
-
 ------------------------------------------------------------------------------------------------------------------
 Adi Stuff (Discuss)
 
@@ -59,5 +56,7 @@ Adi Stuff (Discuss)
     b. Undefined?
     c. Two selected projects don't show up.
 4. Projections on queries. Send only what is needed.
+5. Accepted domains
+6. Already verified ? WHen i go to /veify/student without any auth.
 
 ---------------------------------------------------------------------------------------------------------------------
