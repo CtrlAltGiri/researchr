@@ -1,2 +1,10 @@
-h1
-    | Professor or student
+link(rel='stylesheet', href='/css/index.css')
+img(src="/images/logo.png")
+p.text-center.font-medium
+    | Please click the user type and sign up!
+div.flex.flex-row.justify-around.my-6
+    a.bg-teal-800.rounded-md.px-2.py-1.text-white.font-medium(href="/signup/student")
+        | I am a Student
+
+    a.bg-teal-800.rounded-md.px-2.py-1.text-white.font-medium(href="/signup/professor")
+        | I am a professor

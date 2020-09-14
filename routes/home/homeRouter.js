@@ -54,7 +54,7 @@ homeRouter.route('/signup/:type?')
             res.render('student/signup', {name: "", p_email: ""});
 
         else if(type === 'professor')
-            res.render('signup');       // replace this with professor implementation
+            res.render('professor/signup');       // replace this with professor implementation
 
         else
             res.render('signup')
