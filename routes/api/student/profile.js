@@ -56,6 +56,8 @@ profileRouter
         retrieveStudentDetails(studId, currentID, cvOnly, res);
     });
 
+
+
 profileRouter.route("/createProfile")
     .post(function (req, res) {
 

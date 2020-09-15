@@ -44,6 +44,9 @@ Upcoming:
 2. Check drive links properly.
 3. Dropdown checks.
 
+4. cvElements SCHEMA
+5. Make /profile/studentID changes.
+
 ------------------------------------------------------------------------------------------------------------------
 Adi Stuff (Discuss)
 
@@ -64,5 +67,4 @@ Long-term TODO:
 2. Pop up with application answers and SOP. (/application/:studentID/:projectID)
 3. Auto logoURL generator.
 4. Animations man.
-
---------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------
