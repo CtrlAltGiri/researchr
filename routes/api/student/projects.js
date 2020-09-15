@@ -4,14 +4,13 @@ const ProfProjects = require('../../../models/profProjects');
 // API to show all projects on the main platform page to the students
 projectsRouter.route("/")
     .get(function (req, res) {
-        console.log("Here")
         // following variable decides if college view is to be shown or a normal view is to be shown to the viewer
-        let showAllProjects = req.query.allProjects
+        let showAllProjects = req.query.allProjects;
         // get student's college name from req
-        let studentCollege = req.user.college
+        let studentCollege = req.user.college;
 
         // construct the filter query
-        let filter = {applicationCloseDate: {$gt: Date.now()}}
+        let filter = {applicationCloseDate: {$gt: Date.now()}};
 
         if(showAllProjects === "false"){
             filter.college = studentCollege;
@@ -29,8 +28,13 @@ projectsRouter.route("/")
                     return (element.restrictedView !== true || (element.restrictedView === true && element.college === studentCollege));
                 })
 
+                // filter information to be sent to front end
+                let returnProjects = projects.map(function (element) {
+                    return (({_id, name, desc, professorName, college, views}) => ({_id, name, desc, professorName, college, views}))(element);
+                })
+
                 // send all projects to front end
-                return res.status(200).send(projects);
+                return res.status(200).send(returnProjects);
             }
 
         })
