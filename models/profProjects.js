@@ -14,6 +14,7 @@ const ProfProjectsSchema = new mongoose.Schema({
     dateOfCreation: Date,
     applicationCloseDate: Date,
     location: String, // WFH or specific location
+    restrictedView: Boolean,
     questionnaire: [ String ]
 });
 

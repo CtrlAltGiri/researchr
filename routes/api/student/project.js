@@ -15,10 +15,14 @@ projectRouter.route("/:projectID")
         let projectID = req.params.projectID;
         // get student id from req
         let studentID = req.user._id;
+        // get student's college from req
+        let studentCollege = req.user.college;
+
         // query mongoDB's profProjects collection to return the project details
         Async.waterfall([
             function (callback){
                 //CHECK 1: Check if such a project exists and if its open and also increment its views by 1
+                // Simultaneously check if project is a restricted view and if so check if colleges match and only then return the project
                 ProfProjects.findOneAndUpdate({_id: projectID}, {$inc: {views: 1}}, {new: true, useFindAndModify: false}, function (err, project) {
                     if (err) {
                         console.log(err);
@@ -30,14 +34,20 @@ projectRouter.route("/:projectID")
                         callback("No project found");
                     }
                     else{
-                        project = project.toObject();
-                        // check if project can still be applied to and add the corresponding field 'apply'
-                        project.apply = project.applicationCloseDate >= Date.now();
-                        if (project.apply === false) {
-                            // send project to the front end with apply = false
-                            project.errorMsg = "This project is no longer accepting new applicants";
+                        // check if project has a restricted view and then check if the college name matches
+                        if(project.restrictedView === true && project.college !== studentCollege){
+                            callback("No project found");
                         }
-                        callback(null, project);
+                        else {
+                            project = project.toObject();
+                            // check if project can still be applied to and add the corresponding field 'apply'
+                            project.apply = project.applicationCloseDate >= Date.now();
+                            if (project.apply === false) {
+                                // send project to the front end with apply = false
+                                project.errorMsg = "This project is no longer accepting new applicants";
+                            }
+                            callback(null, project);
+                        }
                     }
                 })
             },
@@ -146,11 +156,14 @@ projectRouter.route("/:projectID")
         let projectID = req.params.projectID;
         // get student id from req
         let studentID = req.user._id;
+        // get student's college from req
+        let studentCollege = req.user.college;
 
         // check few conditions in series and finally add application if none of the conditions check fail
         Async.waterfall([
             function (callback){
                 // CHECK 1: Check if given projectID exists and its applications are still open
+                // Simultaneously check if project is a restricted view and if so check if colleges match and only then allow application
                 ProfProjects.findOne({_id: projectID, applicationCloseDate: {$gt: Date.now()}}, function (err, project){
                     if(err){
                         console.log(err);
@@ -161,8 +174,14 @@ projectRouter.route("/:projectID")
                         console.log("Applications closed or no project with id ", projectID);
                         callback("Applications closed or invalid project");
                     }
-                    else if(project){
-                        callback(null, project);
+                    else{
+                        // check if project has a restricted view and then check if the college name matches
+                        if(project.restrictedView === true && project.college !== studentCollege){
+                            callback("No project found");
+                        }
+                        else {
+                            callback(null, project);
+                        }
                     }
                 })
             },
