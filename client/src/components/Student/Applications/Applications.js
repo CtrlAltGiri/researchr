@@ -25,6 +25,8 @@ function Applications() {
       setAppType(val);
     }
 
+    const headers = ["Project", "Professor", "Application Date", "Status"]
+
     return (
       <section className="text-gray-700 body-font overflow-hidden">
 
@@ -40,9 +42,9 @@ function Applications() {
         </div>
   
         {   
-            appType === 1 ? <Table app={applications.active} setError={(val) => setShowError(val)}/>
-            : appType === 2 ? <Table app={applications.selected} setError={(val) => setShowError(val)} selected={true}/> 
-            : <Table app={applications.archived} setError={(val) => setShowError(val)} /> 
+            appType === 1 ? <Table headers={headers} app={applications.active} setError={(val) => setShowError(val)}/>
+            : appType === 2 ? <Table headers={headers} app={applications.selected} setError={(val) => setShowError(val)} selected={true}/> 
+            : <Table headers={headers} app={applications.archived} setError={(val) => setShowError(val)} /> 
         }
         
         <div className="flex justify-center mb-8">

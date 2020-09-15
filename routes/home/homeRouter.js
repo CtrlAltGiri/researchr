@@ -1,11 +1,5 @@
 const homeRouter = require('express').Router();
-const Students = require('../../models/students');
 const path = require('path');
-const passport = require('../../config/passport');
-const { resetValidator } = require("../../utils/formValidators/reset");
-const { forgotValidator } = require("../../utils/formValidators/forgot");
-const { sendPasswordResetEmail } = require('../../utils/email/sendgirdEmailHelper');
-const Async = require('async');
 const { postLoginStudent , postSignupStudent, getVerifyStudent, postForgotStudent, getResetStudent, postResetStudent } = require('./homeStudent');
 
 homeRouter.route("/")

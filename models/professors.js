@@ -4,10 +4,12 @@ const crypto = require('crypto');
 const ProfessorsSchema = new mongoose.Schema({
     name: String,
     college: String,
-    doj: Date,
     lastLogin: Date,
     c_email: String,
     designation: String,
+    projects: [ String ],    // should it be ObjectID?
+
+    doj: Date,
     completed: Boolean, //completed his profile?
     TandC: Boolean, //TandC for prof?
     hash: String,

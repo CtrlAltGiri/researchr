@@ -58,7 +58,9 @@ function Application(props) {
             <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                 <p className="text-gray-900 whitespace-no-wrap text-center">
                     {props.createDate && (new Date(props.createDate).toDateString())}
-                    {props.finalDate && <p className="text-red-500 font-medium">Accept before: {new Date(props.finalDate).toDateString()}</p>}
+                    {props.finalDate && props.status === "selected" && 
+                        <p className="text-red-500 font-medium">Accept before: {new Date(props.finalDate).toDateString()}</p>
+                    }
                 </p>
             </td>
             <td className="py-5 border-b border-gray-200 bg-white text-sm mb-1">
@@ -80,7 +82,6 @@ function Application(props) {
                     </div>
                     : ""}
             </td>
-
 
             <ReactModal
                 isOpen={modalOpen}

@@ -1,33 +1,52 @@
 const profileRouter = require('express').Router();
 const Students = require('../../../models/students');
-const { collegeFormValidator, workFormValidator, projectFormValidator } = require('../../../client/src/common/formValidators/cvValidator')
+const { collegeFormValidator, workFormValidator, projectFormValidator } = require('../../../client/src/common/formValidators/cvValidator');
+
+profileRouter.get('/getStudentId', function(req, res){
+    res.status(200).send(req.user._id);
+})
 
 profileRouter
-    .get('/myProfile', function (req, res) {
-        const studId = req.user._id;
+    .get("/:studentID", function(req, res){
+
+        const studId = req.params.studentID;
+        const currentID = req.user._id;
+        // Should not do ===, one is an ObjectID and other is a string.
+        const mine = studId == currentID;
         const cvOnly = req.query.cvElements;
-        console.log(cvOnly);
+        
         Students.findOne({ '_id': studId }, function (err, obj) {
             if(err){
                 console.log(err);
-                return res.status(404).send("Failed");
+                return res.status(404).send("Profile not found.");
             }
 
             obj = obj.toObject();
             if(!obj){
-                console.log("No student found with id ", studId);
-                return res.status(404).send("Failed");
+                return res.status(404).send("Profile not found.");
             }
             
             if(!obj.completed && cvOnly === 'false'){
-                res.status(404).send("Profile not completed, please click edit profile to continue.");
+                
+                let errorMsg;
+                if(mine){
+                    errorMsg = "Profile not completed, please click edit profile to continue";
+                }
+                else{
+                    errorMsg = "Profile not completed.";
+                }
+                res.status(404).send(errorMsg);
                 return;
             }
 
             obj = (({ name, c_email, cvElements }) => ({ name, c_email, cvElements }))(obj);
+            obj.mine = mine;
             res.send(obj);
         });
+
     });
+
+
 
 profileRouter.route("/createProfile")
     .post(function (req, res) {

@@ -27,8 +27,8 @@ function AppStudent(props) {
       <Switch>
         <Route path="/student" component={ProjectSection} exact />
         <Route path="/student/project/:projectId" component={ProjectPage} />
-        <Route path="/student/profile/createProfile" component={CreateProfile} />
-        <Route path="/student/profile" component={Profile} exact />
+        <Route path="/student/profile/createProfile" component={CreateProfile} exact/>
+        <Route path="/student/profile/:studentID" component={Profile} />
         <Route path="/student/applications" component={Applications} />
         <Route path="/student/test" component={Test} />
         <Route path="/" component={Error} />
