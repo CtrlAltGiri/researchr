@@ -1,6 +1,6 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
-import Header from '../Header/HeaderStudent'
+import Header from '../Header/HeaderProfessor'
 
 function ItBegins() {
     return <h1>Let the shit show begin</h1>

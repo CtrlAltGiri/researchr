@@ -1,14 +1,11 @@
-const homeRouter = require('express').Router();
-const Students = require('../../models/students');
-const path = require('path');
+const Students = require('../../models/students')
 const passport = require('../../config/passport');
 const { resetValidator } = require("../../utils/formValidators/reset");
 const { forgotValidator } = require("../../utils/formValidators/forgot");
 const { logInValidator } = require("../../utils/formValidators/login");
-const { sendVerificationEmail } = require('../../utils/email/sendgirdEmailHelper');
-const { sendPasswordResetEmail } = require('../../utils/email/sendgirdEmailHelper');
+const { sendVerificationEmail, sendPasswordResetEmail } = require('../../utils/email/sendgirdEmailHelper');
 const { signUpValidator } = require('../../utils/formValidators/signup');
-const Async = require('async');
+const { colleges, branches, yog, degrees} = require('../../client/src/common/data/collegeData');
 
 async function postLoginStudent(req, res, next) {
     // this validator just checks the email validity
@@ -57,6 +54,10 @@ async function postSignupStudent(req, res) {
             branch: req.body.branch,
             degree: req.body.degree,
             yog: req.body.yog,
+            colleges: colleges,
+            yogs: yog,
+            degrees: degrees,
+            branches: branches,
             errorMsg: "Please ensure all fields are entered correctly.",
             errors: errors
         });
@@ -70,7 +71,12 @@ async function postSignupStudent(req, res) {
         }
         // return back to signup page and show email is already in use
         else if (result && result.active) {
-            return res.render('student/signup', { errorMsg: "This email has already been registered with us" });
+            return res.render('student/signup', {
+                colleges: colleges,
+                yogs: yog,
+                degrees: degrees,
+                branches: branches, errorMsg: "This email has already been registered with us" 
+            });
         }
         // if email exists in database but is not verified then update the existing one with new details
         else if (result && !result.active) {

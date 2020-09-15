@@ -20,6 +20,18 @@ function checkProofLink(url){
     return true;
 }
 
+function isValidMonthYear(date){
+
+    const m = date.substr(0, 2);
+    const y = date.substr(3, 4);
+
+    console.log(date);
+    if(isNaN(m) || isNaN(y) || date[2] !== '/')
+        return false;
+    return true;
+
+}
+
 function schoolFormValidator(props){
 
     let scoring = ["Percentage", "CGPA"]
@@ -90,10 +102,10 @@ function workFormValidator(props){
     else if(!(props.position.length > 0)){
         return "Position must be specified (ex. Intern / Software Engineer)"
     }
-    else if(props.startDate.length !== 7){
+    else if(props.startDate.length !== 7 || !isValidMonthYear(props.startDate)){
         return "Select a valid date for start date.";
     }
-    else if(props.endDate.length !== 7){
+    else if(props.endDate.length !== 7 || !isValidMonthYear(props.endDate)){
         return "Select a valid date for end date."
     }
     else if(!checkProofLink(props.proof)){
@@ -129,10 +141,10 @@ function projectFormValidator(props){
         else if(!(props.college.length > 0)){
             return "Please enter valid college name associated with professor."
         }
-        else if(!(props.startDate.length === 7)){
+        else if(!(props.startDate.length === 7) || !isValidMonthYear(props.startDate)){
             return "Please enter valid start date."
         }
-        else if(!(props.endDate.length === 7)){
+        else if(!(props.endDate.length === 7) || !isValidMonthYear(props.endDate)){
             return "Please enter valid end date."
         }
     }

@@ -1,5 +1,18 @@
 var colleges = [
-    { value: "Manipal Institute of Technology", label: "Manipal Institute of Technology" }
+    {
+        value: "Manipal Institute of Technology", 
+        label: "Manipal Institute of Technology",
+        url: "manipal.edu",
+        studentDomain: 'learner.manipal.edu',
+        professorDomain: 'manipal.edu'
+    },
+    {
+        value: "IIT Madras", 
+        label: "IIT Madras",
+        url: "iitm.ac.in",
+        studentDomain: 'smail.com',
+        professorDomain: 'smail.com'
+    }
 ];
 
 var degrees = [

@@ -3,7 +3,7 @@ html(lang='en')
   head
     meta(charset='UTF-8')
     meta(name='viewport', content='width=device-width, initial-scale=1.0')
-    link(rel='stylesheet', href='../css/index.css')
+    link(rel='stylesheet', href='/css/index.css')
     title Sign Up - ResearchR
   body
 
@@ -35,18 +35,48 @@ html(lang='en')
             div(class="w-auto lg:w-10/12")
               p.px-1.mb-1.text-sm.text-gray-600.font-semibold Confirm Password
               input.border-2.rounded-lg.relative.px-4.py-2.w-full(class='focus:outline-none focus:border-teal-500', type='password', name='confirm_password', required='')
+            
             div(class="w-auto lg:w-10/12")
               p.px-1.mb-1.text-sm.text-gray-600.font-semibold College
-              input.border-2.rounded-lg.relative.px-4.py-2.w-full(class='focus:outline-none focus:border-teal-500', type='text', name='college', required='', value=college)
+              if colleges
+                select#colleges.border-2.py-2.px-2.w-full.rounded-lg(name="college")
+                  each val in colleges
+                    if val.value===college
+                      option(value=val.value, selected)=val.label
+                    else
+                      option(value=val.value)=val.label
+                          div(class="w-auto lg:w-10/12")
+
             div(class="w-auto lg:w-10/12")
               p.px-1.mb-1.text-sm.text-gray-600.font-semibold Degree
-              input.border-2.rounded-lg.relative.px-4.py-2.w-full(class='focus:outline-none focus:border-teal-500', type='text', name='degree', required='', value=degree)
+              if degrees
+                select#colleges.border-2.py-2.px-2.w-full.rounded-lg(name="degree")
+                  each val in degrees
+                    if val.value===degree
+                      option(value=val.value, selected)=val.label
+                    else
+                      option(value=val.value)=val.label
+
             div(class="w-auto lg:w-10/12")
               p.px-1.mb-1.text-sm.text-gray-600.font-semibold Branch
-              input.border-2.rounded-lg.relative.px-4.py-2.w-full(class='focus:outline-none focus:border-teal-500', type='text', name='branch', required='', value=branch)
+              if branches
+                select#colleges.border-2.py-2.px-2.w-full.rounded-lg(name="branch")
+                  each val in branches
+                    if val.value===branch
+                      option(value=val.value, selected)=val.label
+                    else
+                      option(value=val.value)=val.label
+            
             div(class="w-auto lg:w-10/12")
               p.px-1.mb-1.text-sm.text-gray-600.font-semibold Year of Graduation
-              input.border-2.rounded-lg.relative.px-4.py-2.w-full(class='focus:outline-none focus:border-teal-500', type='text', name='yog', required='', value=yog)
+              if yogs
+                select#colleges.border-2.py-2.px-2.w-full.rounded-lg(name="yog")
+                  each val in yogs
+                    if val.value===yog
+                      option(value=val.value, selected)=val.label
+                    else
+                      option(value=val.value)=val.label
+
             div(class="w-auto lg:w-10/12")
               button.mt-4.mb-4.bg-teal-500.text-white.rounded-md.px-4.py-2(class='lg:mr-24 focus:outline-none' type='submit')
                 | Sign

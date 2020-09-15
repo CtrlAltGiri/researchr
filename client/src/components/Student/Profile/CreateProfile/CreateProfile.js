@@ -38,6 +38,7 @@ function CreateProfile(props) {
     useEffect(() => {
         axios.get('/api/student/profile/myProfile', { params: { cvElements: true } })
             .then(function (response) {
+                let data = response.data;
                 let profile = response.data.cvElements;
                 profile && setCompleteFormState({
                     step1: {
@@ -46,7 +47,13 @@ function CreateProfile(props) {
                     },
                     step2: {
                         school: (profile.education && profile.education.school) || {},
-                        college: (profile.education && profile.education.college) || []
+                        college: (profile.education && profile.education.college) || [],
+                        defaultCollege: {
+                            college: data.college || "",
+                            branch: data.branch || "",
+                            yog: data.yog || "",
+                            degree: data.degree || ""
+                        }
                     },
                     step3: {
                         workExperiences: profile.workExperiences || [],

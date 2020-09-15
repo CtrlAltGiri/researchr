@@ -108,7 +108,7 @@ function AddExperience(props) {
         <div className={props.extraClass}>
             <Title text={props.title} />
             {
-                props.mainObject.length > 0 ?
+                props.mainObject.length > 0 &&
                     <Accordian
                         mainObject={props.mainObject}
                         heading={props.heading}
@@ -117,7 +117,6 @@ function AddExperience(props) {
                         editCallBack={editExperience}
                         deleteCallBack={deleteExperience}
                     />
-                    : ""
             }
             
             <AddButton
@@ -134,6 +133,8 @@ function AddExperience(props) {
                 formState={formState}
                 updateTags={updateTags}
                 changeDropdown={changeDropdown}
+                defaultValues={props.defaultValues}
+                editObject={editMode === -1 ? props.mainObject.length : editMode}
             />
         </div>
     );

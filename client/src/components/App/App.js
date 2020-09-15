@@ -10,6 +10,7 @@ function App(props) {
         <Switch>
             <Route path="/student" component={AppStudent} />
             <Route path="/professor" component={AppProfessor} />
+            <Route path="/external" component={Error} />
             <Route path="/" component={Error} />
         </Switch>
     );
