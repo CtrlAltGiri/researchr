@@ -11,7 +11,56 @@ const StudentsSchema = new mongoose.Schema({
     lastLogin: Date,
     c_email: String,
     p_email: String,
-    cvElements: Object,
+    cvElements: {
+        education: {
+            school:{
+                scoring10: String,
+                scoring12: String,
+                grade10: String,
+                grade12: String
+            },
+            college: [
+                {
+                    college: String,
+                    degree: String,
+                    branch: String,
+                    yog: String,
+                    cgpa: String,
+                    experience: String,
+                    coursework: [ String ],
+                    logoURL: String
+                }
+            ]
+        },
+        workExperiences: [
+            {
+                organization: String,
+                endDate: String,
+                presentWork: Boolean,
+                position: String,
+                startDate: String,
+                experience: String,
+                proof: String,
+                tags: [ String ],
+                logoURL: String
+            }
+        ],
+        projects: [
+            {
+                professor: String,
+                college: String,
+                startDate: String,
+                endDate: String,
+                researchProject: Boolean,
+                title: String,
+                experience: String,
+                proof: String,
+                tags: [ String ],
+                logoURL: String
+            }
+        ],
+        interestTags: [ String ]
+    },
     completed: Boolean,
     TandC: Boolean,
     hash: String,

@@ -17,7 +17,7 @@ html(lang='en')
         .w-full(class='w-auto lg:w-5/12')
           form.flex.flex-col.items-center.space-y-8.p-4(action='/signup/professor', method='POST', class='lg:items-start lg:px-24')
             div
-              p.font-extrabold.text-black.text-3xl.mt-8 Sign Up
+              p.font-extrabold.text-black.text-3xl.mt-8 Sign Up - Professor
             div(class="w-auto lg:w-10/12")
               p(class="text-red-500 text-2xl") #{errorMsg}
             div(class="w-auto lg:w-10/12")
@@ -27,8 +27,8 @@ html(lang='en')
               p.px-1.mb-1.text-sm.text-gray-600.font-semibold College Email ID
               input.border-2.rounded-lg.relative.px-4.py-2.w-full(class='focus:outline-none focus:border-teal-500', type='email', name='c_email', required='', value=c_email)
             div(class="w-auto lg:w-10/12")
-              p.px-1.mb-1.text-sm.text-gray-600.font-semibold Personal Email ID
-              input.border-2.rounded-lg.relative.px-4.py-2.w-full(class='focus:outline-none focus:border-teal-500', type='email', name='p_email', required='', value=p_email)
+              p.px-1.mb-1.text-sm.text-gray-600.font-semibold Designation (Eg. Assistant Professor)
+              input.border-2.rounded-lg.relative.px-4.py-2.w-full(class='focus:outline-none focus:border-teal-500', type='text', name='designation', required='')
             div(class="w-auto lg:w-10/12")
               p.px-1.mb-1.text-sm.text-gray-600.font-semibold Password
               input.border-2.rounded-lg.relative.px-4.py-2.w-full(class='focus:outline-none focus:border-teal-500', type='password', name='password', required='')
@@ -39,14 +39,8 @@ html(lang='en')
               p.px-1.mb-1.text-sm.text-gray-600.font-semibold College
               input.border-2.rounded-lg.relative.px-4.py-2.w-full(class='focus:outline-none focus:border-teal-500', type='text', name='college', required='', value=college)
             div(class="w-auto lg:w-10/12")
-              p.px-1.mb-1.text-sm.text-gray-600.font-semibold Degree
+              p.px-1.mb-1.text-sm.text-gray-600.font-semibold Department
               input.border-2.rounded-lg.relative.px-4.py-2.w-full(class='focus:outline-none focus:border-teal-500', type='text', name='degree', required='', value=degree)
-            div(class="w-auto lg:w-10/12")
-              p.px-1.mb-1.text-sm.text-gray-600.font-semibold Branch
-              input.border-2.rounded-lg.relative.px-4.py-2.w-full(class='focus:outline-none focus:border-teal-500', type='text', name='branch', required='', value=branch)
-            div(class="w-auto lg:w-10/12")
-              p.px-1.mb-1.text-sm.text-gray-600.font-semibold Year of Graduation
-              input.border-2.rounded-lg.relative.px-4.py-2.w-full(class='focus:outline-none focus:border-teal-500', type='text', name='yog', required='', value=yog)
             div(class="w-auto lg:w-10/12")
               button.mt-4.mb-4.bg-teal-500.text-white.rounded-md.px-4.py-2(class='lg:mr-24 focus:outline-none' type='submit')
                 | Sign

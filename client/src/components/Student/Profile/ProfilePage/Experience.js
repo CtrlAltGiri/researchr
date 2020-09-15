@@ -15,7 +15,7 @@ function Experience(props) {
   
   let description, imageURL;
   const defaultURL = '/images/defaultCompany.jfif';
-  imageURL = props.url ? "//logo.clearbit.com/" + props.url + "?size=400" : defaultURL;
+  imageURL = props.logoURL ? "//logo.clearbit.com/" + props.logoURL + "?size=400" : defaultURL;
 
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -29,7 +29,7 @@ function Experience(props) {
   return (
     <div className="xl:w-1/4 md:w-1/2 p-4">
       <div className="bg-white p-6 rounded-lg">
-        <img onClick={(e) => setModalOpen(true)} onError={(e)=>e.target.setAttribute("src",defaultURL)} className="h-56 min-w-40 md:h-40 rounded w-full object-cover object-center mb-6 cursor-pointer" src={imageURL} alt="content" />
+        <img onClick={(e) => setModalOpen(true)} onError={(e)=>e.target.setAttribute("src",defaultURL)} className="h-56 md:h-40 w-full rounded object-cover object-center mb-6 cursor-pointer" src={imageURL} alt="content" />
         <h3 className="tracking-widest text-teal-500 text-xs font-medium title-font">{!!props.title ? props.title.toUpperCase() : props.research.toUpperCase()}</h3>
         <h2 className="text-lg text-gray-900 font-medium title-font mb-4">{props.name}</h2>
         <p className="leading-relaxed text-base">{description}</p>
@@ -43,6 +43,10 @@ function Experience(props) {
         <div className="flex justify-between mb-8">
           <Title text={props.name} />
           <CloseButton onClick={(e) => setModalOpen(false)} />
+        </div>
+
+        <div className="flex flex-row justify-center">
+          <img onClick={(e) => setModalOpen(true)} onError={(e)=>e.target.setAttribute("src",defaultURL)} className="w-32 rounded object-cover object-center mb-6 cursor-pointer" src={imageURL} alt="content" />
         </div>
 
         {props.displayParams.map((disp, index) => {

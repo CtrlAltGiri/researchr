@@ -99,8 +99,8 @@ function CollegeModal(props) {
                     <TextField
                         text="URL to website (for logo on profile page)"
                         onChange={props.changeInput}
-                        name="url"
-                        value={props.formState.url}
+                        name="logoURL"
+                        value={props.formState.logoURL}
                         extraClass="w-full md:w-1/2 mb-8"
                         fieldExtraClass="w-full md:w-3/4"
                     />

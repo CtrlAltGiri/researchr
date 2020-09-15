@@ -46,6 +46,9 @@ Upcoming:
 2. Change URL to logoURL on DB and check these URLS too.
 3. Check DateTimes properly
 
+4. cvElements SCHEMA
+5. Make /profile/studentID changes.
+
 ------------------------------------------------------------------------------------------------------------------
 Adi Stuff (Discuss)
 
@@ -60,3 +63,12 @@ Adi Stuff (Discuss)
 6. Already verified ? WHen i go to /veify/student without any auth.
 
 ---------------------------------------------------------------------------------------------------------------------
+Long-term TODO:
+
+1. Professor name should be clickable from /student.
+2. Pop up with application answers and SOP. (/application/:studentID/:projectID)
+3. Auto logoURL generator.
+4. Animations man.
+
+
+--------------------------------------------------------------------------------------------------------------------
