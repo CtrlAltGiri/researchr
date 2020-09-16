@@ -41,11 +41,7 @@ Eventually before release
 Upcoming:
 
 1. Mark required and non-required fields on application.
-2. Check drive links properly.
-3. Dropdown checks.
-
-4. cvElements SCHEMA
-5. Make /profile/studentID changes.
+2. Test dropdowns using postman
 
 ------------------------------------------------------------------------------------------------------------------
 Adi Stuff (Discuss)
@@ -68,3 +64,5 @@ Long-term TODO:
 3. Auto logoURL generator.
 4. Animations man.
 -----------------------------------------------------------------------------------------------------------------------
+
+Main Project page

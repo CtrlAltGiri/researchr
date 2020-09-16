@@ -1,20 +1,39 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Projectile from "./Projectile/Projectile";
 import InfiniteScroll from 'react-infinite-scroller';
 import axios from 'axios'
-import {Error} from '../../General/Form/FormComponents';
+import { Error } from '../../General/Form/FormComponents';
+import Toggle from '../../General/Form/Toggle';
 
 function ProjectSection() {
 
     const [projects, setProjects] = useState([]);
     const [hasMore, setHasMore] = useState(true);
     const [apiError, setApiError] = useState(false);
+    const [collegeView, setCollegeView] = useState(false);
 
+    useEffect(() => {
+        newLoader()
+        return () => {
+            setProjects([]);
+        }
+    }, [collegeView])
+    
     function newLoader() {
-        axios.get('/api/student/projects')
+        axios.get('/api/student/projects', {
+            params: {
+                allProjects: !collegeView
+            }
+        })
         .then(res => {
+            if(collegeView){
+                setProjects(res.data);
+            }
+            else{
+                setProjects(res.data);
+                //setProjects([...projects, ...res.data]);
+            }
             setHasMore(false);
-            setProjects([...projects, ...res.data]);
             setApiError(false);
         })
         .catch(err => setApiError(err.response.data));
@@ -24,10 +43,12 @@ function ProjectSection() {
     projects.map((item) => {
         items.push(<Projectile key={item.name} allItems={item} />);
     });
+
     return (
         apiError === false ? 
         <section className="text-gray-700 body-font overflow-hidden">
             <div className="container px-5 py-0 md:py-8 mx-auto">
+                <Toggle text="College View" onClick={() => setCollegeView(!collegeView)}/>
                 <InfiniteScroll
                     pageStart={0}
                     loadMore={newLoader}
