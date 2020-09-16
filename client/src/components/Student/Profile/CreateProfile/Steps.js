@@ -79,7 +79,8 @@ function Step2(props) {
         if (retVal === true && collegeState.length > 0) {
             let finalObj = {
                 school: schoolState,
-                college: collegeState
+                college: collegeState,
+                defaultCollege: props.formData.defaultCollege
             }
             setOuterErrorShow('');
             props.updateCompletedStep(2, finalObj);

@@ -25,6 +25,9 @@ function Statusbadge(props){
     else if(badge === "interview"){
         extraClass = "bg-yellow-200";
     }
+    else if(badge === "declined"){
+        extraClass = "bg-orange-200";
+    }
 
     return(
         <span className={`relative ${extraClass} px-3 py-1 rounded-lg font-medium mx-auto`}>{badge}</span>

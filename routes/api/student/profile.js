@@ -65,6 +65,7 @@ profileRouter.route("/createProfile")
         const studId = req.user._id;
         let newState = req.body.value, step = req.body.step;
         let update = {}
+        let student = req.user;
 
         if (step === 1) {
             update = {
@@ -74,7 +75,7 @@ profileRouter.route("/createProfile")
         else if (step === 2) {
 
             let colleges = newState.college;
-            colleges.every((college, index) => {
+            colleges.every((college) => {
                 validate = collegeFormValidator(college);
                 if (!(validate === true)) {
                     verification = false;
@@ -82,6 +83,15 @@ profileRouter.route("/createProfile")
                 }
                 return true;
             })
+
+            let firstCollege = colleges[0];
+            if(!(firstCollege.college === student.college && 
+                firstCollege.degree === student.degree && 
+                firstCollege.yog.toString() === student.yog.toString() &&
+                firstCollege.branch === student.branch)){
+                    verification = false;
+                    validate = "Please choose the values from the dropdown."
+                }
 
             update = {
                 "cvElements.education": {

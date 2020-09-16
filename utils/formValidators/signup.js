@@ -1,5 +1,6 @@
 const {Validator} = require('node-input-validator');
 const niv = require('node-input-validator');
+const {collegeValues, branchValues, degreeValues, yogValues} = require('../../client/src/common/data/collegeData');
 
 //custom error messages for each error that is sent to front end
 niv.addCustomMessages({
@@ -41,7 +42,11 @@ async function signUpValidator(formData) {
         v.errors['password'] = {'message': 'The password must contain between 8 and 16 characters and include ' +
                 'at least one capital letter, one small letter, one number and one special character'}
     }
-    console.log(v.errors);
+
+    if(!(collegeValues.find(c => c === formData.college) && branchValues.find(b => formData.branch) && degreeValues.find(d => d === formData.degree) && yogValues.find(y => y === formData.yog))){
+        retVal = false;
+        v.errors['college'] = {'message': 'Please choose the values from the dropdown.'}
+    }
 
     return [retVal, v.errors];
 }
