@@ -38,7 +38,8 @@ async function signUpValidator(formData) {
     // Between 8 and 16 characters
     if (!/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,16}$/.test(formData.password)){
         retVal = false;
-        v.errors['password'] = {'message': 'The password must contain between 8 and 16 characters and include atleast one capital letter, one small letter, one number and one special character'}
+        v.errors['password'] = {'message': 'The password must contain between 8 and 16 characters and include ' +
+                'at least one capital letter, one small letter, one number and one special character'}
     }
     console.log(v.errors);
 

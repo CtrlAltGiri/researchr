@@ -5,6 +5,7 @@ const profileRouter = require('./profile');
 const projectsRouter = require('./projects');
 const projectRouter = require('./project')
 const testRouter = require('./test');
+const passwordRouter = require('./password');
 
 // Check if userType is Student and only allow students to access this router.
 studentRouter.all("*", function(req, res, next){
@@ -31,6 +32,8 @@ studentRouter.use("/project", projectRouter);
 
 // API router to view a specific application i.e. its questionnaire, answers and SOP filled by a student
 studentRouter.use("/application", applicationRouter);
+
+studentRouter.use("/password", passwordRouter);
 
 // API router to test new functionalities.
 studentRouter.use("/test", testRouter);
