@@ -8,6 +8,7 @@ import TagInput from '../../../../General/TagInput/TagInput';
 function CollegeModal(props) {
 
     ReactModal.setAppElement(document.getElementById('root'));
+    const isDropdownDisabled = props.editObject === 0;
     return (
         <ReactModal
             isOpen={props.modalOpen}
@@ -25,17 +26,18 @@ function CollegeModal(props) {
                         text="College"
                         changeDropdown={props.changeDropdown}
                         name="college"
-                        val={props.formState.college}
+                        val={isDropdownDisabled ? props.defaultValues.college : props.formState.college}
                         placeholder="College"
                         extraClass="mb-8"
                         fieldExtraClass="w-full md:w-1/2"
                         options={colleges}
+                        isDisabled={isDropdownDisabled}
                     />
 
                     <div className="flex flex-col md:flex-row mb-8">
 
                         <Dropdown
-                            val={props.formState.degree}
+                            val={isDropdownDisabled ? props.defaultValues.degree : props.formState.degree}
                             name="degree"
                             options={degrees}
                             changeDropdown={props.changeDropdown}
@@ -43,10 +45,11 @@ function CollegeModal(props) {
                             extraClass="w-full md:w-1/4 mb-2 md:mb-0"
                             fieldExtraClass="w-full md:w-3/4"
                             text="Degree"
+                            isDisabled={isDropdownDisabled}
                         />
 
                         <Dropdown
-                            val={props.formState.branch}
+                            val={isDropdownDisabled ? props.defaultValues.branch : props.formState.branch}
                             name="branch"
                             options={branches}
                             changeDropdown={props.changeDropdown}
@@ -54,10 +57,11 @@ function CollegeModal(props) {
                             extraClass="w-full md:w-1/4 mb-2 md:mb-0"
                             fieldExtraClass="w-full md:w-3/4"
                             text="Branch of Study"
+                            isDisabled={isDropdownDisabled}
                         />
 
                         <Dropdown
-                            val={props.formState.yog}
+                            val={isDropdownDisabled ? props.defaultValues.yog.toString() : props.formState.yog}
                             name="yog"
                             options={yog}
                             changeDropdown={props.changeDropdown}
@@ -65,6 +69,7 @@ function CollegeModal(props) {
                             extraClass="w-full md:w-1/4 mb-2 md:mb-0"
                             fieldExtraClass="w-full md:w-3/4"
                             text="Year of Graduation"
+                            isDisabled={isDropdownDisabled}
                         />
 
                         <TextField

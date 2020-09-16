@@ -64,7 +64,7 @@ function Step1(props) {
 
 function Step2(props) {
 
-    const [collegeState, setCollegeState] = useState(props.formData.college || [])
+    const [collegeState, setCollegeState] = useState(props.formData.college || []);
     const [schoolState, setSchoolState] = useState(props.formData.school || {
         scoring10: "Percentage",
         scoring12: "Percentage",
@@ -106,6 +106,7 @@ function Step2(props) {
                 title="University"
                 modal={CollegeModal}
                 formValidator={collegeFormValidator}
+                defaultValues={props.formData.defaultCollege}
             />
 
             {collegeState.length > 0 && <TealButton extraClass="flex mx-auto mt-6" submitForm={submitOuterForm} text={"Next"} />}

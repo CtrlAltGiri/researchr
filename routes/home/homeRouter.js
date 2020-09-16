@@ -1,6 +1,7 @@
 const homeRouter = require('express').Router();
 const path = require('path');
 const { postLoginStudent , postSignupStudent, getVerifyStudent, postForgotStudent, getResetStudent, postResetStudent } = require('./homeStudent');
+const { colleges, branches, yog, degrees } = require('../../client/src/common/data/collegeData')
 
 homeRouter.route("/")
     .get(function (req, res) {
@@ -12,10 +13,17 @@ homeRouter.route("/")
 })
     .post(function (req, res) {
         if(req.body.type === 'student'){
-            res.render('student/signup', { name: req.body.name, p_email: req.body.email });
+           res.render('student/signup', {
+                name: req.body.name, 
+                p_email: req.body.email, 
+                colleges: colleges,
+                degrees: degrees,
+                yogs: yog,
+                branches: branches
+            });
         }
         else if(req.body.type === 'professor'){
-            res.render('professor/signup', { name: req.body.name, p_email: req.body.email })
+            res.render('professor/signup', { name: req.body.name, p_email: req.body.email, colleges: colleges })
         }
         else{
             res.redirect('/')
@@ -45,10 +53,17 @@ homeRouter.route('/signup/:type?')
     .get(function(req, res){
         let type = req.params.type;
         if(type === 'student')
-            res.render('student/signup', {name: "", p_email: ""});
+            res.render('student/signup', {
+                name: "", 
+                p_email: "", 
+                colleges: colleges,
+                degrees: degrees,
+                yogs: yog,
+                branches: branches
+            });
 
         else if(type === 'professor')
-            res.render('professor/signup');       // replace this with professor implementation
+            res.render('professor/signup', {colleges: colleges});       // replace this with professor implementation
 
         else
             res.render('signup')

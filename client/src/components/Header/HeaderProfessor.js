@@ -1,29 +1,29 @@
 import React, {useEffect, useState} from 'react';
 import {Link} from 'react-router-dom';
 import axios from 'axios';
-import { ResearchRLogo } from '../General/Form/Buttons';
- 
+import {ResearchRLogo} from '../General/Form/Buttons';
+
 function Header() {
 
-    const [studentID, setStudentID] = useState('');
+    const [professorID, setProfessorID] = useState('');
 
     useEffect(() => {
-        axios.get('/api/student/profile/getStudentId')
-        .then(res => setStudentID(res.data))
+        axios.get('/api/professor/profile/getProfile')
+        .then(res => setProfessorID(res.data))
         .catch(err => console.log(err));    // think this is fine.
     }, [])
 
     return (
         <header className="md:px-16 px-6 bg-white flex flex-wrap items-center py-8 md:py-4">
             <div className="flex-1 flex justify-between items-center">
-                <ResearchRLogo url='/student' />
+                <ResearchRLogo url='/professor' />
             </div>
             <input className="hidden" type="checkbox" id="menu-toggle" />
             <div className="hidden md:flex md:items-center md:w-auto w-full" id="menu">
                 <nav>
                     <ul className="md:flex items-center justify-between text-base text-gray-700 pt-2 md:pt-0 text-center md:text-left">
-                        <li><Link to={"/student/profile/" + studentID} className="md:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-teal-500">My Profile</Link></li>
-                        <li><Link to="/student/applications" className="md:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-teal-500">Applications</Link></li>
+                        <li><Link to={"/professor" + professorID} className="md:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-teal-500">My Profile</Link></li>
+                        <li><Link to="/professor/requests" className="md:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-teal-500">Requests</Link></li>
                         <li><a className="md:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-red-500 md:mb-0 mb-2 text-red-500" href="/logout">Sign out</a></li>
                     </ul>
                 </nav>

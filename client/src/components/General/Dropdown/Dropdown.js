@@ -53,6 +53,7 @@ function Dropdowns(props) {
         <div className={props.extraClass}>
             <Label text={props.text} />
             <Select
+                isDisabled={props.isDisabled || false}
                 className={props.fieldExtraClass}
                 styles={customStyles}
                 value={props.options && props.options.find(item => item.value === val)}

@@ -2,48 +2,58 @@ const profileRouter = require('express').Router();
 const Students = require('../../../models/students');
 const { collegeFormValidator, workFormValidator, projectFormValidator } = require('../../../client/src/common/formValidators/cvValidator');
 
+function retrieveStudentDetails(studId, currentID, cvOnly, res){
+    
+    // Should not do ===, one is an ObjectID and other is a string.
+    const mine = studId == currentID;      
+    Students.findOne({ '_id': studId }, function (err, obj) {
+        if(err){
+            console.log(err);
+            return res.status(404).send("Profile not found.");
+        }
+
+        obj = obj.toObject();
+        if(!obj){
+            return res.status(404).send("Profile not found.");
+        }
+        
+        if(!obj.completed && cvOnly === 'false'){
+            
+            let errorMsg;
+            if(mine){
+                errorMsg = "Profile not completed, please click edit profile to continue";
+            }
+            else{
+                errorMsg = "Profile not completed.";
+            }
+            res.status(404).send(errorMsg);
+            return;
+        }
+
+        obj = (({ name, c_email, college, branch, degree, yog, cvElements }) => ({ name, c_email, college, branch, degree, yog, cvElements }))(obj);
+        obj.mine = mine;
+        res.send(obj);
+    });
+}
+
+profileRouter.get("/myProfile", function(req, res){
+    const cvOnly = req.query.cvElements;
+    const studId = req.user._id;
+    const currentID = req.user._id;
+    retrieveStudentDetails(studId, currentID, cvOnly, res);
+})
+
+
 profileRouter.get('/getStudentId', function(req, res){
     res.status(200).send(req.user._id);
 })
 
 profileRouter
     .get("/:studentID", function(req, res){
-
+        const cvOnly = req.query.cvElements;
         const studId = req.params.studentID;
         const currentID = req.user._id;
-        // Should not do ===, one is an ObjectID and other is a string.
-        const mine = studId == currentID;
-        const cvOnly = req.query.cvElements;
-        
-        Students.findOne({ '_id': studId }, function (err, obj) {
-            if(err){
-                console.log(err);
-                return res.status(404).send("Profile not found.");
-            }
-
-            obj = obj.toObject();
-            if(!obj){
-                return res.status(404).send("Profile not found.");
-            }
-            
-            if(!obj.completed && cvOnly === 'false'){
-                
-                let errorMsg;
-                if(mine){
-                    errorMsg = "Profile not completed, please click edit profile to continue";
-                }
-                else{
-                    errorMsg = "Profile not completed.";
-                }
-                res.status(404).send(errorMsg);
-                return;
-            }
-
-            obj = (({ name, c_email, cvElements }) => ({ name, c_email, cvElements }))(obj);
-            obj.mine = mine;
-            res.send(obj);
-        });
-
+        retrieveStudentDetails(studId, currentID, cvOnly, res);
     });
 
 
