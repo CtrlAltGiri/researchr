@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const ApplicationsSchema = new mongoose.Schema({
     profApplications: [
         {
-            projectID: mongoose.Types.ObjectId,
+            projectID: {type: mongoose.Types.ObjectId, unique: true},
             name: String,
             professorName: String,
             status: String,

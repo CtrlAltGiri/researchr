@@ -130,6 +130,41 @@ projectRouter.route("/:projectID")
                 return res.status(404).send(err);
             }
             else{
+                // filter information to be sent to front end
+                project = (
+                    ({
+                        _id,
+                        name,
+                        desc,
+                        professorName,
+                        professorDesignation,
+                        college,
+                        prereq,
+                        duration,
+                        startDate,
+                        applicationCloseDate,
+                        location,
+                        questionnaire,
+                        apply,
+                        errorMsg
+                     }) =>
+                    ({
+                        _id,
+                        name,
+                        desc,
+                        professorName,
+                        professorDesignation,
+                        college,
+                        prereq,
+                        duration,
+                        startDate,
+                        applicationCloseDate,
+                        location,
+                        questionnaire,
+                        apply,
+                        errorMsg
+                    }))(project);
+
                 return res.status(200).send(project);
             }
         })
