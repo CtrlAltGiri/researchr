@@ -33,6 +33,7 @@ studentRouter.use("/project", projectRouter);
 // API router to view a specific application i.e. its questionnaire, answers and SOP filled by a student
 studentRouter.use("/application", applicationRouter);
 
+// API router to update student password
 studentRouter.use("/password", passwordRouter);
 
 // API router to test new functionalities.
