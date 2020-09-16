@@ -313,7 +313,7 @@ async function postResetStudent(req, res){
                     return res.redirect('/reset/error');
                 }
                 else if(!result){
-                    console.log("Failed to update password for student");
+                    console.log("Failed to reset password for student");
                     return res.redirect('/reset/error');
                 }
                 else{
