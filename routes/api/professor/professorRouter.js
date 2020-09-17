@@ -1,4 +1,5 @@
 const projectsRouter = require("./projects");
+const projectRouter = require("./project");
 const professorRouter = require('express').Router()
 
 // Check if userType is Professor and only allow professors to access this router.
@@ -14,5 +15,7 @@ professorRouter.all("*", function(req, res, next){
 // API router to handle(i.e. view project/ add a project) all projects of the professor
 professorRouter.use("/projects", projectsRouter);
 
+// API router to view a prof project and to update it if allowed
+professorRouter.use("/project", projectRouter);
 
 module.exports = professorRouter;
