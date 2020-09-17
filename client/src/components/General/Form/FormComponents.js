@@ -84,6 +84,7 @@ function TextArea(props) {
                 className={`p-2 min-w-full outline-none focus:border-teal-500 border-2 rounded-lg min-h-1/4 ${props.fieldExtraClass}`}
                 name={props.name}
                 value={props.value}
+                disabled={props.disabled || false}
             />
         </div>
     )

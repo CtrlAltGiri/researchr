@@ -25,7 +25,7 @@ function Applications() {
       setAppType(val);
     }
 
-    const headers = ["Project", "Professor", "Application Date", "Status"]
+    const headers = ["Project", "Professor", "Details", "Application Date", "Status"]
 
     return (
       <section className="text-gray-700 body-font overflow-hidden">

@@ -9,6 +9,7 @@ import Error from './Error';
 import { Switch, Route } from 'react-router-dom';
 import axios from 'axios';
 import Test from '../General/Form/CompanyInput';
+import ApplicationDetails from '../Student/Applications/ApplicationDetails/ApplicationDetails';
 
 function AppStudent(props) {
 
@@ -31,6 +32,7 @@ function AppStudent(props) {
         <Route path="/student/profile/:studentID" component={Profile} />
         <Route path="/student/applications" component={Applications} />
         <Route path="/student/test" component={Test} />
+        <Route path="/student/application/:projectId" component={ApplicationDetails} />
         <Route path="/" component={Error} />
       </Switch>
     </div>

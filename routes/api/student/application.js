@@ -5,17 +5,12 @@ const Applications = require("../../../models/applications");
 const ProfProjects = require('../../../models/profProjects');
 const Async = require('async');
 
-applicationRouter.route('/:studentID/:projectID')
+applicationRouter.route('/:projectID')
     // API to view a specific applications
     .get(function (req, res){
-        let studentID = req.params.studentID;
-        let projectID = req.params.projectID;
 
-        // check if the student ID matches the authenticated request id
-        if(!req.user._id.equals(mongoose.Types.ObjectId(studentID))) {
-            console.log("student ID does not match");
-            return res.status(404).send("Application not found");
-        }
+        let studentID = req.user._id;
+        let projectID = req.params.projectID;
 
         Async.waterfall([
             function (callback) {

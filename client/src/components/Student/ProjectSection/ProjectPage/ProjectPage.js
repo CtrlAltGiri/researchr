@@ -25,6 +25,7 @@ function ProjectPage(props) {
     const [apply, setApply] = useState(false);
     const [projDetails, setProjDetails] = useState({});
     const [redirect, setRedirect] = useState(false);
+    const [applyError, setApplyError] = useState('')
 
     useEffect(() => {
         
@@ -33,8 +34,17 @@ function ProjectPage(props) {
                 setProjDetails(res.data);
                 setApply(res.data.apply);
                 setQuestionnaire(res.data.questionnaire);
+                
+                // set empty answers for all initially
+                let len = res.data.questionnaire.length;
+                let ans = []
+                for(let i = 0; i < len; i++){
+                    ans.push('');
+                }
+                setAnswers(ans);
+
                 if(res.data.apply === false){
-                    setError(res.data.errorMsg)
+                    setApplyError(res.data.errorMsg)
                 }
                 if(props.professor){
                     props.retProjDetails(res.data);
@@ -165,7 +175,10 @@ function ProjectPage(props) {
                     </div>
                 </div>
                 }
-                <Error text={errorText} />
+                <div className="text-center">
+                    <Error text={errorText} />
+                    <Error text={applyError} />
+                </div>
             </div>
 
             <ReactModal
