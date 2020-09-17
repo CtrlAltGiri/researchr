@@ -9,7 +9,7 @@ const ProfessorsSchema = new mongoose.Schema({
     designation: String,
     department: String,
     doj: Date,
-    verified: Boolean, // completed his profile?
+    verified: Boolean, // verified his identity?
     TandC: Boolean, // TandC for prof?
     hash: String,
     salt: String,
