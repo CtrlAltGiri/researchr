@@ -23,16 +23,15 @@ passport.use("local-student", new LocalStrategy({
 
 
 passport.use("local-professor", new LocalStrategy({
-    username: 'c_email',
+    usernameField: 'c_email',
     passwordField: 'password',
 }, (c_email, password, done) => {
-
     Professors.findOne({ c_email })
         .then((professor) => {
             if (!professor || !professor.validatePassword(password)) {
-                return done(null, false);
+                return done(null, false, { errors: { 'Email or Password': 'is invalid' } });
             }
-            return done(null, user);
+            return done(null, professor);
         }).catch(done);
 }));
 

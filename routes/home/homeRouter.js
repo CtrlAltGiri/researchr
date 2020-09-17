@@ -2,6 +2,7 @@ const homeRouter = require('express').Router();
 const path = require('path');
 const { postLoginStudent , postSignupStudent, getVerifyStudent, postForgotStudent, getResetStudent, postResetStudent } = require('./homeStudent');
 const { colleges, branches, yog, degrees } = require('../../client/src/common/data/collegeData')
+const { postLoginProfessor, postSignupProfessor } = require('./homeProfessor')
 
 homeRouter.route("/")
     .get(function (req, res) {
@@ -23,7 +24,7 @@ homeRouter.route("/")
             });
         }
         else if(req.body.type === 'professor'){
-            res.render('professor/signup', { name: req.body.name, p_email: req.body.email, colleges: colleges })
+            res.render('professor/signup', { name: req.body.name, p_email: req.body.email, colleges: colleges }) // TODO(giri): Manage dropdowns here and in form vaildator
         }
         else{
             res.redirect('/')
@@ -40,10 +41,10 @@ homeRouter.route("/login/:type?")
     .post(async function (req, res, next) {
         let type = req.params.type;
         if(type === 'student')
-            postLoginStudent(req, res, next);
+            await postLoginStudent(req, res, next);
 
         else if(type === 'professor')
-            res.redirect('/login');     // replace this with professor implementation.
+            await postLoginProfessor(req, res, next);
 
         else
             res.redirect('/login');
@@ -71,10 +72,10 @@ homeRouter.route('/signup/:type?')
     .post(async function(req, res){
         let type = req.params.type;
         if(type === 'student')
-            postSignupStudent(req, res)
+            await postSignupStudent(req, res);
 
         else if(type === 'professor')
-            res.redirect('/signup');    // replace this with professor implementation
+            await postSignupProfessor(req, res);
 
         else
             res.redirect('/signup');   
@@ -106,7 +107,7 @@ homeRouter.route('/forgot/:type?')
 
         let type = req.params.type;
         if(type === 'student')
-            postForgotStudent(req, res);
+            await postForgotStudent(req, res);
         
         else if(type === 'professor')
             res.render('homepage')      //replace this with professor implementation
@@ -132,7 +133,7 @@ homeRouter.route('/reset/:type')
     .post(async function(req, res) {  
         let type = req.params.type;
         if(type === 'student')
-            postResetStudent(req, res);
+            await postResetStudent(req, res);
         
         else if(type === 'professor')
             res.render('homepage')      // replace this with professor implementation

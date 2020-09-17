@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const ProfProjectsSchema = new mongoose.Schema({
     name: String,
     desc: String,
-    // professorID: ObjectID,
+    professorID: mongoose.Types.ObjectId,
     professorName: String,
     professorDesignation: String,
     college: String,
@@ -12,6 +12,7 @@ const ProfProjectsSchema = new mongoose.Schema({
     duration: Number, // in months
     startDate: Date,
     dateOfCreation: Date,
+    commitment: Number, // hours per week
     applicationCloseDate: Date,
     location: String, // WFH or specific location
     restrictedView: Boolean,
