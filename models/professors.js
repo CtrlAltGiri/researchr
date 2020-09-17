@@ -7,11 +7,10 @@ const ProfessorsSchema = new mongoose.Schema({
     lastLogin: Date,
     c_email: String,
     designation: String,
-    projects: [ String ],    // should it be ObjectID?
-
+    department: String,
     doj: Date,
-    completed: Boolean, //completed his profile?
-    TandC: Boolean, //TandC for prof?
+    verified: Boolean, // completed his profile?
+    TandC: Boolean, // TandC for prof?
     hash: String,
     salt: String,
     active: Boolean,

@@ -144,7 +144,7 @@ async function postSignupStudent(req, res) {
                     return res.redirect('/signup/error');
                 }
                 else {
-                    sendVerificationEmail(req.body.c_email, req.body.name, token).then(r => console.log(r)).catch(function (err) { console.log(err) });
+                    sendVerificationEmail(req.body.c_email, req.body.name, token, "student").then(r => console.log(r)).catch(function (err) { console.log(err) });
                     //TODO(aditya): Make a proper webpage for this
                     res.render('signUpComplete');
                 }
