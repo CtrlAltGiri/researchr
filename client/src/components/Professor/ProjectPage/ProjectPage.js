@@ -12,7 +12,7 @@ function ProjectPageProfessor(props) {
     return (
         <div>
             <ProjectPage
-                url="/api/student/project/5f5bbc5d4bbed985c4a72c50"
+                url={"/api/professor/project/" + projectID.toString()}
                 professor={true}        // MAKE THIS TRUE ONLY IF MINE IS TRUE
                 retProjDetails={setProjDetails}
                 editAction={() => setModalOpen(true)}
@@ -23,6 +23,7 @@ function ProjectPageProfessor(props) {
                 modalOpen={modalOpen}
                 closeModal={(e) => setModalOpen(false)}
                 projDetails={projDetails}
+                _id={projectID}
             />}
         
         </div>

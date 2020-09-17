@@ -3,6 +3,7 @@ import { Switch, Route } from 'react-router-dom';
 import Header from '../Header/HeaderProfessor'
 import LandingPage from '../Professor/LandingPage/LandingPage';
 import ProjectPage from '../Professor/ProjectPage/ProjectPage';
+import ProfilePage from '../Professor/ProfilePage/ProfilePage';
 import axios from 'axios';
 
 function ItBegins() {
@@ -12,7 +13,7 @@ function ItBegins() {
 function AppProfessor(props) {
 
     useEffect(() => {
-        axios.get("/plsauthenticate").then(function (response) {
+        axios.get("/plsauthenticate/Professor").then(function (response) {
           console.log("authenication done dev");
         }).catch(function (err) {
           console.log("error auth");
@@ -25,6 +26,7 @@ function AppProfessor(props) {
             <Switch>
                 <Route path="/professor" component={LandingPage} exact />
                 <Route path="/professor/project/:projectID" component={ProjectPage} />
+                <Route path="/professor/profile/" component={ProfilePage} />
             </Switch>
         </div>
     );

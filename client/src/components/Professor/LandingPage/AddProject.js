@@ -26,19 +26,19 @@ function AddProject(props) {
 
         // ALSO DO THE FORM VALIDATOR. startDate > applicationCloseDate.
 
-        if(props.editMode){
-            axios.put('/api/professor/projects', projDetails)
-            .then(res => {console.log(res)
-                //TO REFRESH THE PAGE => history.go(0);
-            })
-            .catch(err => {
-                showError(err.response.data)
-            });
+        if (props.editMode) {
+            axios.put('/api/professor/project/' + props._id, projDetails)
+                .then(res => {
+                    history.go(0);
+                })
+                .catch(err => {
+                    showError(err.response.data)
+                });
         }
-        else{
-            axios.post('/api/professor/addProject', projDetails)
-            .then(res => closeModal(event))
-            .catch(err => showError(err.response.data));
+        else {
+            axios.post('/api/professor/projects', projDetails)
+                .then(res => history.go(0))
+                .catch(err => showError(err.response.data));
         }
     }
 
@@ -64,7 +64,7 @@ function AddProject(props) {
             />
 
             <TextArea
-                text="Description (please include the work and committment)"
+                text="Description (please include the work and commitment)"
                 extraClass="my-4"
                 onChange={changeInput}
                 name="desc"
@@ -78,7 +78,7 @@ function AddProject(props) {
                 fieldExtraClass="w-full md:3/5"
                 updateTags={changeTags}
                 chosenTags={projDetails.prereq}
-                maxNumberOfTags={3}
+                maxNumberOfTags={10}
                 noSuggestions={false}
                 name="prereq"
                 heading="Chosen Prerequisites"
@@ -106,17 +106,27 @@ function AddProject(props) {
                 />
             </div>
 
-            <DayMonthYear
-                name="applicationCloseDate"
-                onChange={changeTags}
-                date={projDetails.applicationCloseDate}
-                onlyFuture={true}
-                text="Application Close Date"
-                extraClass="w-full mb-8"
-                innerClass="flex"
-                fieldExtraClass="w-full md:w-3/4 mr-12"
-            />
+            <div className="flex flex-col md:flex-row mb-2 mt-4">
+                <DayMonthYear
+                    name="applicationCloseDate"
+                    onChange={changeTags}
+                    date={projDetails.applicationCloseDate}
+                    onlyFuture={true}
+                    text="Application Close Date"
+                    extraClass="w-full mb-8"
+                    innerClass="flex"
+                    fieldExtraClass="w-full md:w-3/4 mr-12"
+                />
 
+                <TextField
+                    text="Commitment per week (in hrs)"
+                    extraClass="w-full md:w-1/3 mt-1 mb-4 md:mb-0"
+                    fieldExtraClass="w-full"
+                    onChange={changeInput}
+                    name="commitment"
+                    value={projDetails.commitment}
+                />
+            </div>
 
             <div className="flex flex-row mb-2 w-full">
                 <Dropdown
@@ -138,14 +148,14 @@ function AddProject(props) {
                     placeholder="Visibility"
                     extraClass="mb-8 w-1/2"
                     fieldExtraClass="w-4/5"
-                    options={[{ value: "true", label: "Show it only to students in my college" }, { value: "false", label: "Show it to everyone" }]}
+                    options={[{ value: true, label: "Show it only to students in my college" }, { value: false, label: "Show it to everyone" }]}
                 />
 
             </div>
 
-            <TagInput
+            {!props.editMode && <TagInput
                 text="Enter Questions that you wish student to answer"
-                extraClass="flex justify-center mx-auto flex-col"
+                extraClass="flex justify-center mx-auto flex-col mb-6"
                 fieldExtraClass="w-full md:w-3/5"
                 updateTags={changeTags}
                 chosenTags={projDetails.questionnaire}
@@ -154,7 +164,18 @@ function AddProject(props) {
                 name="questionnaire"
                 heading="Chosen Questionnaire"
                 allCases={true}
-            />
+            />}
+
+            {!props.editMode && <TagInput
+                text="Tags which will help match students"
+                extraClass="flex justify-center mx-auto flex-col mb-4"
+                fieldExtraClass="w-full md:w-3/5"
+                updateTags={changeTags}
+                chosenTags={projDetails.tags}
+                maxNumberOfTags={3}
+                name="tags"
+                heading="Chosen Tags"
+            />}
 
             <TealButton
                 text="Add project"

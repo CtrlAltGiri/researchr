@@ -148,6 +148,10 @@ function ProjectPage(props) {
                                     <span className="text-gray-500">Close date for application</span>
                                     <span className="ml-auto text-gray-900">{(new Date(projDetails.applicationCloseDate)).toDateString()}</span>
                                 </div>}
+                                {projDetails.commitment && <div className="flex border-t border-gray-300 py-2">
+                                    <span className="text-gray-500">Commitment per week</span>
+                                    <span className="ml-auto text-gray-900">{projDetails.commitment + " hours/week"}</span>
+                                </div>}
                                 {projDetails.tags && <div className="flex border-t border-gray-300 py-2">
                                     <span className="text-gray-500">Tags</span>
                                     <span className="ml-auto text-gray-900">{projDetails.tags.join(",")}</span>

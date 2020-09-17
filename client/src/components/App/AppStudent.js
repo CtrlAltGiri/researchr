@@ -13,7 +13,7 @@ import Test from '../General/Form/CompanyInput';
 function AppStudent(props) {
 
   useEffect(() => {
-    axios.get("/plsauthenticate").then(function (response) {
+    axios.get("/plsauthenticate/Student").then(function (response) {
       console.log("authenication done dev");
     }).catch(function (err) {
       console.log("error auth");

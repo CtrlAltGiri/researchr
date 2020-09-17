@@ -16,7 +16,8 @@ const ProfProjectsSchema = new mongoose.Schema({
     applicationCloseDate: Date,
     location: String, // WFH or specific location
     restrictedView: Boolean,
-    questionnaire: [ String ]
+    questionnaire: [ String ],
+    tags: [ String ]
 });
 
 const ProfProjects = mongoose.model('profProjects', ProfProjectsSchema, 'profProjects');

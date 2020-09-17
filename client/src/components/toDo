@@ -48,14 +48,9 @@ Upcoming:
 Adi Stuff (Discuss)
 
 1. n and nModified
-2. User checks?
-3. Bug in GET /applications.
-    a. Does not retrieve the selected because of DateTime issue. 
-    b. Undefined?
-    c. Two selected projects don't show up.
-4. Projections on queries. Send only what is needed.
-5. Accepted domains
-6. Already verified ? WHen i go to /veify/student without any auth.
+2. Projections on queries. Send only what is needed.
+3. Accepted domains
+4. Already verified ? WHen i go to /veify/student without any auth.
 
 ---------------------------------------------------------------------------------------------------------------------
 Long-term TODO:
@@ -64,35 +59,12 @@ Long-term TODO:
 2. Pop up with application answers and SOP. (/application/:studentID/:projectID)
 3. Auto logoURL generator.
 4. Animations man.
------------------------------------------------------------------------------------------------------------------------
 
-Professor flow
+----------------------------------------------------------------------------------------------------------------
+Rahul - Giri
 
-1. /api/professor/projects -> 
+1. 5 applications/month.
+2. Discrepency -> remove the student (5).
+3. User profile -> green tick if we find it reviewed.
 
-GET
-
-Returns all projects using profID. 
-Name, applicationCloseDate, noApplicants (active, selected, interview).
-startDate.
-Restricted to college? and college name.
-_id also.
-
-POST
-
-All fields.
-
-2. T&C for prof in the signup page.
-    Add housrs/ week to project page and remove views
-
-3. /api/professor/project/:projectID
-
-GET
-Return everything about the project (except views)
-mine: true / false
-
-PUT
-
-
-
-1. Prof tab for student
+----------------------------------------------------------------------------------------------------------------------------

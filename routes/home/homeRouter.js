@@ -155,10 +155,14 @@ homeRouter.get("/test", function (req, res) {
     res.sendFile(path.resolve("views/html/login.html"))
 });
 
-homeRouter.get('/plsauthenticate', function(req, res){
+homeRouter.get('/plsauthenticate/:type', function(req, res){
+
+    const type = req.params.type;
+    const id = type === 'Student' ? '5f5b66197600e40b9c52f2a4': '5f6273f9f49bf96ebc3662ad';
     if(process.env.NODE_ENV === 'dev'){
         const user = {
-           _id : '5f5b66197600e40b9c52f2a4'
+           _id : id,
+           _type: type
         }
         req.logIn(user, function (err) {
             if(err){

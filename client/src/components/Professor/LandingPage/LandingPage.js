@@ -5,10 +5,15 @@ import AddProject from './AddProject';
 
 function LandingPage(props) {
 
-    const [projects, setProjects] = useState(['a', 'b']);
+    const [projects, setProjects] = useState([]);
     const [modalOpen, setModalOpen] = useState(false);
 
     useEffect(() => {
+
+        axios.get('/api/professor/projects')
+        .then(res => setProjects(res.data))
+        .catch(err => console.log(err));
+
     }, [])
 
 
