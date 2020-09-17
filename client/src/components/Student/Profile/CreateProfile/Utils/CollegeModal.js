@@ -99,6 +99,7 @@ function CollegeModal(props) {
                         chosenTags={props.formState.coursework}    
                         noSuggestions={true}
                         heading="Chosen coursework"
+                        name="coursework"
                     />
 
                     <TextField

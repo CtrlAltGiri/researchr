@@ -21,7 +21,7 @@ projectRouter.route("/:projectID")
         // query mongoDB's profProjects collection to return the project details
         Async.waterfall([
             function (callback){
-                //CHECK 1: Check if such a project exists and if its open and also increment its views by 1
+                // CHECK 1: Check if such a project exists and if its open and also increment its views by 1
                 // Simultaneously check if project is a restricted view and if so check if colleges match and only then return the project
                 ProfProjects.findOneAndUpdate({_id: projectID}, {$inc: {views: 1}}, {new: true, useFindAndModify: false}, function (err, project) {
                     if (err) {

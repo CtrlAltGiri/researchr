@@ -48,7 +48,7 @@ function Profile(props) {
                             description="experience"
                             logoURL="logoURL"
                             displayModal={['Position', 'Start Date', 'End Date', 'experience', 'URL (Proof)']}
-                            displayParams={['position', 'startDate', 'endDate', 'experience', 'url']}
+                            displayParams={['position', 'startDate', 'endDate', 'experience', 'proof']}
 
                         />}
 

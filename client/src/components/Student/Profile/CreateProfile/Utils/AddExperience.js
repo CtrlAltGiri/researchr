@@ -84,15 +84,7 @@ function AddExperience(props) {
         setshowError('');
     }
 
-    function updateTags(newTags) {
-        let name;
-        if(props.heading === 'college'){
-            name = 'coursework';
-        }
-        else{
-            name = 'tags';
-        }
-
+    function updateTags(newTags, name) {
         setFormState({ ...formState, [name]: newTags })
     }
 
