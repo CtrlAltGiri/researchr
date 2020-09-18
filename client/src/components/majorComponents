@@ -1,0 +1,31 @@
+Students
+
+A. Landing Project Page.
+B. Individual Project Pag
+C. Profile Page
+D. Applications Page
+E. Create CV Page
+F. Application Page.
+---------------------------------------------------------------------------------------------------------------------
+Professor
+
+A. Landing Page (project Page)
+B. Individual Project Page (with edit button)
+C. Profile Page + Create Profile Page
+D. Applications Page
+E. Feedback Page
+
+-----------------------------------------------------------------------------------------------------------------
+Professor profile schema
+
+1. website (done)
+2. areas of interest (done)
+3. publications (done)
+4. Patents / New technologies developed (done)
+5. Courses taught in college (done)
+6. Books written (done)
+7. Projects done - Title, Funding agency, Duration
+8. His / Her education itself -> Degree + College + Year 
+9. Responsibilities in College -> position, organization, year.
+
+------------------------------------------------------------------------------------------------------------------------

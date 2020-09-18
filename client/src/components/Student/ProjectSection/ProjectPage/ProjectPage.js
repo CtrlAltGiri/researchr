@@ -25,16 +25,29 @@ function ProjectPage(props) {
     const [apply, setApply] = useState(false);
     const [projDetails, setProjDetails] = useState({});
     const [redirect, setRedirect] = useState(false);
+    const [applyError, setApplyError] = useState('')
 
     useEffect(() => {
-
-        axios.get("/api/student/project/" + projectId.toString())
+        
+        axios.get(props.url ? props.url : ("/api/student/project/" + projectId.toString()))
             .then(res => {
                 setProjDetails(res.data);
                 setApply(res.data.apply);
                 setQuestionnaire(res.data.questionnaire);
+                
+                // set empty answers for all initially
+                let len = res.data.questionnaire.length;
+                let ans = []
+                for(let i = 0; i < len; i++){
+                    ans.push('');
+                }
+                setAnswers(ans);
+
                 if(res.data.apply === false){
-                    setError(res.data.errorMsg)
+                    setApplyError(res.data.errorMsg)
+                }
+                if(props.professor){
+                    props.retProjDetails(res.data);
                 }
             })
             .catch(err => {
@@ -93,10 +106,12 @@ function ProjectPage(props) {
         <section className="text-gray-700 body-font overflow-hidden">
             {redirect && <Redirect to="/student/applications" />}
             <div className="container px-5 py-12 mx-auto">
+                {errorText.length === 0 && 
                 <div className="lg:w-4/5 mx-auto flex flex-wrap">
                     <div className="w-full lg:pr-10 lg:py-6 mb-6 lg:mb-0">
                         <h2 className="text-sm title-font text-gray-500 tracking-widest uppercase">{projDetails.professorName}</h2>
                         <h1 className="text-gray-900 text-3xl title-font font-medium mb-4">{projDetails.name}</h1>
+                        
                         <div className="flex mb-2 justify-around items-center pr-8">
                             <a className={`py-2 text-lg px-1 cursor-pointer ${slider === slideValues.DESCRIPTION ? "text-teal-500" : ""}`} onClick={(e) => { setSlider(slideValues.DESCRIPTION) }} href="#">Description</a>
                             <a className={`py-2 text-lg px-1 cursor-pointer ${slider === slideValues.SKILLS ? "text-teal-500" : ""}`} onClick={(e) => { setSlider(slideValues.SKILLS) }} href="#">Skills</a>
@@ -108,7 +123,6 @@ function ProjectPage(props) {
                         {slider === slideValues.DESCRIPTION ?
                             <div>
                                 <p className="leading-relaxed mb-8">{projDetails.desc}</p>
-                                <Error text={errorText} />
                             </div>
                             : slider === slideValues.SKILLS ?
                                 <div className="flex flex-wrap w-full sm:mx-auto sm:mb-2 -mx-2">
@@ -144,21 +158,26 @@ function ProjectPage(props) {
                                     <span className="text-gray-500">Close date for application</span>
                                     <span className="ml-auto text-gray-900">{(new Date(projDetails.applicationCloseDate)).toDateString()}</span>
                                 </div>}
+                                {projDetails.commitment && <div className="flex border-t border-gray-300 py-2">
+                                    <span className="text-gray-500">Commitment per week</span>
+                                    <span className="ml-auto text-gray-900">{projDetails.commitment + " hours/week"}</span>
+                                </div>}
                                 {projDetails.tags && <div className="flex border-t border-gray-300 py-2">
                                     <span className="text-gray-500">Tags</span>
                                     <span className="ml-auto text-gray-900">{projDetails.tags.join(",")}</span>
                                 </div>}
-                                <div className="flex border-t border-gray-300 py-2 mb-6">
-                                    <span className="text-gray-500">Project views</span>
-                                    <span className="ml-auto text-gray-900">{projDetails.views}</span>
-                                </div>
-
+                                
                             </div>
-                            
                         }
 
-                        {apply ? <button onClick={(e) => setModalOpen(true)} className="flex ml-auto mt-4 text-white bg-teal-500 border-0 py-2 px-6 focus:outline-none hover:bg-teal-600 rounded">Apply</button> : "" }
+                        {props.professor ? <TealButton text="Edit" extraClass="mt-8 ml-auto flex" submitForm={(e) => props.editAction()}/> :
+                        apply ? <button onClick={(e) => setModalOpen(true)} className="flex ml-auto mt-4 text-white bg-teal-500 border-0 py-2 px-6 focus:outline-none hover:bg-teal-600 rounded">Apply</button> : "" }
                     </div>
+                </div>
+                }
+                <div className="text-center">
+                    <Error text={errorText} />
+                    <Error text={applyError} />
                 </div>
             </div>
 

@@ -1,20 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import Select from 'react-select';
 import { Label } from '../Form/FormComponents';
-import { retMonthOptions, retYearOptions} from './DateOptions';
+import { retDayOptions, retMonthOptions, retYearOptions } from './DateOptions'
 
 // changeInput, date, name, extraClass
-function MonthYear(props) {
-
+function DayMonthYear(props) {
+    
+    const dayOptions = retDayOptions();
     const monthOptions = retMonthOptions();
     const yearOptions = retYearOptions(props.onlyFuture);
 
     let finalDate = props.date;
     if(typeof(finalDate) === typeof('')){
-        finalDate = new Date(finalDate.substr(2,4),finalDate.substr(0,2));
+        finalDate = new Date(finalDate);
     }
 
-    const [month, setMonth] = useState((finalDate && monthOptions[finalDate.getMonth()] && monthOptions[finalDate.getMonth()].value) || '-')
+    const [day, setDay] = useState((finalDate && dayOptions[finalDate.getDate() - 1].value) || '-')
+    const [month, setMonth] = useState((finalDate && (monthOptions[finalDate.getMonth()].value)) || '-')
     const [year, setYear] = useState( (finalDate && finalDate.getFullYear()) || '-')
 
     const customStyles = {
@@ -40,16 +42,27 @@ function MonthYear(props) {
 
     // make this useEffect()
     useEffect(function updateProps() {
-        if (month !== '-' && year !== '-') {
-            let date = month + "/" + year.toString();
+        if (day !== '-' && month !== '-' && year !== '-') {
+            console.log(year, month, day);
+            let date = new Date(year, month - 1, day);
+            console.log(date);
             props.onChange(date, props.name);
         }
-    },[month, year])
+    },[day, month, year])
 
     return (
         <div className={props.extraClass}>
             <Label text={props.text} />
             <div className={props.innerClass}>
+
+                <Select
+                    className={props.fieldExtraClass}
+                    styles={customStyles}
+                    value={dayOptions.find(item => item.value === day)}
+                    onChange={(newDay) => { setDay(newDay.value); }}
+                    options={dayOptions}
+                    placeholder="Day"
+                />
 
                 <Select
                     className={props.fieldExtraClass}
@@ -74,4 +87,4 @@ function MonthYear(props) {
     )
 }
 
-export default MonthYear;
+export default DayMonthYear;

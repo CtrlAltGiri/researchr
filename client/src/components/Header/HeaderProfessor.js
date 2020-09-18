@@ -22,7 +22,7 @@ function Header() {
             <div className="hidden md:flex md:items-center md:w-auto w-full" id="menu">
                 <nav>
                     <ul className="md:flex items-center justify-between text-base text-gray-700 pt-2 md:pt-0 text-center md:text-left">
-                        <li><Link to={"/professor" + professorID} className="md:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-teal-500">My Profile</Link></li>
+                        <li><Link to={"/professor/profile" + professorID} className="md:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-teal-500">My Profile</Link></li>
                         <li><Link to="/professor/requests" className="md:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-teal-500">Requests</Link></li>
                         <li><a className="md:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-red-500 md:mb-0 mb-2 text-red-500" href="/logout">Sign out</a></li>
                     </ul>

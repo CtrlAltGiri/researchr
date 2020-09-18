@@ -14,7 +14,9 @@ projectsRouter.route("/")
         // get professor's ID from req
         let professorID = req.user._id;
         // statuses that are to be considered
-        let statuses = ["active", "selected", "interview"]
+        let statuses = ["active", "selected", "interview"];
+        // The college that the professor belongs to
+        let college;
 
         Async.waterfall([
             function(callback) {
@@ -29,11 +31,12 @@ projectsRouter.route("/")
                         callback("Error in fetching projects from collection")
                     }
                     else {
+                        college = projects[0].college;
                         // filter information to be sent to front end
                         let returnProjects = projects.map(function (element) {
                             return ((
-                                {_id, name, startDate, restrictedView, college, applicationCloseDate}) =>
-                                ({_id, name, startDate, restrictedView, college, applicationCloseDate}))(element);
+                                {_id, name, startDate, restrictedView, applicationCloseDate, tags, views}) =>
+                                ({_id, name, startDate, restrictedView, applicationCloseDate, tags, views}))(element);
                         })
                         callback(null, returnProjects);
                     }
@@ -102,6 +105,7 @@ projectsRouter.route("/")
                 return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(err);
             }
             else {
+                projects = {projects: projects, college: college}
                 return res.status(StatusCodes.OK).send(projects);
             }
         })
@@ -115,7 +119,8 @@ projectsRouter.route("/")
         const retVal = values[0];
         const errors = values[1];
         if (retVal === false) {
-            return res.status(StatusCodes.BAD_REQUEST).send(errors);
+            let error = Object.values(Object.values(errors)[0])[0]
+            return res.status(StatusCodes.BAD_REQUEST).send(error);
         }
         // all checks passed
 
@@ -156,7 +161,8 @@ projectsRouter.route("/")
                     applicationCloseDate: req.body.applicationCloseDate,
                     location: req.body.location, // WFH or specific location
                     restrictedView: req.body.restrictedView,
-                    questionnaire: req.body.questionnaire
+                    questionnaire: req.body.questionnaire,
+                    tags: req.body.tags
                 })
 
                 project.save({}, function (err, result) {

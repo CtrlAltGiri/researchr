@@ -58,7 +58,8 @@ projectRouter.route("/:projectID")
                                 commitment,
                                 applicationCloseDate,
                                 location,
-                                questionnaire
+                                questionnaire,
+                                restrictedView
                             }) =>
                             ({
                                 name,
@@ -73,7 +74,8 @@ projectRouter.route("/:projectID")
                                 commitment,
                                 applicationCloseDate,
                                 location,
-                                questionnaire
+                                questionnaire,
+                                restrictedView
                             }))(project);
                         project.mine = mine;
                         callback(null, project, toCheck);
@@ -130,13 +132,15 @@ projectRouter.route("/:projectID")
         })
     })
     // API to update a given project
+    // TODO (Adi): Check if the professor is allowed to change.
     .put(async function (req,res){
         // validate the req body
         const values = await updateProfProjectValidator(req.body);
         const retVal = values[0];
         const errors = values[1];
         if (retVal === false) {
-            return res.status(StatusCodes.BAD_REQUEST).send(errors);
+            let error = Object.values(Object.values(errors)[0])[0]
+            return res.status(StatusCodes.BAD_REQUEST).send(error);
         }
         // all checks passed
 

@@ -6,18 +6,22 @@ import axios from 'axios';
 Usage:
     <TagInput
       text="Enter tags"
+      name="whatisthename"
       extraClass="flex justify-center px-16 mx-auto flex-col"
       updateTags={updateTags}
       chosenTags={interestTags}
       maxNumberOfTags={3}
       noSuggestions={true}
       heading="coursework"
+      allCases={true}
     />
 
     updateTags refers to the method used to update the tags in the parent.
     chosenTags is the variable passed by parent with the tags.
     noSuggestions is the boolean to control if API call should be made.
     It is a controlled element basically.
+
+    allCases allows for upper case input too
     */
 
 
@@ -63,7 +67,7 @@ function TagInputs(props) {
         else {
             if (suggestion || suggestion.length > 0) {
                 setShowError(false);
-                props.updateTags(temp);
+                props.updateTags(temp, props.name);
                 setChosenTags(temp)
                 setVal('');
             }
@@ -75,7 +79,7 @@ function TagInputs(props) {
             <Label text={props.text} />
             <div className="flex flex-row">
                 <input type="text" 
-                    onChange={(e) => setVal(e.target.value.toLowerCase())} 
+                    onChange={(e) => props.allCases ? setVal(e.target.value) : setVal(e.target.value.toLowerCase())} 
                     className={`outline-none focus:border-teal-500 border-2 rounded-lg py-1 px-2 ${props.fieldExtraClass}`} 
                     name={props.name} 
                     value={val} 
@@ -129,7 +133,7 @@ function TagInputs(props) {
                             let index = chosenTags.indexOf(tag);
                             let temp = [...chosenTags];
                             temp.splice(index, 1);
-                            props.updateTags(temp);
+                            props.updateTags(temp, props.name);
                             setChosenTags(temp);
                             setShowError(false);
                         }}>

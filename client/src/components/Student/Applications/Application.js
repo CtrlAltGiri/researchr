@@ -50,10 +50,13 @@ function Application(props) {
                         </div>
                         <div className="ml-4">
                         <p className="font-medium text-md">{props.professor}</p>
-                        {props.selected && <button className="focus:outline-none underline text-teal-700 cursor-pointer" onClick={(e) => {setProfMessageModal(true)}}>Message from Professor</button>}
+                        {props.selected && <button className="focus:outline-none underline text-teal-700 cursor-pointer text-left" onClick={(e) => {setProfMessageModal(true)}}>Message from Professor</button>}
                         </div>
                     </div>
                 </div>
+            </td>
+            <td className="text-center">
+                <Link className="underline" to={"/student/application/" + props.projID}>Application</Link>
             </td>
             <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                 <p className="text-gray-900 whitespace-no-wrap text-center">

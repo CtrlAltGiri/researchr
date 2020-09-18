@@ -49,7 +49,7 @@ passport.serializeUser(function (user, done) {
     }
     else{
         if(process.env.NODE_ENV === 'dev')
-            userGroup = "Student";
+            userGroup = user._type
     }
 
     let sessionConstructor = new SessionConstructor(user._id, userGroup);
