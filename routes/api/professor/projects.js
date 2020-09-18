@@ -14,7 +14,9 @@ projectsRouter.route("/")
         // get professor's ID from req
         let professorID = req.user._id;
         // statuses that are to be considered
-        let statuses = ["active", "selected", "interview"]
+        let statuses = ["active", "selected", "interview"];
+        // The college that the professor belongs to
+        let college;
 
         Async.waterfall([
             function(callback) {
@@ -29,11 +31,12 @@ projectsRouter.route("/")
                         callback("Error in fetching projects from collection")
                     }
                     else {
+                        college = projects[0].college;
                         // filter information to be sent to front end
                         let returnProjects = projects.map(function (element) {
                             return ((
-                                {_id, name, startDate, restrictedView, college, applicationCloseDate, tags, views}) =>
-                                ({_id, name, startDate, restrictedView, college, applicationCloseDate, tags, views}))(element);
+                                {_id, name, startDate, restrictedView, applicationCloseDate, tags, views}) =>
+                                ({_id, name, startDate, restrictedView, applicationCloseDate, tags, views}))(element);
                         })
                         callback(null, returnProjects);
                     }
@@ -102,6 +105,7 @@ projectsRouter.route("/")
                 return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(err);
             }
             else {
+                projects = {projects: projects, college: college}
                 return res.status(StatusCodes.OK).send(projects);
             }
         })

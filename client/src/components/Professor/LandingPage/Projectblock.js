@@ -11,7 +11,6 @@ function Projectblock(props) {
         startDate: props.project.startDate,
         closeDate: props.project.applicationCloseDate,
         restricted: props.project.restrictedView,
-        college: props.project.college,
         active: props.project.active,
         selected: props.project.selected,
         interview: props.project.interview,
@@ -28,7 +27,7 @@ function Projectblock(props) {
                 <div className="my-6">
                     <p className="font-medium mb-1">Start Date for Project: {new Date(data.startDate).toDateString()}</p>
                     <p className="font-medium mb-1">Application Deadline: <span className="underline">{new Date(data.closeDate).toDateString()}</span></p>
-                    <p className="font-medium underline">Restricted to IIT Bombay</p>
+                    <p className="font-medium underline">{data.restricted ? "Restricted to " + props.college : "Shown to everyone"}</p>
                 </div>
 
                 <div className="text-right">
@@ -52,7 +51,7 @@ function Projectblock(props) {
                         </svg>{data.active ? data.active : 0}
                     </span>
                     <span className="text-gray-600 mr-3 inline-flex items-center leading-none text-sm pr-3 py-1 border-r-2 border-gray-300">
-                        <svg className="w-4 h-4 mr-1" stroke="currentColor" strokeWidth={2} fill="none" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
+                        <svg className="w-4 h-4 mr-1" stroke="gold" strokeWidth={2} fill="none" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
                             <path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z" />
                         </svg>{data.interview ? data.interview : 0}
                     </span>

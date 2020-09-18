@@ -6,6 +6,7 @@ import axios from 'axios';
 Usage:
     <TagInput
       text="Enter tags"
+      name="whatisthename"
       extraClass="flex justify-center px-16 mx-auto flex-col"
       updateTags={updateTags}
       chosenTags={interestTags}

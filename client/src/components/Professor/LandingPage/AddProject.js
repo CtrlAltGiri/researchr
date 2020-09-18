@@ -6,6 +6,7 @@ import DayMonthYear from '../../General/Dropdown/DayMonthYear';
 import Dropdown from '../../General/Dropdown/Dropdown';
 import axios from 'axios';
 import { useHistory } from 'react-router-dom';
+import { projectValidator } from '../../../common/formValidators/profProjectValidator';
 
 function AddProject(props) {
 
@@ -23,8 +24,11 @@ function AddProject(props) {
 
     function submitForm(event) {
         event.preventDefault();
-
-        // ALSO DO THE FORM VALIDATOR. startDate > applicationCloseDate.
+        let retVal = projectValidator(projDetails, props.editMode);
+        if(retVal !== true){
+            showError(retVal);
+            return;
+        }
 
         if (props.editMode) {
             axios.put('/api/professor/project/' + props._id, projDetails)
@@ -56,7 +60,7 @@ function AddProject(props) {
             <TextField
                 text="Project Name"
                 extraClass="w-full my-4"
-                fieldExtraClass="w-3/5"
+                fieldExtraClass="w-full md:w-3/5"
                 onChange={changeInput}
                 name="name"
                 value={projDetails.name}
@@ -93,7 +97,7 @@ function AddProject(props) {
                     text="Project Start Date"
                     extraClass="w-full mb-8"
                     innerClass="flex"
-                    fieldExtraClass="w-full md:w-3/4 mr-12"
+                    fieldExtraClass="w-full md:w-3/4 mr-4 md:mr-12"
                 />
 
                 <TextField
@@ -115,7 +119,7 @@ function AddProject(props) {
                     text="Application Close Date"
                     extraClass="w-full mb-8"
                     innerClass="flex"
-                    fieldExtraClass="w-full md:w-3/4 mr-12"
+                    fieldExtraClass="w-full md:w-3/4 mr-4 md:mr-12"
                 />
 
                 <TextField
@@ -137,7 +141,7 @@ function AddProject(props) {
                     placeholder="Location"
                     extraClass="mb-8 w-1/2"
                     fieldExtraClass="w-4/5"
-                    options={[{ value: "WFH", label: "Work From Home" }, { value: projDetails.college, label: projDetails.college }]}
+                    options={[{ value: "WFH", label: "Work From Home" }, { value: projDetails.college || props.college, label: projDetails.college || props.college }]}
                 />
 
                 <Dropdown

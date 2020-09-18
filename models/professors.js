@@ -9,6 +9,16 @@ const ProfessorsSchema = new mongoose.Schema({
     designation: String,
     department: String,
     doj: Date,
+    profile: {
+        areasOfInterest : [ String ],
+        courses: [ String ],
+        education: [ String ],
+        books: [ String ],
+        publications: [ String ],
+        projects: [ String ],
+        patents: [ String ],
+        url: String
+    },
     verified: Boolean, // verified his identity?
     TandC: Boolean, // TandC for prof?
     hash: String,
