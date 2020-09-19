@@ -38,6 +38,7 @@ function ProjectPage(props) {
                 
                 // set empty answers for all initially
                 let len = res.data.questionnaire.length;
+<<<<<<< HEAD
                 if(len > 0){
                     let ans = []
                     for(let i = 0; i < len; i++){
@@ -49,6 +50,13 @@ function ProjectPage(props) {
                     setStep(2);
                     setShowBackButton(false);
                 }
+=======
+                let ans = []
+                for(let i = 0; i < len; i++){
+                    ans.push('');
+                }
+                setAnswers(ans);
+>>>>>>> b3839f7d55a2e3d2b8d8e321cd91057723de038d
 
                 if(res.data.apply === false){
                     setApplyError(res.data.errorMsg)
