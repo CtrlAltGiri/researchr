@@ -2,7 +2,7 @@ const homeRouter = require('express').Router();
 const path = require('path');
 const { postLoginStudent , postSignupStudent, getVerifyStudent, postForgotStudent, getResetStudent, postResetStudent } = require('./homeStudent');
 const { colleges, branches, yog, degrees } = require('../../client/src/common/data/collegeData')
-const { postLoginProfessor, postSignupProfessor } = require('./homeProfessor')
+const { postLoginProfessor, postSignupProfessor, getVerifyProfessor, postForgotProfessor, getResetProfessor, postResetProfessor } = require('./homeProfessor')
 
 homeRouter.route("/")
     .get(function (req, res) {
@@ -85,11 +85,11 @@ homeRouter.get('/verify/:type',function(req, res){
 
     let type = req.params.type;
     if(type === 'student')
-        getVerifyStudent(req, res)
+        getVerifyStudent(req, res);
 
     else if(type === 'professor')
-        res.render('homepage')      // replace this with professor implementation
-    
+        getVerifyProfessor(req, res);
+
     else
         res.render('error')
 });
@@ -110,7 +110,7 @@ homeRouter.route('/forgot/:type?')
             await postForgotStudent(req, res);
         
         else if(type === 'professor')
-            res.render('homepage')      //replace this with professor implementation
+            await postForgotProfessor(req, res);
 
         else
             res.render('error');
@@ -125,7 +125,7 @@ homeRouter.route('/reset/:type')
             getResetStudent(req, res);
         
         else if(type === 'professor')
-            res.render('homepage')      // replace this with professor implementation
+            getResetProfessor(req, res);
         
         else
             res.render('error');
@@ -136,7 +136,7 @@ homeRouter.route('/reset/:type')
             await postResetStudent(req, res);
         
         else if(type === 'professor')
-            res.render('homepage')      // replace this with professor implementation
+            await postResetProfessor(req, res);
         
         else
             res.render('error');
