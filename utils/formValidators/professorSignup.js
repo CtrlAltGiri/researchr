@@ -18,12 +18,12 @@ async function professorSignUpValidator(formData) {
     let retVal = true;
     const v = new Validator(formData, {
         c_email: 'required|email',
-        name: 'required|string|maxLength:50',
+        name: 'required|string|maxLength:100',
         password: 'required|string|same:confirm_password',
         confirm_password: 'required|string',
-        college: 'required|string|maxLength:50',
-        designation: 'required|string|maxLength:50',
-        department: 'required|string|maxLength:50'
+        college: 'required|string|maxLength:100',
+        designation: 'required|string|maxLength:100',
+        department: 'required|string|maxLength:100'
     });
 
     retVal = await v.check()

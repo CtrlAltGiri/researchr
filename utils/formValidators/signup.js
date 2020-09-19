@@ -20,12 +20,12 @@ async function signUpValidator(formData) {
     const v = new Validator(formData, {
         c_email: 'required|email',
         p_email: 'required|email',
-        name: 'required|string|maxLength:50',
+        name: 'required|string|maxLength:100',
         password: 'required|string|same:confirm_password',
         confirm_password: 'required|string',
-        college: 'required|string|maxLength:50',
-        degree: 'required|string|maxLength:50',
-        branch: 'required|string|maxLength:50',
+        college: 'required|string|maxLength:100',
+        degree: 'required|string|maxLength:100',
+        branch: 'required|string|maxLength:100',
         yog: 'required|dateFormat:YYYY'
     });
    
