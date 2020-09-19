@@ -1,4 +1,4 @@
-const professorRouter = require('express').Router()
+const professorRouter = require('express').Router();
 const projectsRouter = require("./projects");
 const projectRouter = require("./project");
 const profileRouter = require("./profile");
