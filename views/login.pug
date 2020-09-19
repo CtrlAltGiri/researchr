@@ -16,11 +16,11 @@ body.bg-white
           a.font-medium.text-teal-600.transition.ease-in-out.duration-150(class='hover:text-teal-500 focus:outline-none focus:underline' href='/signup') create an account for free!
       
       ul.flex.mb-0.list-none.flex-wrap.pt-6.pb-4.flex-row
-        li.-mb-px.mr-2.flex-auto.text-center.cursor-pointer(class='last:mr-0')
+        li.-mb-px.mr-2.flex-auto.text-center.cursor-pointer(class='last:mr-0', id="students")
           a.text-xs.font-bold.uppercase.px-5.py-3.shadow-lg.rounded.border-2.border-teal-600.block.leading-normal.text-white.bg-teal-600(onclick="changeActiveTab(event,'tab-student')")
             i.fas.fa-space-shuttle.text-base.mr-1
             |  Student
-        li.-mb-px.mr-2.flex-auto.text-center.cursor-pointer(class='last:mr-0')
+        li.-mb-px.mr-2.flex-auto.text-center.cursor-pointer(class='last:mr-0', id="professors")
           a.text-xs.font-bold.uppercase.px-5.py-3.shadow-lg.border-2.border-teal-600.rounded.block.leading-normal.text-teal-600.bg-white(onclick="changeActiveTab(event,'tab-professor')")
             i.fas.fa-cog.text-base.mr-1
             |  Professor

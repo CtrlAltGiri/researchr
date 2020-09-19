@@ -13,21 +13,21 @@ async function profProfileValidator(formData) {
 
     let retVal = true;
     const v = new Validator(formData, {
-        areasOfInterest : 'arrayUnique|length:5,0',
-        'areasOfInterest.*': 'string|maxLength:200',
-        courses: 'arrayUnique|length:10,0',
-        'courses.*': 'string|maxLength:100',
-        education: 'arrayUnique|length:4,0',
-        'education.*': 'string|maxLength:200',
-        books: 'arrayUnique|length:10,0',
-        'books.*': 'string|maxLength:200',
-        publications: 'arrayUnique|length:20,0',
-        'publications.*': 'string|maxLength:200',
-        projects: 'arrayUnique|length:20,0',
-        'projects.*':'string|maxLength:200',
-        patents: 'arrayUnique|length:10,0',
-        'patents.*': 'string|maxLength:200',
-        url: 'string|maxLength:200'
+        // areasOfInterest : 'nullable|arrayUnique|length:5,0',
+        // 'areasOfInterest.*': 'string|maxLength:200',
+        // courses: 'nullable|arrayUnique|length:10,0',
+        // 'courses.*': 'string|maxLength:100',
+        // education: 'nullable|arrayUnique|length:4,0',
+        // 'education.*': 'string|maxLength:200',
+        // books: 'nullable|arrayUnique|length:10,0',
+        // 'books.*': 'string|maxLength:200',
+        // publications: 'nullable|arrayUnique|length:20,0',
+        // 'publications.*': 'string|maxLength:200',
+        // projects: 'nullable|arrayUnique|length:20,0',
+        // 'projects.*':'string|maxLength:200',
+        // patents: 'nullable|arrayUnique|length:10,0',
+        // 'patents.*': 'string|maxLength:200',
+        url: 'nullable|string|maxLength:200'
     });
 
     retVal = await v.check()

@@ -1,21 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ProfileRow from './ProfileRow';
 import ProfileSection from './ProfileSection';
 import EditProfile from './EditProfile';
+import { Error } from '../../General/Form/FormComponents';
+import axios from 'axios';
+import { useParams } from 'react-router-dom';
+import { all } from 'async';
 
 
 function ProfilePage(props) {
 
+    const { profileID } = useParams();
     const [modalOpen, setModalOpen] = useState(false);
+    const [showError, setShowError] = useState('');
+    const [allDetails, setAllDetails] = useState({})
+
+    useEffect(() => {
+        axios.get('/api/professor/profile/' + profileID)
+            .then((res) => setAllDetails(res.data))
+            .catch(err => setShowError(err.response.data))
+    }, []);
 
     return (
         <section className="px-12 md:px-24 py-4">
             <div name="intro-section" className="flex flex-col md:flex-row md:justify-between">
                 <div className="">
-                    <p className="text-3xl font-semibold">Dr. Giridhar Balachandran</p>
-                    <p className="text-xl font-thin">Assistant Professor</p>
-                    <p className="text-xl font-thin">IIT Madras</p>
-                    <a href="https://manipal.edu/giridhar"><p className="text-lg font-normal">manipal.edu/giridharpandey</p></a>
+                    <p className="text-3xl font-semibold">{allDetails.name}</p>
+                    <p className="text-xl font-thin">{allDetails.designation}</p>
+                    <p className="text-xl font-thin">{allDetails.college}</p>
+                    {allDetails.profile && allDetails.profile.url && <a href={allDetails.profile.url}><p className="text-lg font-normal">{allDetails.profile.url}</p></a>}
                 </div>
 
             </div>
@@ -24,46 +37,51 @@ function ProfilePage(props) {
                 <p className="px-4 py-2 bg-teal-500 text-white rounded-full font-medium">Edit Profile</p>
             </div>
 
-            <div className="px-0 md:px-6 mt-12">
+            {allDetails.profile && <div className="px-0 md:px-6 mt-6">
 
-                <ProfileRow 
+                <ProfileRow
                     section1Name={"Areas of interest"}
                     section2Name={"Courses Taught"}
-                    data1={['Computer Networks and Security', 'Reinforcement learning']}
-                    data2={['Formal Languages and Automata Theory', 'Data Structures and Algorithms']}
+                    data1={allDetails.profile.areasOfInterest}
+                    data2={allDetails.profile.courses}
                 />
 
                 <ProfileRow
                     section1Name="Education"
-                    section2Name="Books" 
-                    data1={["Phd. at Stanford in Computer Science and Engineering (1999)", "MTech. at Manipal in Computer Science and Engineering (2000)"]}
-                    data2={['Data Structures and Algorithms using C# using', 'Machine Learning using Tensorflow', 'Crazy fuzzy algorithms in C', 'Major imprvoments in Pytorch in 2020']}
+                    section2Name="Books"
+                    data1={allDetails.profile.education}
+                    data2={allDetails.profile.books}
                 />
 
-                <ProfileSection
+                {allDetails.profile.publications && <ProfileSection
                     sectionName="Publications"
-                    data={['IEEE All Access conference (2019.) Dr. Pandey, Mr. Radhakrishnan', 'Artificial Intelligence']}
+                    data={allDetails.profile.publications}
                     extraClass="md:w-full"
-                />
+                />}
 
-                <ProfileSection
+                {allDetails.profile.projects && <ProfileSection
                     sectionName="Projects"
-                    data={['New range machines for building technologies', 'Built an API generation engine using unreal']}
+                    data={allDetails.profile.projects}
                     extraClass="md:w-full"
-                />
+                />}
 
-                <ProfileSection
+                {allDetails.profile.patents && <ProfileSection
                     sectionName="Patents"
-                    data={['New range machines for building technologies', 'Built an API generation engine using unreal']}
+                    data={allDetails.profile.patents}
                     extraClass="md:w-full mb-12"
-                />
+                />}
 
             </div>
+            }
 
-            <EditProfile 
+            <Error text={showError} />
+
+            {modalOpen && <EditProfile
                 modalOpen={modalOpen}
                 closeModal={(e) => setModalOpen(false)}
+                profileDetails={allDetails.profile}
             />
+            }
 
         </section>
     )
