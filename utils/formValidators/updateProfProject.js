@@ -21,9 +21,9 @@ async function updateProfProjectValidator(formData) {
     const v = new Validator(formData, {
         desc: 'string|maxLength:300',
         prereq: 'arrayUnique|length:10,0',
-        'prereq.*': 'string|maxLength:50',
+        'prereq.*': 'string|maxLength:400',
         duration: 'numeric|max:100', // in months
-        location: 'string|maxLength:100',
+        location: 'string|maxLength:200',
         applicationCloseDate: 'dateAfterToday:1,days',
         startDate: 'dateAfterToday:2,days',
         commitment: 'numeric|max:168', //hrs per week

@@ -22,9 +22,9 @@ async function profProjectValidator(formData) {
         name: 'required|string|maxLength:50',
         desc: 'required|string|maxLength:300',
         prereq: 'required|arrayUnique|length:10,0',
-        'prereq.*': 'required|string|maxLength:50',
+        'prereq.*': 'required|string|maxLength:400',
         duration: 'required|numeric|max:100', // in months
-        location: 'required|string|maxLength:100',
+        location: 'required|string|maxLength:200',
         applicationCloseDate: 'required|dateAfterToday:1,days',
         startDate: 'required|dateAfterToday:2,days',
         questionnaire: 'required|arrayUnique|length:10,0',
