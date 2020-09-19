@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const ProfProjects = require('../../../models/profProjects');
 const Professors = require('../../../models/professors');
 const { StatusCodes, ReasonPhrases } = require('http-status-codes');
+const ObjectID = require("bson-objectid");
 const Async = require('async');
 const { updateProfProjectValidator } = require("../../../utils/formValidators/updateProfProject");
 
@@ -16,6 +17,11 @@ projectRouter.route("/:projectID")
         let professorID = req.user._id;
         // get projectID from req params
         let projectID = req.params.projectID;
+        // check if its a valid object id
+        if(!ObjectID.isValid(projectID)){
+            return res.status(StatusCodes.BAD_REQUEST).send("Invalid URL");
+        }
+
         // find the given project
         Async.waterfall([
             function(callback) {
@@ -148,7 +154,10 @@ projectRouter.route("/:projectID")
         let professorID = req.user._id;
         // get projectID from req params
         let projectID = req.params.projectID;
-
+        // check if its a valid object id
+        if(!ObjectID.isValid(projectID)){
+            return res.status(StatusCodes.BAD_REQUEST).send("Invalid URL");
+        }
         // find the given project and update certain allowed fields
         // currently allowed fields are:
         /*
