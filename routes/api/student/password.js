@@ -10,8 +10,9 @@ passwordRouter
         // validate all password fields
         const values = await updatePasswordValidator(req.body);
         const retVal = values[0]
-        const errors = values[1]
+        let errors = values[1]
         if (retVal === false) {
+            errors = Object.values(Object.values(errors)[0])[0];
             return res.status(StatusCodes.BAD_REQUEST).send(errors);
         }
         else{

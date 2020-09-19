@@ -13,7 +13,7 @@ studentRouter.all("*", function(req, res, next){
         next('route');
     }
     else{
-        res.send(401).send("Not authorized to access student details.")
+        res.status(401).send("Not authorized to access student details.")
     }
 })
 

@@ -10,6 +10,7 @@ import { Switch, Route } from 'react-router-dom';
 import axios from 'axios';
 import Test from '../General/Form/CompanyInput';
 import ApplicationDetails from '../Student/Applications/ApplicationDetails/ApplicationDetails';
+import ChangePassword from '../General/ChangePassword/ChangePassword';
 
 function AppStudent(props) {
 
@@ -29,6 +30,7 @@ function AppStudent(props) {
         <Route path="/student" component={ProjectSection} exact />
         <Route path="/student/project/:projectId" component={ProjectPage} />
         <Route path="/student/profile/createProfile" component={CreateProfile} exact/>
+        <Route path="/student/profile/changePassword" component={ChangePassword} exact />
         <Route path="/student/profile/:studentID" component={Profile} />
         <Route path="/student/applications" component={Applications} />
         <Route path="/student/test" component={Test} />

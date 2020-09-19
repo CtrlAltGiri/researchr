@@ -40,6 +40,9 @@ function AddProject(props) {
                 });
         }
         else {
+            if(!projDetails.questionnaire){
+                projDetails.questionnaire = [];
+            }
             axios.post('/api/professor/projects', projDetails)
                 .then(res => history.go(0))
                 .catch(err => showError(err.response.data));

@@ -33,7 +33,10 @@ function Profile(props) {
                     <div className="lg:w-1/2 w-full mb-6 lg:mb-0">
                         {profile.name && <h1 className="sm:text-3xl text-2xl font-medium title-font mb-2 text-gray-900">{profile.name}</h1>}
                         {profile.c_email && <p className="lg:w-1/2 w-full leading-relaxed text-base">College Email: {profile.c_email}</p>}
-                        {profile.mine && <Link to="/student/profile/createProfile" className="underline cursor-pointer">Edit Profile</Link>}
+                        <div className="flex flex-col space-2">
+                            {profile.mine && <Link to="/student/profile/createProfile" className="underline cursor-pointer">Edit Profile</Link>}
+                            {profile.mine && <Link to="/student/profile/changePassword" className="underline cursor-pointer">Change Password</Link>}
+                        </div>
                     </div>
                 </div>
 

@@ -25,7 +25,8 @@ function ProjectPage(props) {
     const [apply, setApply] = useState(false);
     const [projDetails, setProjDetails] = useState({});
     const [redirect, setRedirect] = useState(false);
-    const [applyError, setApplyError] = useState('')
+    const [applyError, setApplyError] = useState('');
+    const [showBackButton, setShowBackButton] = useState(true);
 
     useEffect(() => {
         
@@ -37,11 +38,17 @@ function ProjectPage(props) {
                 
                 // set empty answers for all initially
                 let len = res.data.questionnaire.length;
-                let ans = []
-                for(let i = 0; i < len; i++){
-                    ans.push('');
+                if(len > 0){
+                    let ans = []
+                    for(let i = 0; i < len; i++){
+                        ans.push('');
+                    }
+                    setAnswers(ans);
                 }
-                setAnswers(ans);
+                else{
+                    setStep(2);
+                    setShowBackButton(false);
+                }
 
                 if(res.data.apply === false){
                     setApplyError(res.data.errorMsg)
@@ -221,12 +228,14 @@ function ProjectPage(props) {
                     :
                     <div>
 
-                        <div className="flex flex-row justify-between">
-                            <BackButton extraClass="mb-8" onClick={(e) => setStep(1)}/>
-                            <CloseButton
-                                onClick={closeModal}
-                            />
-                        </div>
+                        {showBackButton && 
+                            <div className="flex flex-row justify-between">
+                                <BackButton extraClass="mb-8" onClick={(e) => setStep(1)}/>
+                                <CloseButton
+                                    onClick={closeModal}
+                                />
+                            </div>
+                        }
 
                         <Title text="SOP to professor" />
 
