@@ -5,7 +5,6 @@ import EditProfile from './EditProfile';
 import { Error } from '../../General/Form/FormComponents';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
-import { all } from 'async';
 
 
 function ProfilePage(props) {
@@ -16,7 +15,10 @@ function ProfilePage(props) {
     const [allDetails, setAllDetails] = useState({})
 
     useEffect(() => {
-        axios.get('/api/professor/profile/' + profileID)
+
+        let apiURL = (props.apiURL ? props.apiURL : '/api/professor/profile/') + profileID;
+
+        axios.get(apiURL)
             .then((res) => setAllDetails(res.data))
             .catch(err => setShowError(err.response.data))
     }, []);
@@ -33,9 +35,11 @@ function ProfilePage(props) {
 
             </div>
 
-            <div className="fixed bottom-0 right-0 w-auto h-16 mr-12 mb-2 cursor-pointer" onClick={e => setModalOpen(true)}>
-                <p className="px-4 py-2 bg-teal-500 text-white rounded-full font-medium">Edit Profile</p>
-            </div>
+            {allDetails.mine &&
+                <div className="fixed bottom-0 right-0 w-auto h-16 mr-12 mb-2 cursor-pointer" onClick={e => setModalOpen(true)}>
+                    <p className="px-4 py-2 bg-teal-500 text-white rounded-full font-medium">Edit Profile</p>
+                </div>
+            }
 
             {allDetails.profile && <div className="px-0 md:px-6 mt-6">
 
@@ -53,19 +57,22 @@ function ProfilePage(props) {
                     data2={allDetails.profile.books}
                 />
 
-                {allDetails.profile.publications && <ProfileSection
+                {allDetails.profile.publications && allDetails.profile.publications.length > 0 && 
+                <ProfileSection
                     sectionName="Publications"
                     data={allDetails.profile.publications}
                     extraClass="md:w-full"
                 />}
 
-                {allDetails.profile.projects && <ProfileSection
+                {allDetails.profile.projects &&  allDetails.profile.publications.length > 0 && 
+                <ProfileSection
                     sectionName="Projects"
                     data={allDetails.profile.projects}
                     extraClass="md:w-full"
                 />}
 
-                {allDetails.profile.patents && <ProfileSection
+                {allDetails.profile.patents && allDetails.profile.publications.length > 0 && 
+                <ProfileSection
                     sectionName="Patents"
                     data={allDetails.profile.patents}
                     extraClass="md:w-full mb-12"

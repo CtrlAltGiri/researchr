@@ -6,7 +6,10 @@ function isStudent(req, res, next){
         return next();
     }
     else{
-        res.redirect('/login');
+        if(/\/student\/profile\/.+/.test(req.originalUrl))
+            res.redirect('/external' + req.originalUrl);
+        else
+            res.redirect('/login');
     }
 }
 

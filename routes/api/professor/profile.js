@@ -1,9 +1,12 @@
 const profileRouter = require('express').Router();
-const mongoose = require('mongoose');
 const Professors = require("../../../models/professors");
 const { StatusCodes, ReasonPhrases } = require('http-status-codes');
-const ObjectID = require("bson-objectid");
-const {profProfileValidator} = require("../../../utils/formValidators/profProfile");
+const { profProfileValidator } = require("../../../utils/formValidators/profProfile");
+const { profProfileDetails } = require('../utils/profDetails');
+
+profileRouter.get("/getProfile", function(req, res){
+    res.send(req.user._id);
+})
 
 profileRouter.get("/getProfile", function(req, res){
     res.send(req.user._id);
@@ -15,49 +18,11 @@ profileRouter.route('/:professorID')
     .get(function (req, res){
         // get professor ID from req
         let professorID = req.user._id;
-
         // get profID from url
         let urlProfID = req.params.professorID;
 
-        // TODO(aditya): Add these check everywhere necessary
-        // check if its a valid object id
-        if(!ObjectID.isValid(urlProfID)){
-            return res.status(StatusCodes.BAD_REQUEST).send("Invalid URL");
-        }
-
-        // check if professor who is viewing the profile is the same as the one who is logged in
-        let mine = false;
-        if(professorID.equals(mongoose.Types.ObjectId(urlProfID)))
-            mine = true;
-
-        Professors.findOne({_id: professorID}, function (err, professor){
-            if(err) {
-                console.log(err);
-                return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send("Failed");
-            }
-            else if(!professor) {
-                console.log("No professor found");
-                return res.status(StatusCodes.BAD_REQUEST).send("Invalid request");
-            }
-            else {
-                professor = professor.toObject();
-                professor = (
-                    ({
-                        name,
-                        college,
-                        designation,
-                        profile
-                    }) =>
-                    ({
-                        name,
-                        college,
-                        designation,
-                        profile
-                    }))(professor);
-                professor.mine = mine;
-                return res.status(StatusCodes.OK).send(professor);
-            }
-        })
+        // call the function.
+        profProfileDetails(professorID, urlProfID, res);
     })
 
 

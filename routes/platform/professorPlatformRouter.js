@@ -3,10 +3,13 @@ const path = require('path');
 
 function isProfessor(req, res, next){
     if(req.isAuthenticated() && req.user.userType === "Professor"){
-        return next();
+        next();
     }
     else{
-        res.redirect('/login');
+        if(/\/professor\/profile\/.+/.test(req.originalUrl))
+            res.redirect('/external' + req.originalUrl);
+        else
+            res.redirect('/login');
     }
 }
 

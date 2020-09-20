@@ -12,7 +12,9 @@ function Profile(props) {
 
     useEffect(() => {
         if (studID.studentID) {
-            axios.get('/api/student/profile/' + studID.studentID, { params: { cvElements: false } })
+
+            let apiURL = (props.apiURL ? props.apiURL : '/api/student/profile/') + studID.studentID;
+            axios.get(apiURL, { params: { cvElements: false } })
                 .then(response => {
                     setProfile(response.data);
                 })
