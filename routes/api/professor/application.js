@@ -112,6 +112,7 @@ applicationRouter.route("/:projectID")
                 let update = {
                     $set : {'profApplications.$.status': newStatus}
                 };
+                // add message if present only if status is changing to `interview` or `selected`
                 if((newStatus === "interview" || newStatus === "selected") && message) {
                     update.$push = {
                         'profApplications.$.messages' : {
@@ -119,6 +120,10 @@ applicationRouter.route("/:projectID")
                             message: message
                         }
                     }
+                }
+                // add time to accept field if status is changing to `selected` and set it as 24 hrs from current time
+                if(newStatus === "selected") {
+                    update.$set['profApplications.$.timeToAccept'] = (Date.now() + (24*60*60*1000));
                 }
                 Applications.updateOne(
                     {_id: studentID, 'profApplications.projectID': projectID},
