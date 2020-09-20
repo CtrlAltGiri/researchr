@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import StudentProfile from '../Student/Profile/ProfilePage/Profile';
 import ProfessorProfile from '../Professor/ProfilePage/ProfilePage';
