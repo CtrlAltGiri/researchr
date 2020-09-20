@@ -26,7 +26,7 @@ function AppProfessor(props) {
             <Switch>
                 <Route path="/professor" component={LandingPage} exact />
                 <Route path="/professor/project/:projectID" component={ProjectPage} />
-                <Route path="/professor/profile/" component={ProfilePage} />
+                <Route path="/professor/profile/:profileID" component={ProfilePage} />
             </Switch>
         </div>
     );

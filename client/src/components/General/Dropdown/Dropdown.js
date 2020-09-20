@@ -43,7 +43,14 @@ function Dropdowns(props) {
         }),
     };
 
-    const [val, setVal] = useState(props.val || "-");
+    let startVal;
+    if(props.val === false){
+        startVal = false;
+    }
+    else{
+        startVal = props.val || '-';
+    }
+    const [val, setVal] = useState(startVal);
     useEffect(() => { 
         props.changeDropdown(val, props.name);
     }, [val])

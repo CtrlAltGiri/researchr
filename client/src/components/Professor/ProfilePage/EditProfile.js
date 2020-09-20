@@ -1,14 +1,27 @@
-import React, { useState } from 'react';
-import { TealButton, TextField } from '../../General/Form/FormComponents';
+import axios from 'axios';
+import React, { useState, useEffect } from 'react';
+import { Error, TealButton, TextField } from '../../General/Form/FormComponents';
 import Modal from '../../General/Modal/Modal';
 import TagInput from '../../General/TagInput/TagInput';
+import { useHistory } from 'react-router-dom';
 
 function EditProfile(props) {
 
-    const [profileDetails, setProfileDetails] = useState({});
+    const [profileDetails, setProfileDetails] = useState(props.profileDetails || {});
+    const [showError, setError] = useState('');
+    let history = useHistory();
 
     function updateTags(newValue, name) {
         setProfileDetails({ ...profileDetails, [name]: newValue });
+    }
+
+    function submitProfile(event){
+        axios.post('/api/professor/profile', {profile: profileDetails})
+        .then(res => {
+            props.closeModal(false);
+            history.go(0);
+        })
+        .catch(err => setError(err.response.data));
     }
 
     return (
@@ -122,8 +135,11 @@ function EditProfile(props) {
                 <TealButton
                     text="Submit"
                     extraClass="mr-8 mt-8 mb-4"
+                    submitForm={submitProfile}
                 />
             </div>
+
+            <Error text={showError} />
 
         </Modal>
 

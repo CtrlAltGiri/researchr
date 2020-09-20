@@ -5,6 +5,10 @@ const { StatusCodes, ReasonPhrases } = require('http-status-codes');
 const ObjectID = require("bson-objectid");
 const {profProfileValidator} = require("../../../utils/formValidators/profProfile");
 
+profileRouter.get("/getProfile", function(req, res){
+    res.send(req.user._id);
+})
+
 // API to view professor profile
 profileRouter.route('/:professorID')
     // API to fetch professor profile from professors collection and return it
@@ -89,7 +93,7 @@ profileRouter.route('/')
                 else {
                     const { n, nModified } = result;
                     // check if document has been successfully updated in collection
-                    if(n && nModified) {
+                    if(n) {
                         console.log("Successfully updated the professor profile");
                         return res.status(StatusCodes.OK).send("Successfully updated");
                     }

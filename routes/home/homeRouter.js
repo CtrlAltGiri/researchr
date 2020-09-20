@@ -36,7 +36,7 @@ homeRouter.route("/login/:type?")
         if (req.isAuthenticated())
             res.redirect("/platform");
         else
-            res.render("login", { wrongCreds: false, unverified: false });
+            res.render("login", { wrongCreds: false, unverified: false, professor: true});
     })
     .post(async function (req, res, next) {
         let type = req.params.type;
