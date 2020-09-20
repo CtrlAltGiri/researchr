@@ -16,7 +16,12 @@ applicationRouter.route("/:projectID")
         let studentID = req.body.studentID;
         let newStatus = req.body.newStatus;
         let message = req.body.message;
-        // TODO(aditya): Check validity of the message field
+
+        // check validity of message field
+        if(message && (!(typeof message === 'string') || message.length > 500)) {
+            console.log("Invalid message field");
+            return res.status(StatusCodes.BAD_REQUEST).send("Bad Request");
+        }
 
         // object describing state transitions possible from original status
         let changesAllowedFrom = {
@@ -139,7 +144,7 @@ applicationRouter.route("/:projectID")
                 return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(err);
             }
             else {
-                return res.status(StatusCodes.OK).send("Successfully updated status")
+                return res.status(StatusCodes.OK).send("Successfully updated status");
             }
         })
     })
