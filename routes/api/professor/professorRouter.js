@@ -5,7 +5,7 @@ const profileRouter = require("./profile");
 const passwordRouter = require("./password");
 const applicationsRouter = require("./applications");
 const applicationRouter = require("./application");
-
+const feedbackRouter = require("./feedback")
 
 // Check if userType is Professor and only allow professors to access this router.
 professorRouter.all("*", function(req, res, next){
@@ -34,5 +34,8 @@ professorRouter.use("/applications", applicationsRouter);
 
 // API router to change the status of an applicant for a particular project
 professorRouter.use("/application", applicationRouter);
+
+// API router to add feedback to an ongoing student application
+professorRouter.use("/feedback", feedbackRouter);
 
 module.exports = professorRouter;
