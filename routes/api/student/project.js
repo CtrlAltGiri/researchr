@@ -74,13 +74,17 @@ projectRouter.route("/:projectID")
                             console.log("Not completed CV id: ", studentID);
                             project.apply = false;
                             project.errorMsg = "Please complete your profile first";
+                            callback(null, project, student.college);
                         }
-                        callback(null, project);
+                        else{
+                            callback(null, project, student.college);
+                        }
                     })
                 }
             },
-            function (project, callback){
+            function (project, college, callback){
                 // CHECK 3: Check if student has already applied for the given project or if he already has an ongoing project
+                // Also checks if project is not from same college, has the student reached the application limit in the current month
                 // First check if project.apply === false and call callback immediately
                 if(project.apply === false){
                     callback(null, project);
@@ -115,6 +119,13 @@ projectRouter.route("/:projectID")
                                 console.log("Already has an ongoing project");
                                 project.apply = false;
                                 project.errorMsg = "You already have an ongoing project";
+                                callback(null, project);
+                            }
+                            else if ((project.college !== college) && (!checkOutsideLimit(applications))) {
+                                // if college is not same then and limit for the current month is over
+                                console.log("Already reached limit on number of outside applications in this month");
+                                project.apply = false;
+                                project.errorMsg = "You have already reached the limit on the number of outside project applications this month";
                                 callback(null, project);
                             }
                             else {
@@ -238,18 +249,19 @@ projectRouter.route("/:projectID")
                         callback("Not completed CV");
                     }
                     else if (student && student.completed) {
-                        callback(null, project);
+                        callback(null, project, student);
                     }
                 })
             },
-            function (project, callback) {
+            function (project, student, callback) {
                 //CHECK 3: Check if student has already applied for this project or has a project that is ongoing
+                // Also check if the limit on number of outside applications in the current month has been reached if the colleges are not same
                 Applications.findOne({_id: studentID}, function (err, studentApplication) {
                     if (err) {
                         console.log(err);
                         callback("Failed");
                     } else if (!studentApplication) {
-                        callback(null, project);
+                        callback(null, project, student);
                     } else {
                         let applications = studentApplication.profApplications;
                         // Find if any application exists with the given ProjectID
@@ -263,20 +275,33 @@ projectRouter.route("/:projectID")
                         if (alreadyApplied) {
                             console.log("Already applied for this project");
                             callback("Already applied");
-                        } else if (ongoing) {
+                        }
+                        else if (ongoing) {
                             console.log("Already has an ongoing project");
                             callback("Already has an ongoing project");
-                        } else {
-                            callback(null, project);
+                        }
+                        else if ((project.college !== student.college) && (!checkOutsideLimit(applications))) {
+                            console.log("Limit on outside applications for this month reached");
+                            callback("Limit on number of outside applications for this month reached");
+                        }
+                        else {
+                            callback(null, project, student);
                         }
                     }
                 })
             },
-            function (project, callback){
+            function (project, student, callback){
                 // FINAL STEP: add application to applications collection
+                let sameCollege = (project.college === student.college);
+
                 Applications.updateOne(
                     {_id: mongoose.Types.ObjectId(studentID)},
                     {
+                        $set: {
+                            name: student.name,
+                            college: student.college,
+                            branch: student.branch
+                        },
                         $push : {
                             profApplications: {
                                 projectID: mongoose.Types.ObjectId(projectID),
@@ -285,7 +310,9 @@ projectRouter.route("/:projectID")
                                 status: 'active',
                                 doa: Date.now(),
                                 answers: req.body.answers,
-                                sop: req.body.sop
+                                sop: req.body.sop,
+                                cgpa: student.cvElements.education.college[0].cgpa,
+                                sameCollege: sameCollege
                             }
                         }
                     },
@@ -321,5 +348,18 @@ projectRouter.route("/:projectID")
         });
     })
 
+// function to check the limit on number of outside applications in current month
+// returns true if limit not reached and false otherwise
+function checkOutsideLimit(applications){
+    let cur_date = new Date();
+    let cur_month = cur_date.getMonth();
+    let cur_year = cur_date.getFullYear();
+    let limit = 2;
 
-module.exports = projectRouter
+    let apps_within_month = applications.filter(function (element){
+        return ((element.doa.getMonth() === cur_month) && (element.doa.getFullYear() === cur_year) && (element.sameCollege !== true));
+    })
+    return (apps_within_month.length<limit);
+}
+
+module.exports = projectRouter;
