@@ -6,6 +6,7 @@ import { Error } from '../../General/Form/FormComponents';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 
+
 function ProfilePage(props) {
 
     const { profileID } = useParams();
@@ -56,22 +57,34 @@ function ProfilePage(props) {
                     data2={allDetails.profile.books}
                 />
 
+<<<<<<< HEAD
                 {allDetails.profile.publications && allDetails.profile.publications.length > 0 && 
                 <ProfileSection
+=======
+                {allDetails.profile.publications && <ProfileSection
+>>>>>>> 979c5f5954d51d7c25adc79676ff6b6875059bb3
                     sectionName="Publications"
                     data={allDetails.profile.publications}
                     extraClass="md:w-full"
                 />}
 
+<<<<<<< HEAD
                 {allDetails.profile.projects &&  allDetails.profile.publications.length > 0 && 
                 <ProfileSection
+=======
+                {allDetails.profile.projects && <ProfileSection
+>>>>>>> 979c5f5954d51d7c25adc79676ff6b6875059bb3
                     sectionName="Projects"
                     data={allDetails.profile.projects}
                     extraClass="md:w-full"
                 />}
 
+<<<<<<< HEAD
                 {allDetails.profile.patents && allDetails.profile.publications.length > 0 && 
                 <ProfileSection
+=======
+                {allDetails.profile.patents && <ProfileSection
+>>>>>>> 979c5f5954d51d7c25adc79676ff6b6875059bb3
                     sectionName="Patents"
                     data={allDetails.profile.patents}
                     extraClass="md:w-full mb-12"

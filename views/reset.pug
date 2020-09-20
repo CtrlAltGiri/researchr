@@ -13,7 +13,7 @@ html(lang='en')
         section#reset-password
             .flex.flex-col(class='lg:flex-row')
                 .w-full(class='w-auto lg:w-5/12')
-                    form.flex.flex-col.items-center.space-y-8.p-4(method='POST', action='/reset/' + type, class='lg:items-start lg:px-24')
+                    form.flex.flex-col.items-center.space-y-8.p-4(method='POST', action='/reset/' + type + '?token=' + resetToken, class='lg:items-start lg:px-24')
                         div
                             p.font-extrabold.text-black.text-3xl.mt-8 Reset Password
                         div(class="w-auto lg:w-10/12")

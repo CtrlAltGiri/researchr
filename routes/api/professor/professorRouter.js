@@ -1,7 +1,8 @@
+const professorRouter = require('express').Router();
 const projectsRouter = require("./projects");
 const projectRouter = require("./project");
 const profileRouter = require("./profile");
-const professorRouter = require('express').Router()
+const passwordRouter = require("./password");
 
 // Check if userType is Professor and only allow professors to access this router.
 professorRouter.all("*", function(req, res, next){
@@ -21,5 +22,8 @@ professorRouter.use("/project", projectRouter);
 
 // API router to view professor's profile and update it
 professorRouter.use("/profile", profileRouter);
+
+// API router to update professor password
+professorRouter.use("/password", passwordRouter);
 
 module.exports = professorRouter;

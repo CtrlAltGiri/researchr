@@ -266,7 +266,7 @@ function getResetStudent(req, res){
             return res.render('forgot', {c_email:"", errorMsg:"Password reset link is invalid or has expired", type:"student"});
         }
         else{
-            return res.render('reset', {type:"student"});
+            return res.render('reset', {type:"student", resetToken: req.query.token});
         }
     })
 }
