@@ -6,6 +6,7 @@ const passwordRouter = require("./password");
 const applicationsRouter = require("./applications");
 const applicationRouter = require("./application");
 
+
 // Check if userType is Professor and only allow professors to access this router.
 professorRouter.all("*", function(req, res, next){
     if(req.user.userType === "Professor"){
