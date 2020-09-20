@@ -33,8 +33,8 @@ projectsRouter.route("/")
                     return (({_id, name, desc, professorName, college, views}) => ({_id, name, desc, professorName, college, views}))(element);
                 })
 
-                // send all projects to front end
-                return res.status(200).send(returnProjects);
+                // send all projects to front end (after reversing the array so newly added projects appear first)
+                return res.status(200).send(returnProjects.reverse());
             }
 
         })
