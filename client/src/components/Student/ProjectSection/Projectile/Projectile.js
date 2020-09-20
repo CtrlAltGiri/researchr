@@ -21,7 +21,7 @@ function Projectile(props) {
         <h2 className="sm:text-3xl text-2xl title-font font-medium text-gray-900 mt-4 mb-4">{props.allItems.name}</h2>
         <p className="leading-relaxed mb-8">{desc}</p>
         <div className="flex items-center flex-wrap pb-4 mb-4 border-b-2 border-gray-200 mt-auto w-full">
-          <Link to={`student/project/${props.allItems._id}`} className="text-teal-500 inline-flex items-center">Details
+          <Link to={`/student/project/${props.allItems._id}`} className="text-teal-500 inline-flex items-center">Details
                   <svg className="w-4 h-4 ml-2" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} fill="none" strokeLinecap="round" strokeLinejoin="round">
               <path d="M5 12h14" />
               <path d="M12 5l7 7-7 7" />
