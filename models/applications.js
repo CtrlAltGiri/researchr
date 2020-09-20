@@ -15,6 +15,18 @@ const ApplicationsSchema = new mongoose.Schema({
             doa: Date, // date of application
             answers: [ String ],
             sop: String,
+            messages: [
+                {
+                    timestamp: Date,
+                    message: String
+                }],
+            feedbacks: [
+                {
+                    timestamp: Date,
+                    feedback: String,
+                    rating: Number
+                }
+            ],
             professorMsg: String,
             timeToAccept: Date,
         }
