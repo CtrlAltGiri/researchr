@@ -26,7 +26,7 @@ projectsRouter.route("/")
                         console.log(err);
                         callback("Failed");
                     }
-                    else if(!projects) {
+                    else if(!projects || projects.length === 0) {
                         console.log("Error in fetching projects from collection");
                         callback("Error in fetching projects from collection")
                     }

@@ -31,11 +31,7 @@ Upcoming:
 
 1. Mark required and non-required fields on application.
 2. Test dropdowns using postman
-3. Test 150 character limit thing. Also make sure nothing crosses 300 characters, whatever it is.
-4. The project location must be tested in the backend to be either WFH or the dropdown.
-
-4. Form Validators -> profProjects.
-5. Deal with you have already applied for the project.
+3. Test 150 character limit thing. Also make sure nothing crosses 300 characters, whatever it is
 
 ------------------------------------------------------------------------------------------------------------------
 Adi Stuff (Discuss)
@@ -43,9 +39,10 @@ Adi Stuff (Discuss)
 1. n and nModified
 2. Projections on queries. Send only what is needed.
 3. Accepted domains
-4. Already verified ? WHen i go to /veify/student without any auth.
+4. Already verified ? WHen i go to /verify/student without any auth.
 5. Need to check if number of answers is equal to the number of questionnaire.
 6. Date of creation of profProject -> ordering in the /projects
+4. The project location must be tested in the backend to be either WFH or the dropdown.
 
 ---------------------------------------------------------------------------------------------------------------------
 Long-term TODO:
