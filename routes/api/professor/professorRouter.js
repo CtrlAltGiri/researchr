@@ -3,6 +3,7 @@ const projectsRouter = require("./projects");
 const projectRouter = require("./project");
 const profileRouter = require("./profile");
 const passwordRouter = require("./password");
+const applicationsRouter = require("./applications");
 
 // Check if userType is Professor and only allow professors to access this router.
 professorRouter.all("*", function(req, res, next){
@@ -10,7 +11,7 @@ professorRouter.all("*", function(req, res, next){
         next('route');
     }
     else{
-        res.send(401).send("Not authorized to access professor details.")
+        res.status(401).send("Not authorized to access professor details.")
     }
 })
 
@@ -25,5 +26,8 @@ professorRouter.use("/profile", profileRouter);
 
 // API router to update professor password
 professorRouter.use("/password", passwordRouter);
+
+// API router to get all applicants for a particular project
+professorRouter.use("/applications", applicationsRouter);
 
 module.exports = professorRouter;
