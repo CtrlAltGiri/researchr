@@ -1,11 +1,15 @@
-import axios from 'axios';
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import AnswersAndSop from './AnswersAndSop';
+import Modal from '../../../General/Modal/Modal';
+import { TealButton } from '../../../General/Form/FormComponents';
 import { Error, TextArea, TextField, Title } from '../../../General/Form/FormComponents';
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
 
 function ApplicationDetails(props) {
 
     const { projectId } = useParams();
+    const [answersModal, setAnswersModal] = useState(false);
     const [details, setDetails] = useState({});
     const [errorText, setError] = useState('');
 
@@ -22,39 +26,44 @@ function ApplicationDetails(props) {
     }, [])
 
     return (
-        <section className="mt-2 px-12 md:px-24">
 
-            <div className="mb-8 px-1">
-                <Title text={<p>Application for <span className="text-teal-700">Project_name</span></p> }/>
-            </div>
-            {details.questionnaire && details.questionnaire.map((question, index) => {
+        <div>
+            
+            <div className="flex justify-end mx-16 cursor-pointer">
+                <p className="underline" onClick={e => setAnswersModal(true)} >Show Application</p>
+            </div>       
 
-                if (details.answers[index].length > 0)
-                    return (
-                        <TextArea
-                            text={question}
-                            value={details.answers[index]}
-                            disabled={true}
-                            key={question}
-                            extraClass="mb-4"
-                        />
+            <Modal
+                modalOpen={answersModal}
+                closeModal={e => setAnswersModal(false)}
+                text={<p className="px-8 text-2xl">Application for <span className="text-teal-700">project_name</span></p>}
+            >
+                <AnswersAndSop details={details} errorText={errorText}/>
+
+            </Modal>
+
+
+            <div className="px-8 md:px-24">
+                <p className="text-2xl">Feedback</p>
+                {details.feedbacks && details.feedbacks.map(feedback =>{
+                    return(
+                        <div key={feedback.timestamp} className="my-2 px-2">
+                            <p className="text-lg">Time: {(new Date((feedback.timestamp)).toDateString())}</p>
+                            <p className="text-lg">Feedback: {feedback.feedback}</p>
+                            <p className="text-lg">Rating: {feedback.rating}</p>
+                        </div>
                     )
-                else
-                    return "";
-            })}
+                })}
+                
+            </div>
 
-            {errorText.length === 0 && 
-            <TextArea
-                text="Statement of Purpose"
-                value={details.sop}
-                disabled={true}
-                rows={8}
-                extraClass="mb-4"
-            />
-            }
+            <div className="px-8 md:px-24">
+                <p className="text-2xl">Messages</p>
+            </div>
 
-            <Error text={errorText} />
-        </section>
+            <Error text={errorText} divClass="flex justify-center" />
+
+        </div>
     )
 
 }

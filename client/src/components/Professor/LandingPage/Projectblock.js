@@ -8,6 +8,7 @@ function Projectblock(props) {
         desc: props.project.desc,
         title: props.project.name,
         url: "/professor/project/" + props.project._id,
+        applicationURL: "/professor/applications/" + props.project._id,
         startDate: props.project.startDate,
         closeDate: props.project.applicationCloseDate,
         restricted: props.project.restrictedView,
@@ -30,8 +31,14 @@ function Projectblock(props) {
                     <p className="font-medium underline">{data.restricted ? "Restricted to " + props.college : "Shown to everyone"}</p>
                 </div>
 
-                <div className="text-right">
-                <Link to={data.url} className="text-teal-600 inline-flex items-center text-xl hover:underline cursor-pointer">Project Details
+                <div className="items-end flex flex-col">
+                <Link to={data.url} className="text-teal-600 inline-flex items-center text-xl hover:underline cursor-pointer" target="_blank">Project Details
+                    <svg className="w-4 h-4 ml-2" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} fill="none" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M5 12h14" />
+                        <path d="M12 5l7 7-7 7" />
+                    </svg>
+                </Link>
+                <Link to={data.applicationURL} className="text-teal-600 inline-flex items-center text-xl hover:underline cursor-pointer" target="_blank">Applications
                     <svg className="w-4 h-4 ml-2" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} fill="none" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M5 12h14" />
                         <path d="M12 5l7 7-7 7" />
