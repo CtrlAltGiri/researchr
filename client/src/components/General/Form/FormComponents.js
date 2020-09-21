@@ -27,7 +27,9 @@ function RedButton(props) {
 function Error(props) {
 
     return (
-        <p className={`text-red-500 text-xl ${props.extraClass}`}>{props.text}</p>
+        <div className={props.divClass}>
+            <p className={`text-red-500 text-xl ${props.extraClass}`}>{props.text}</p>
+        </div>
     )
 }
 

@@ -157,7 +157,9 @@ homeRouter.get("/test", function (req, res) {
 
 homeRouter.get('/plsauthenticate/:type', function(req, res){
 
-    const type = req.params.type;
+    res.status(200).send("done");
+
+    /*const type = req.params.type;
     const id = type === 'Student' ? '5f5b66197600e40b9c52f2a4': '5f6273f9f49bf96ebc3662ad';
     if(process.env.NODE_ENV === 'dev'){
         const user = {
@@ -172,7 +174,7 @@ homeRouter.get('/plsauthenticate/:type', function(req, res){
             console.log("Dev authenticated");
             res.send("done");
         })
-    }
+    }*/
 })
 
 module.exports = homeRouter;

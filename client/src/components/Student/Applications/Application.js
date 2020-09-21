@@ -75,11 +75,11 @@ function Application(props) {
                 {props.status === 'selected' ?
                     <div className="flex justify-around">
                         <AcceptButton
-                            onClick={(e) => setButton('declined')}
+                            onClick={(e) => setButton('ongoing')}
                         />
 
                         <DeclineButton
-                            onClick={(e) => setButton('ongoing')}
+                            onClick={(e) => setButton('declined')}
                         />
 
                     </div>
