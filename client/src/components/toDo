@@ -39,9 +39,9 @@ Adi Stuff (Discuss)
 1. n and nModified
 2. Projections on queries. Send only what is needed.
 3. Accepted domains
-4. Already verified ? WHen i go to /verify/student without any auth.
-5. Need to check if number of answers is equal to the number of questionnaire.
-6. Date of creation of profProject -> ordering in the /projects
+4. Already verified ? WHen i go to /verify/student without any auth. -------- DONE
+5. Need to check if number of answers is equal to the number of questionnaire. --------- DONE
+6. Date of creation of profProject -> ordering in the /projects ---------- ORDER IS REVERSED. -------- DONE.
 4. The project location must be tested in the backend to be either WFH or the dropdown.
 
 ---------------------------------------------------------------------------------------------------------------------

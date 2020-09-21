@@ -155,6 +155,12 @@ async function postSignupStudent(req, res) {
 
 
 function getVerifyStudent(req, res) {
+    // check if req.query.token is undefined
+    if(!req.query.token) {
+        console.log("Invalid URL");
+        return res.end("<h1>Bad Request</h1>");
+    }
+
     Students.findOne({ verifyHash: req.query.token }, function (err, student) {
         if (err) {
             console.log(err);
@@ -255,6 +261,12 @@ async function postForgotStudent(req, res){
 }
 
 function getResetStudent(req, res){
+    // check if req.query.token is undefined
+    if(!req.query.token) {
+        console.log("Invalid URL");
+        return res.end("<h1>Bad Request</h1>");
+    }
+
     Students.findOne({resetHash: req.query.token, resetExpires: {$gt: Date.now()}}, function (err, student){
         if(err) {
             console.log(err);
@@ -272,6 +284,12 @@ function getResetStudent(req, res){
 }
 
 async function postResetStudent(req, res){
+    // check if req.query.token is undefined
+    if(!req.query.token) {
+        console.log("Invalid URL");
+        return res.end("<h1>Bad Request</h1>");
+    }
+
     // validate the passwords
     const values = await resetValidator(req.body);
     const retVal = values[0]
