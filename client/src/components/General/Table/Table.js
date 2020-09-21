@@ -1,5 +1,5 @@
 import React from 'react'
-import Application from './Application';
+import Application from '../../Student/Applications/Application'; 
 
 function Table(props) {
   return (
@@ -22,20 +22,23 @@ function Table(props) {
                 </tr>
               </thead>
               <tbody>
-                {props.app && props.app.map((app) => {
-                  return <Application
-                    name={app.name}
-                    createDate={app.doa}
-                    professor={app.professorName}
-                    status={app.status}
-                    selected={props.selected}
-                    projID={app.projectID}
-                    key={app.projectID}
-                    professorMsg={app.professorMsg}
-                    setError={props.setError}
-                    finalDate={app.timeToAccept}
-                  />
-                })}
+
+                {props.children ? props.children : 
+                  props.app && props.app.map((app) => {
+                    return <Application
+                      name={app.name}
+                      createDate={app.doa}
+                      professor={app.professorName}
+                      status={app.status}
+                      selected={props.selected}
+                      projID={app.projectID}
+                      key={app.projectID}
+                      professorMsg={app.professorMsg}
+                      setError={props.setError}
+                      finalDate={app.timeToAccept}
+                    />
+                  })
+                }
               </tbody>
             </table>
           </div>

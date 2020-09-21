@@ -8,10 +8,6 @@ profileRouter.get("/getProfile", function(req, res){
     res.send(req.user._id);
 })
 
-profileRouter.get("/getProfile", function(req, res){
-    res.send(req.user._id);
-})
-
 // API to view professor profile
 profileRouter.route('/:professorID')
     // API to fetch professor profile from professors collection and return it

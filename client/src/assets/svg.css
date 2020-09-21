@@ -24,6 +24,15 @@
 .svg-icon-red-small path {
   fill: red;
 }
+
+.svg-icon-yellow-small{
+    width: 1.5em;
+    height: 1.5em;
+}
+
+.svg-icon-yellow-small path {
+  fill: #e6c300;
+}
   
 #menu-toggle:checked + #menu {
     display: block;
