@@ -210,6 +210,7 @@ projectRouter.route("/:projectID")
             function (callback){
                 // CHECK 1: Check if given projectID exists and its applications are still open
                 // Simultaneously check if project is a restricted view and if so check if colleges match and only then allow application
+                // Also check if number of answers is equal to the number of questions in the questionnaire
                 ProfProjects.findOne({_id: projectID, applicationCloseDate: {$gt: Date.now()}}, function (err, project){
                     if(err){
                         console.log(err);
@@ -224,6 +225,9 @@ projectRouter.route("/:projectID")
                         // check if project has a restricted view and then check if the college name matches
                         if(project.restrictedView === true && project.college !== studentCollege){
                             callback("No project found");
+                        }
+                        else if(project.questionnaire.length !== req.body.answers.length) {
+                            callback("Answers missing");
                         }
                         else {
                             callback(null, project);

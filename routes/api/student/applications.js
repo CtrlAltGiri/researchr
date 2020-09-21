@@ -50,7 +50,19 @@ applicationsRouter.route('/')
                         }
                         // the flow below will happen if student has previously applied before
                         else{
-                            let cur_applications = applications.profApplications;
+                            let cur_applications = [];
+                            applications.profApplications.forEach(function (element) {
+                                let toAdd = element.toObject();
+                                toAdd.feedbackCount = ('feedbacks' in element)? element.feedbacks.length : 0;
+                                toAdd.messageCount = ('messages' in element)? element.messages.length : 0;
+                                toAdd = (({feedbackCount, messageCount, status, projectID, name, professorName, doa}) =>
+                                    ({feedbackCount, messageCount, status, projectID, name, professorName, doa}))(toAdd);
+                                if('timeToAccept' in element) {
+                                    toAdd.timeToAccept = element.timeToAccept;
+                                }
+                                cur_applications.push(toAdd);
+                            })
+
                             // active field
                             all_applications.active = cur_applications.filter(function (e){
                                 return e.status === "active";
