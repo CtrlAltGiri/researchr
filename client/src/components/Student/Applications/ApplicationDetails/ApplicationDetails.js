@@ -23,7 +23,6 @@ function ApplicationDetails(props) {
 
     return (
         <section className="mt-2 px-12 md:px-24">
-
             <div className="mb-8 px-1">
                 <Title text={<p>Application for <span className="text-teal-700">Project_name</span></p> }/>
             </div>

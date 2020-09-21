@@ -5,41 +5,35 @@ import { RedButton, TealButton, TextArea } from '../../General/Form/FormComponen
 import SmallModal from '../../General/Modal/SmallModal';
 import { useHistory } from 'react-router-dom';
 
-
-function changeStatus(studentID, newStatus, message, projectID) {
-
-    let finalObj = {
-        studentID: studentID,
-        newStatus: newStatus,
-    }
-
-    if (message && message.length > 0) {
-        finalObj.message = message;
-    }
-
-    axios.post('/api/professor/application/' + projectID, finalObj)
-        .then(res => {
-            return true;
-        })
-        .catch(err => {
-            return err.response.data;
-        });
-}
-
 function ActiveModal(props) {
 
     const [message, setMessage] = useState('');
     const history = useHistory();
 
     function acceptStudent(event) {
-        const retVal = changeStatus(props.studentID, props.newStatus, message, props.projectID);
+
+        const studentID = props.studentID
+        const newStatus = props.newStatus
+        const projectID = props.projectID;
+
+        let finalObj = {
+            studentID: studentID,
+            newStatus: newStatus,
+        }
+    
+        if (message && message.length > 0) {
+            finalObj.message = message;
+        }
+    
+        axios.post('/api/professor/application/' + projectID, finalObj)
+            .then(res => {
+                history.go(0);
+            })
+            .catch(err => {
+                return props.setErrorText(err.response.data);
+            });
+
         props.closeModal(false);
-        if (retVal !== true) {
-            props.setErrorText(retVal);
-        }
-        else {
-            history.go(0);
-        }
     }
 
     return (

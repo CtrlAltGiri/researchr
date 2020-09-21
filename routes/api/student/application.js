@@ -64,7 +64,7 @@ applicationRouter.route('/:projectID')
             }
             else {
                 // filter out information to send to the front end
-                application = (({sop, answers, questionnaire}) => ({sop, answers, questionnaire}))(application);
+                application = (({feedbacks, messages, sop, answers, questionnaire, status}) => ({feedbacks, messages, sop, answers, questionnaire, status}))(application);
                 return res.status(200).send(application);
             }
         })

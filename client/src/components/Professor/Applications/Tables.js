@@ -20,6 +20,9 @@ function ActiveTable(props) {
                         status={application.status}
                         setErrorText={props.setErrorText}
                         key={application.name+application.college+application.cpga+application.branch}
+                        sop={application.sop}
+                        questionnaire={props.questionnaire}
+                        answers={application.answers || []}
                     />
                 )
             })}

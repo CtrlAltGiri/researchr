@@ -141,6 +141,12 @@ async function postSignupProfessor(req, res) {
 
 // function to verify the verifyHash of professor and set the profile as active to allow logins
 function getVerifyProfessor(req, res) {
+    // check if req.query.token is undefined
+    if(!req.query.token) {
+        console.log("Invalid URL");
+        return res.end("<h1>Bad Request</h1>");
+    }
+
     Professors.findOne({ verifyHash: req.query.token }, function (err, professor) {
         if (err) {
             console.log(err);
@@ -242,6 +248,12 @@ async function postForgotProfessor(req, res){
 }
 
 function getResetProfessor(req, res){
+    // check if req.query.token is undefined
+    if(!req.query.token) {
+        console.log("Invalid URL");
+        return res.end("<h1>Bad Request</h1>");
+    }
+
     Professors.findOne({resetHash: req.query.token, resetExpires: {$gt: Date.now()}}, function (err, professor){
         if(err) {
             console.log(err);
@@ -259,6 +271,12 @@ function getResetProfessor(req, res){
 }
 
 async function postResetProfessor(req, res){
+    // check if req.query.token is undefined
+    if(!req.query.token) {
+        console.log("Invalid URL");
+        return res.end("<h1>Bad Request</h1>");
+    }
+
     // validate the passwords
     const values = await resetValidator(req.body);
     const retVal = values[0]
