@@ -31,8 +31,23 @@ degrees.forEach(degree => {
 })
 
 var branches = [
-    { value: "CSE", label: "CSE" }, 
-    { value: "Electronics", label: "Electronics" }
+    { value: "Aerospace", label: "Aerospace" }, 
+    { value: "Biological Sciences", label: "Biological Sciences" },
+    { value: "Chemical", label: "Chemical" },
+    { value: "Metallurgy", label: "Metallurgy"}, 
+    { value: "Civil", label: "Civil" }, 
+    { value: "Computer Science", label: "Computer Science" }, 
+    { value: "Earth Sciences", label: "Earth Sciences" }, 
+    { value: "Electrical / Electronics", label: "Electrical / Electronics" }, 
+    { value: "Material Sciences", label: "Material Sciences" },
+    { value: "Mathematics", label: "Mathematics" }, 
+    { value: "Mechanical", label: "Mechanical" }, 
+    { value: "Industrial Sciences", label: "Industrial Sciences" }, 
+    { value: "Humanities", label: "Humanities" },  
+    { value: "Physics", label: "Physics" },
+    { value: "Ocean Engineering", label: "Ocean Engineering" },
+    { value: "Theoretical Studies", label: "Theoretical Studies" },
+    { value: "Other", label: "Other" }
 ]
 
 var branchValues = []

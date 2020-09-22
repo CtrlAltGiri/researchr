@@ -363,7 +363,7 @@ function checkOutsideLimit(applications){
     let apps_within_month = applications.filter(function (element){
         return ((element.doa.getMonth() === cur_month) && (element.doa.getFullYear() === cur_year) && (element.sameCollege !== true));
     })
-    return (apps_within_month.length<limit);
+    return (apps_within_month.length < limit);
 }
 
 module.exports = projectRouter;
