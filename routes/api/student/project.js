@@ -360,7 +360,7 @@ function checkOutsideLimit(applications){
     let cur_date = new Date();
     let cur_month = cur_date.getMonth();
     let cur_year = cur_date.getFullYear();
-    let limit = 2;
+    let limit = 100;
 
     let apps_within_month = applications.filter(function (element){
         return ((element.doa.getMonth() === cur_month) && (element.doa.getFullYear() === cur_year) && (element.sameCollege !== true));
