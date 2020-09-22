@@ -54,7 +54,7 @@ function TextField(props) {
 function Checkbox(props) {
     return (
         <div className={props.extraClass}>
-            <input onChange={props.onChange} id={props.ID} type="checkbox" name={props.name} className={`mx-2 ${props.checkboxExtraClass}`} defaultChecked={props.value}></input>
+            <input onChange={props.onChange} id={props.ID} type="checkbox" name={props.name} className={`mx-2 ${props.checkboxExtraClass}`} value={props.value} defaultChecked={props.value}></input>
             <label htmlFor={props.ID} className="text-gray-900 cursor-pointer">{props.text}</label>
         </div>
     )

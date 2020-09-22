@@ -4,7 +4,7 @@ import './toggle.css';
 function Toggle(props) {
 
     return (
-        <div className="flex items-center justify-end w-full mb-6 pr-12">
+        <div className="px-16 self-end w-full md:w-1/4 justify-self-center">
             <label htmlFor="toogleA" className="flex items-center cursor-pointer">
                 <div className="relative">
                     <input id="toogleA" type="checkbox" className="hidden" onChange={e => {(props.onClick && props.onClick());}}/>

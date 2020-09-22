@@ -115,7 +115,7 @@ function AddExperience(props) {
                 onClick={(e) => setModalOpen(true)}
             />
 
-            <ModalComponent
+            {modalOpen && <ModalComponent
                 submitInnerForm={submitInnerForm}
                 changeInput={changeInput}
                 errorText={errorText}
@@ -127,7 +127,7 @@ function AddExperience(props) {
                 changeDropdown={changeDropdown}
                 defaultValues={props.defaultValues}
                 editObject={editMode === -1 ? props.mainObject.length : editMode}
-            />
+            />}
         </div>
     );
 }

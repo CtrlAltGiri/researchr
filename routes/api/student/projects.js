@@ -30,7 +30,7 @@ projectsRouter.route("/")
 
                 // filter information to be sent to front end
                 let returnProjects = projects.map(function (element) {
-                    return (({_id, name, desc, professorName, college, views}) => ({_id, name, desc, professorName, college, views}))(element);
+                    return (({_id, name, desc, professorName, college, views, tags}) => ({_id, name, desc, professorName, college, views, tags}))(element);
                 })
 
                 // send all projects to front end (after reversing the array so newly added projects appear first)
