@@ -23,8 +23,7 @@ function AppStudent(props) {
   }, [])
 
   return (
-    <div>
-
+    <div className="min-h-screen">
       <Header />
       <Switch>
         <Route path="/student" component={ProjectSection} exact />
