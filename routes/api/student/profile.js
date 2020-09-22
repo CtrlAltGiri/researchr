@@ -1,6 +1,7 @@
 const profileRouter = require('express').Router();
 const { collegeFormValidator, workFormValidator, projectFormValidator } = require('../../../client/src/common/formValidators/cvValidator');
 const {retrieveStudentDetails} = require('../utils/studentDetails');
+const Students = require('../../../models/students');
 
 profileRouter
     .get("/myProfile", function(req, res){
