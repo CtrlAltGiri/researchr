@@ -15,13 +15,13 @@ applicationRouter.route("/:projectID")
         // get studentID, status and optional message field from req body
         let studentID = req.body.studentID;
         let newStatus = req.body.newStatus;
-        let message = req.body.message;
-
-        // check validity of message field
-        if(message && (!(typeof message === 'string') || message.length > 500)) {
-            console.log("Invalid message field");
-            return res.status(StatusCodes.BAD_REQUEST).send("Bad Request");
-        }
+        // let message = req.body.message;
+        //
+        // // check validity of message field
+        // if(message && (!(typeof message === 'string') || message.length > 500)) {
+        //     console.log("Invalid message field");
+        //     return res.status(StatusCodes.BAD_REQUEST).send("Bad Request");
+        // }
 
         // object describing state transitions possible from original status
         let changesAllowedFrom = {
@@ -112,15 +112,15 @@ applicationRouter.route("/:projectID")
                 let update = {
                     $set : {'profApplications.$.status': newStatus}
                 };
-                // add message if present only if status is changing to `interview` or `selected`
-                if((newStatus === "interview" || newStatus === "selected") && message) {
-                    update.$push = {
-                        'profApplications.$.messages' : {
-                            timestamp: Date.now(),
-                            message: message
-                        }
-                    }
-                }
+                // // add message if present only if status is changing to `interview` or `selected`
+                // if((newStatus === "interview" || newStatus === "selected") && message) {
+                //     update.$push = {
+                //         'profApplications.$.messages' : {
+                //             timestamp: Date.now(),
+                //             message: message
+                //         }
+                //     }
+                // }
                 // add time to accept field if status is changing to `selected` and set it as 24 hrs from current time
                 if(newStatus === "selected") {
                     update.$set['profApplications.$.timeToAccept'] = (Date.now() + (24*60*60*1000));

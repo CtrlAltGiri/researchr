@@ -50,6 +50,7 @@ applicationsRouter.route("/:projectID")
                     else {
                         // object to be returned
                         let applicants = {};
+                        applicants.name = project.name;
                         applicants.questionnaire = project.questionnaire;
                         // all active applications
                         applicants.active = [];
