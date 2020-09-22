@@ -7,6 +7,7 @@ const ProfProjectsSchema = new mongoose.Schema({
     professorName: String,
     professorDesignation: String,
     college: String,
+    department: String,
     views: Number,
     prereq: [ String ],
     duration: Number, // in months
