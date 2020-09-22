@@ -22,7 +22,7 @@ function AppProfessor(props) {
       }, [])
 
     return (
-        <div>
+        <div className="min-h-screen">
             <Header />
             <Switch>
                 <Route path="/professor" component={LandingPage} exact />

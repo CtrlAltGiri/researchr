@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Redirect, Link } from 'react-router-dom'
+import { useHistory, Link } from 'react-router-dom'
 import axios from 'axios';
 import ReactModal from 'react-modal';
 import { RedButton, TealButton } from '../../General/Form/FormComponents';
@@ -12,7 +12,7 @@ function Application(props) {
     const [modalOpen, setModalOpen] = useState(false);
     const [profMessageModal, setProfMessageModal] = useState(false);
     const [decision, setDecision] = useState();
-    const [refresh, setRefresh] = useState(false);
+    const history = useHistory();
 
     ReactModal.setAppElement(document.getElementById('root'));
 
@@ -23,7 +23,7 @@ function Application(props) {
             status: decision
         })
         .then(res => {
-            setRefresh(true);
+            history.go(0);
         })
         .catch(err => {
             props.setError(err.response.data);
@@ -37,8 +37,6 @@ function Application(props) {
 
     return (
         <tr>
-            {/*The below line of code is to ensure they reload the page*/}
-            {refresh && <Redirect to='/student'/>}
             <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                 <p className="text-gray-900 whitespace-no-wrap text-center"><Link className="underline" to={"/student/project/"+props.projID.toString()}>{props.name}</Link></p>
             </td>
