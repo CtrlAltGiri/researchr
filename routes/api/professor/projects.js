@@ -151,6 +151,7 @@ projectsRouter.route("/")
                     professorID: mongoose.Types.ObjectId(professorID),
                     professorName: professor.name,
                     professorDesignation: professor.designation,
+                    department: professor.department,
                     college: professor.college,
                     views: 0,
                     prereq: req.body.prereq,
