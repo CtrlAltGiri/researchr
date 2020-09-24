@@ -18,7 +18,8 @@ const ApplicationsSchema = new mongoose.Schema({
             messages: [
                 {
                     timestamp: Date,
-                    message: String
+                    message: String,
+                    fromProf: Boolean // true if the message was sent by the professor, false otherwise
                 }],
             feedbacks: [
                 {

@@ -31,7 +31,10 @@ applicationRouter.route('/:projectID')
             },
             function (questionnaire, callback) {
                 // STEP 2: Find the required application from the applications collection
-                Applications.findOne({_id: studentID, 'profApplications.projectID': projectID}, function (err, applications) {
+                Applications.findOne(
+                    {_id: studentID, 'profApplications.projectID': projectID},
+                    {'profApplications.$':  1, name:2},
+                    function (err, applications) {
                     if (err) {
                         console.log(err);
                         callback("Failed");
@@ -40,21 +43,16 @@ applicationRouter.route('/:projectID')
                         console.log("No such application exists");
                         callback("Application not found");
                     }
+                    // sanity check
+                    else if(applications.profApplications.length <= 0) {
+                        console.log("No such application exists");
+                        callback("Failed");
+                    }
                     else {
-                        let application = applications.profApplications.find(function (element){
-                            return element.projectID.equals(mongoose.Types.ObjectId(projectID));
-                        })
-                        // sanity check
-                        if (!application) {
-                            console.log("Should not happen");
-                            callback("Failed");
-                        }
-                        else {
-
-                            application.questionnaire = questionnaire;
-                            callback(null, application);
-                        }
-
+                        let application = applications.profApplications[0].toObject();
+                        application.questionnaire = questionnaire;
+                        application.studentName = applications.name;
+                        callback(null, application);
                     }
                 })
             }
@@ -64,7 +62,8 @@ applicationRouter.route('/:projectID')
             }
             else {
                 // filter out information to send to the front end
-                application = (({feedbacks, messages, sop, answers, questionnaire, status}) => ({feedbacks, messages, sop, answers, questionnaire, status}))(application);
+                application = (({name, studentName, professorName, feedbacks, messages, sop, answers, questionnaire, status}) =>
+                    ({name, studentName, professorName, feedbacks, messages, sop, answers, questionnaire, status}))(application);
                 return res.status(200).send(application);
             }
         })
