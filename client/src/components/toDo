@@ -5,60 +5,46 @@ NEW FEATURES
 - Autocomplete + Logo API.
 - Animations while moving from one page to another. V V important.
 - Make a beautiful error page :)
-
 --------------------------------------------------------------------------------------------------------------
 Backend
 
 1. Make sure everything that we send from here is acceptable by APIROUTER (for /createProfile)
 2. Remove all console.logs()
-
 --------------------------------------------------------------------------------------------------------------
 Refactoring
 
 1. MonthYear.js
 2. ProjectPage.js
-3. Export all React-Modals with a close sign elsewhere. (20px top bottom right left works well on mobile.)
-4. Export Table from application table to allow for any one to access.
-
 ---------------------------------------------------------------------------------------------------------------
 Eventually before release
 
 1. Email verification.                                            (SendGrid - Adi)
 2. Make the textfield a recommender too (logo API)
-
 --------------------------------------------------------------------------------------------------------------------
 Upcoming:
 
 1. Mark required and non-required fields on application.
 2. Test dropdowns using postman
 3. Test 150 character limit thing. Also make sure nothing crosses 300 characters, whatever it is
-
 ------------------------------------------------------------------------------------------------------------------
 Adi Stuff (Discuss)
 
 1. n and nModified
 2. Projections on queries. Send only what is needed.
 3. Accepted domains
-4. Already verified ? WHen i go to /verify/student without any auth. -------- DONE
-5. Need to check if number of answers is equal to the number of questionnaire. --------- DONE
-6. Date of creation of profProject -> ordering in the /projects ---------- ORDER IS REVERSED. -------- DONE.
 4. The project location must be tested in the backend to be either WFH or the dropdown.
-
----------------------------------------------------------------------------------------------------------------------
-Long-term TODO:
-
-1. Professor name should be clickable from /student.
-2. Pop up with application answers and SOP. (/application/:studentID/:projectID)
-3. Auto logoURL generator.
-4. Animations man.
-
+5. Prof _id should be returned in /student/projects to make the student click prof.
 ----------------------------------------------------------------------------------------------------------------
 Rahul - Giri
 
-1. 5 applications/month.
-2. Discrepency -> remove the student (5).
-3. User profile -> green tick if we find it reviewed.
+1. Discrepency -> remove the student (5).
+2. User profile -> green tick if we find it reviewed.
 
+4. Each Student is a card.
+5. Make the API for messages.
+6. Department classification for 
+7. Show feedback of prof.
+8. # the links for different tabs
 ----------------------------------------------------------------------------------------------------------------------------
 
 //https://www.youtube.com/watch?v=NUQkajBdnmQ

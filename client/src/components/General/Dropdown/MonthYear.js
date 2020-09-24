@@ -11,7 +11,7 @@ function MonthYear(props) {
 
     let finalDate = props.date;
     if(typeof(finalDate) === typeof('')){
-        finalDate = new Date(finalDate.substr(2,4),finalDate.substr(0,2));
+        finalDate = new Date(finalDate.substr(3,4),finalDate.substr(0,2));
     }
 
     const [month, setMonth] = useState((finalDate && monthOptions[finalDate.getMonth()] && monthOptions[finalDate.getMonth()].value) || '-')

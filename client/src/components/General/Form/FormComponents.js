@@ -3,7 +3,7 @@ import React from 'react';
 function TealButton(props) {
     return (
         <div className={props.divClass}>
-            <button className={`text-white bg-teal-500 border-0 py-2 px-8 focus:outline-none hover:bg-teal-600 rounded text-lg ${props.extraClass}`}
+            <button className={`text-white bg-teal-500 border-0 py-2 px-6 focus:outline-none hover:bg-teal-600 rounded text-lg ${props.extraClass}`}
                 onClick={props.submitForm}
                 type={props.type}
             >
@@ -54,7 +54,7 @@ function TextField(props) {
 function Checkbox(props) {
     return (
         <div className={props.extraClass}>
-            <input onChange={props.onChange} id={props.ID} type="checkbox" name={props.name} className={`mx-2 ${props.checkboxExtraClass}`} defaultChecked={props.value}></input>
+            <input onChange={props.onChange} id={props.ID} type="checkbox" name={props.name} className={`mx-2 ${props.checkboxExtraClass}`} value={props.value} defaultChecked={props.value}></input>
             <label htmlFor={props.ID} className="text-gray-900 cursor-pointer">{props.text}</label>
         </div>
     )

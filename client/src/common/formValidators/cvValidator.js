@@ -19,10 +19,10 @@ function FormCheck(props, obj) {
 function checkProofLink(url) {
 
     if (/[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/.test(url)) {
-        if (/^drive\.google\.com\/(.+)/.test(url) || /^https:\/\/drive\.google\.com\/(.+)/.test(url))
+        if (/^(www\.)?drive\.google\.com\/(.+)/.test(url) || /^https:\/\/(www\.)?drive\.google\.com\/(.+)/.test(url))
             return true;
-        else
-            return false;
+        else if(/^(www\.)?github.com\/(.+)/.test(url) || /^https:\/\/(www\.)?github.com\/(.+)/.test(url))
+            return true;
     }
     else
         return false;

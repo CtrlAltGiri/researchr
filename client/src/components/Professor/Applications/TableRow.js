@@ -3,11 +3,13 @@ import { Link } from 'react-router-dom'
 import Statusbadge from '../../Student/Applications/Statusbadge';
 import { AcceptInterviewReject } from './Utils';
 import Modal from '../../General/Modal/Modal';
-import { TextArea } from '../../General/Form/FormComponents';
+import { TextArea, TextField } from '../../General/Form/FormComponents';
+import Messages from '../../General/Messaging/Messages';
 
 function TableRow(props) {
 
     const [modalOpen, setModalOpen] = useState(false);
+    const [messageModal, setMessageModal] = useState(true);
 
     return (
         <tr>
@@ -26,6 +28,7 @@ function TableRow(props) {
 
             {props.status && (props.status === 'active' || props.status === 'selected' || props.status === 'interview') && <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm text-center">
                 <p className="underline cursor-pointer" onClick={(e) => setModalOpen(true)}>View Application</p>
+                {(props.status === 'selected' || props.status === 'interview') && <p className="underline cursor-pointer mt-2" onClick={e => setMessageModal(true)}>Messages</p>}
             </td>
             }
 
@@ -46,7 +49,6 @@ function TableRow(props) {
             }
 
             <Modal modalOpen={modalOpen} closeModal={(e) => setModalOpen(false)} text={props.name + "'s Application"}>
-
                 <TextArea
                     text="Statement of purpose"
                     disabled={true}
@@ -67,6 +69,16 @@ function TableRow(props) {
                 })}
 
             </Modal>
+
+            <Modal modalOpen={messageModal} closeModal={e => setMessageModal(false)} text={"Messages with " + props.name}>
+                <Messages
+                    messages={[{ fromProf: true, message: "Hi, please contact me at +91-9080034580" }, { fromProf: false, message: "Hi I am Giridhar" }]}
+                    studentID={props.studentID}
+                    projectID={props.projectID}
+                    professor={true}
+                />
+            </Modal>
+
         </tr>
     )
 }

@@ -180,6 +180,7 @@ function Step4(props) {
             <TagInput
                 text="Enter Interest tags"
                 extraClass="flex justify-center px-16 mx-auto flex-col"
+                fieldExtraClass=" w-full"
                 updateTags={setTags}
                 chosenTags={interestTags}
                 maxNumberOfTags={3}

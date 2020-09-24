@@ -15,7 +15,7 @@ function Applications(props) {
     const [ongoing, setOngoing] = useState([]);
     const [archived, setArchived] = useState([]);
     const [errorText, setErrorText] = useState('');
-    const [appType, setAppType] = useState(0);
+    const [appType, setAppType] = useState(1);
 
     useEffect(() => {
         axios.get('/api/professor/applications/' + projectID.toString())

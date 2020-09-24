@@ -4,6 +4,7 @@ import InfiniteScroll from 'react-infinite-scroller';
 import axios from 'axios'
 import { Error } from '../../General/Form/FormComponents';
 import Toggle from '../../General/Form/Toggle';
+import Filters from './Projectile/Filters';
 
 function ProjectSection() {
 
@@ -11,6 +12,7 @@ function ProjectSection() {
     const [hasMore, setHasMore] = useState(true);
     const [apiError, setApiError] = useState(false);
     const [collegeView, setCollegeView] = useState(false);
+    const [filters, setFilters] = useState({});
 
     useEffect(() => {
         newLoader()
@@ -18,6 +20,19 @@ function ProjectSection() {
             setProjects([]);
         }
     }, [collegeView])
+
+    function setNewFilter(newVal, name){
+        setFilters({...filters, [name]: newVal});
+    }
+
+    function filterProjects(item){
+        if(filters.dept && filters.dept.length > 1){
+            if(item.department !== filters.dept){
+                return false;
+            }
+        }
+        return true;
+    }
     
     function newLoader() {
         axios.get('/api/student/projects', {
@@ -40,15 +55,21 @@ function ProjectSection() {
     }
 
     let items = []
-    projects.map((item) => {
-        items.push(<Projectile key={item.name} allItems={item} />);
+    projects.forEach((item) => {
+        if(filterProjects(item) === true)
+            items.push(<Projectile key={item.name} allItems={item} />);
     });
 
     return (
         apiError === false ? 
-        <section className="text-gray-700 body-font overflow-hidden">
-            <div className="container px-5 py-0 md:py-8 mx-auto">
+        <section className="text-gray-700 body-font">
+            
+            <div className="flex flex-col w-full justify-end space-y-4">
+                <Filters setFilter={setNewFilter} />
                 <Toggle text="College View" onClick={() => setCollegeView(!collegeView)}/>
+            </div>
+
+            <div className="container px-5 py-0 md:py-8 mx-auto">
                 <InfiniteScroll
                     pageStart={0}
                     loadMore={newLoader}
