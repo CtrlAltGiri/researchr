@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Link, useHistory } from 'react-router-dom'
 import { Label, RedButton, TealButton, TextArea, TextField, Error } from '../../General/Form/FormComponents';
 import SmallModal from '../../General/Modal/SmallModal';
+import Modal from '../../General/Modal/Modal';
+import Messages from '../../General/Messaging/Messages';
 import BeautyStars from 'beauty-stars';
 import axios from 'axios';
 
@@ -26,7 +28,7 @@ function FeedbackModal(props) {
 
             props.onRequestClose();
         }
-        else{
+        else {
             setModalError('Please enter a comprehensive feedback.')
         }
     }
@@ -71,25 +73,14 @@ function FeedbackModal(props) {
 
 function MessageModal(props) {
 
-    const [feedback, setFeedback] = useState('');
-    const history = useHistory();
-
-    function submitFeedback() {
-        axios.post('/api/professor/messages/' + props.projectID, {
-            studentID: props.studentID,
-        })
-            .then(res => history.go(0))
-            .catch(err => props.setErrorText(err.response.data));
-
-        props.onRequestClose();
-    }
-
     return (
-        <SmallModal isOpen={props.isOpen} onRequestClose={props.onRequestClose}>
-
-            Messaging Feature not enabled yet.
-
-        </SmallModal>
+        <Modal modalOpen={props.isOpen} closeModal={props.onRequestClose} text={"Messages with " + props.name}>
+            <Messages
+                studentID={props.studentID}
+                projectID={props.projectID}
+                professor={true}
+            />
+        </Modal>
     );
 }
 
@@ -150,8 +141,8 @@ function OngoingBlock(props) {
             <div className="mt-8 space-y-1 text-center md:text-left">
                 {props.student.status === 'ongoing' && <p className="font-thin cursor-pointer" onClick={(e) => setOpenFeedback(true)}>Give feedback</p>}
                 <p className="font-thin cursor-pointer" onClick={(e) => setOpenMessages(true)}>Messages</p>
-                {props.student.status === 'ongoing' ? 
-                    <p className="font-thin cursor-pointer" onClick={(e) => setOpenCompleted(true)}>Mark as completed</p>:
+                {props.student.status === 'ongoing' ?
+                    <p className="font-thin cursor-pointer" onClick={(e) => setOpenCompleted(true)}>Mark as completed</p> :
                     <p className="text-red-500">Completed</p>
                 }
             </div>
@@ -169,6 +160,7 @@ function OngoingBlock(props) {
                 onRequestClose={(e) => setOpenMessages(false)}
                 projectID={props.projectID}
                 studentID={props.student.studentID}
+                name={props.student.name}
                 setErrorText={props.setErrorText}
             />
 

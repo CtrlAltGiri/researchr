@@ -20,7 +20,7 @@ function Filters(props) {
                 placeholder="Department"
                 extraClass=""
                 fieldExtraClass="w-fu"
-                options={branches}
+                options={[{value:"-", label:"All"}].concat(branches)}
             />
 
         </div>

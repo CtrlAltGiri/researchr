@@ -20,20 +20,28 @@ function ActiveModal(props) {
             studentID: studentID,
             newStatus: newStatus,
         }
-    
-        if (message && message.length > 0) {
-            finalObj.message = message;
-        }
-    
+
+        props.closeModal(false);   
         axios.post('/api/professor/application/' + projectID, finalObj)
-            .then(res => {
+            .then(res => {              
+                if (message && message.length > 0) {
+                    // add the message field.
+                    finalObj.message = message;
+                    axios.post('/api/message/' + projectID, finalObj)
+                    .then(res => {
+                        history.go(0);
+                    })
+                    .catch(err => {
+                        props.setErrorText(err.response.data);
+                    });
+
+                    return;
+                }      
                 history.go(0);
             })
             .catch(err => {
-                return props.setErrorText(err.response.data);
+                props.setErrorText(err.response.data);
             });
-
-        props.closeModal(false);
     }
 
     return (

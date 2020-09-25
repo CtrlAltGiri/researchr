@@ -13,7 +13,7 @@ function Table(props) {
                   {
                     props.headers.map(header => {
                       return (
-                        <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                        <th key={header} className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
                           {header}
                         </th>
                       )
@@ -36,6 +36,7 @@ function Table(props) {
                       professorMsg={app.professorMsg}
                       setError={props.setError}
                       finalDate={app.timeToAccept}
+                      messageCount={app.messageCount}
                     />
                   })
                 }

@@ -3,7 +3,7 @@ import React from 'react';
 function TealButton(props) {
     return (
         <div className={props.divClass}>
-            <button className={`text-white bg-teal-500 border-0 py-2 px-8 focus:outline-none hover:bg-teal-600 rounded text-lg ${props.extraClass}`}
+            <button className={`text-white bg-teal-500 border-0 py-2 px-6 focus:outline-none hover:bg-teal-600 rounded text-lg ${props.extraClass}`}
                 onClick={props.submitForm}
                 type={props.type}
             >

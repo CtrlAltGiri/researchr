@@ -34,7 +34,8 @@ degrees.forEach(degree => {
 var branches = [
     { value: "Aerospace", label: "Aerospace" }, 
     { value: "Biological Sciences", label: "Biological Sciences" },
-    { value: "Chemical / Mettalurgy", label: "Chemical / Metallurgy" }, 
+    { value: "Chemical", label: "Chemical" },
+    { value: "Metallurgy", label: "Metallurgy"}, 
     { value: "Civil", label: "Civil" }, 
     { value: "Computer Science", label: "Computer Science" }, 
     { value: "Earth Sciences", label: "Earth Sciences" }, 
@@ -48,7 +49,6 @@ var branches = [
     { value: "Ocean Engineering", label: "Ocean Engineering" },
     { value: "Theoretical Studies", label: "Theoretical Studies" },
     { value: "Other", label: "Other" }
-
 ]
 
 var branchValues = []
