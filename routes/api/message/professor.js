@@ -98,7 +98,7 @@ async function getProfessorMessages(req, res) {
     // get projectID from req params
     let projectID = req.params.projectID;
     // get studentID field from req body
-    let studentID = req.body.studentID;
+    let studentID = req.query.studentID;
     // check if projectID is a valid object id
     if (!ObjectID.isValid(projectID)) {
         return res.status(StatusCodes.BAD_REQUEST).send("Invalid URL");

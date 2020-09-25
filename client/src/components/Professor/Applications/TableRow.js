@@ -3,13 +3,13 @@ import { Link } from 'react-router-dom'
 import Statusbadge from '../../Student/Applications/Statusbadge';
 import { AcceptInterviewReject } from './Utils';
 import Modal from '../../General/Modal/Modal';
-import { TextArea, TextField } from '../../General/Form/FormComponents';
+import { TextArea } from '../../General/Form/FormComponents';
 import Messages from '../../General/Messaging/Messages';
 
 function TableRow(props) {
 
     const [modalOpen, setModalOpen] = useState(false);
-    const [messageModal, setMessageModal] = useState(true);
+    const [messageModal, setMessageModal] = useState(false);
 
     return (
         <tr>
@@ -72,7 +72,6 @@ function TableRow(props) {
 
             <Modal modalOpen={messageModal} closeModal={e => setMessageModal(false)} text={"Messages with " + props.name}>
                 <Messages
-                    messages={[{ fromProf: true, message: "Hi, please contact me at +91-9080034580" }, { fromProf: false, message: "Hi I am Giridhar" }]}
                     studentID={props.studentID}
                     projectID={props.projectID}
                     professor={true}

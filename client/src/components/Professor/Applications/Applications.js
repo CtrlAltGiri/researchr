@@ -15,7 +15,7 @@ function Applications(props) {
     const [ongoing, setOngoing] = useState([]);
     const [archived, setArchived] = useState([]);
     const [errorText, setErrorText] = useState('');
-    const [appType, setAppType] = useState(1);
+    const [appType, setAppType] = useState(0);
 
     useEffect(() => {
         axios.get('/api/professor/applications/' + projectID.toString())
@@ -41,13 +41,15 @@ function Applications(props) {
             />
 
             {
-                appType === 0 ?
+                appType >= 0 && appType === 0 ?
                     <ActiveTable
                         projectID={projectID}
                         setErrorText={setErrorText}
                         headers={['Student', 'College', 'Branch', 'CGPA', 'Application', 'Action']}
                         data={active}
                         questionnaire={questionnaire || []}
+                        active={true}
+                        key="active"
                     />
                     : appType === 1 ?
                         <ActiveTable
@@ -56,6 +58,7 @@ function Applications(props) {
                             headers={['Student', 'College', 'Branch', 'CGPA', 'Application', 'Action', 'Status']}
                             data={selected}
                             questionnaire={questionnaire || []}
+                            key="selected"
                         />
                         : appType === 2 ?
                             <Ongoing
@@ -70,6 +73,7 @@ function Applications(props) {
                                 setErrorText={setErrorText}
                                 data={archived}
                                 questionnaire={questionnaire || []}
+                                key="archived"
                             />
             }
 

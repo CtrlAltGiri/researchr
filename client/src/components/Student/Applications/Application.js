@@ -10,7 +10,6 @@ import SmallModal from '../../General/Modal/SmallModal';
 function Application(props) {
 
     const [modalOpen, setModalOpen] = useState(false);
-    const [profMessageModal, setProfMessageModal] = useState(false);
     const [decision, setDecision] = useState();
     const history = useHistory();
 
@@ -34,7 +33,7 @@ function Application(props) {
         setDecision(decision);
         setModalOpen(true);
     }
-
+    
     return (
         <tr>
             <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
@@ -49,14 +48,13 @@ function Application(props) {
                                 alt="" />
                         </div>
                         <div className="ml-4">
-                        <p className="font-medium text-md">{props.professor}</p>
-                        {props.selected && <button className="focus:outline-none underline text-teal-700 cursor-pointer text-left" onClick={(e) => {setProfMessageModal(true)}}>Message from Professor</button>}
+                            <p className="font-medium text-md">{props.professor}</p>
                         </div>
                     </div>
                 </div>
             </td>
             <td className="text-center">
-                <Link className="underline" to={"/student/application/" + props.projID}>Application</Link>
+                <Link className="underline" target="_blank" to={"/student/application/" + props.projID}>{(props.status === "ongoing" || props.status === "selected" || props.status === "interview" || props.status === "completed") ? (props.messageCount ? ("Messages (" + props.messageCount + ")" + (props.status === "ongoing" ? " and Feedback": "" )): "Messages") :"Application" }</Link>
             </td>
             <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                 <p className="text-gray-900 whitespace-no-wrap text-center">
@@ -120,14 +118,6 @@ function Application(props) {
                     </div>
                 }
 
-            </SmallModal>
-
-            <SmallModal
-                isOpen={profMessageModal}
-                onRequestClose={(e) => setProfMessageModal(false)}
-            >
-                The professor has not left any message for you
-            
             </SmallModal>
 
         </tr>

@@ -20,7 +20,7 @@ function Statusbadge(props){
         extraClass = "bg-green-200";
     }
     else if(badge === "rejected"){
-        extraClass = "bg-red-200"
+        extraClass = "bg-red-300"
     }
     else if(badge === "interview"){
         extraClass = "bg-yellow-200";
