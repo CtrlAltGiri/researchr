@@ -3,13 +3,15 @@ const studentRouter = require('./student/studentRouter');
 const professorRouter = require('./professor/professorRouter');
 const messageRouter = require('./message/message');
 const publicRouter = require('./public/publicRouter')
-const createError = require('http-errors');
+const logger = require('../../config/winston');
 
 function authChecker(req, res, next){
     if (req.isAuthenticated())
         next('route')
-    else
-        throw createError(401, "Not Authenticated");
+    else{
+        logger.info("Not authenticated - neither student nor professor - %s", req.originalUrl);
+        res.status(401).send("Not authenticated").end();
+    }   
 }
 
 // API router for /api/public

@@ -2,20 +2,14 @@ var appRoot = require('app-root-path');
 var winston = require('winston');
 var winstonDailyRotate = require('winston-daily-rotate-file');
 
-// define the custom settings for each transport (file, console)
-var options = {
-  console: {
-    level: 'debug',
-    handleExceptions: true,
-    json: false,
-    colorize: true,
-  }
-};
-
 var logFormat = winston.format.combine(
-    winston.format.colorize(),
     winston.format.timestamp(),
     winston.format.align(),
+    winston.format.timestamp({
+      format: 'DD-MM-YYYY HH:mm:ss'
+    }),
+    winston.format.errors({stack: true}),
+    winston.format.splat(),
     winston.format.printf(
         info => `${info.timestamp} ${info.level}: ${info.message}`
     )
@@ -43,10 +37,18 @@ var logger = new winston.createLogger({
             maxFiles: 5,
             handleExceptions: true
         }),
-        new winston.transports.Console(options.console)
     ],
     exitOnError: false, // do not exit on handled exceptions
 });
+
+if(process.env.NODE_ENV !== 'production'){
+  logger.add(new winston.transports.Console({
+    format: winston.format.combine(
+      winston.format.colorize(),
+      winston.format.simple()
+    )
+  }));
+}
 
 // create a stream object with a 'write' function that will be used by `morgan`
 logger.stream = {
