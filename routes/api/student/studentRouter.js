@@ -6,6 +6,7 @@ const projectsRouter = require('./projects');
 const projectRouter = require('./project')
 const testRouter = require('./test');
 const passwordRouter = require('./password');
+const createError = require('http-errors');
 
 // Check if userType is Student and only allow students to access this router.
 studentRouter.all("*", function(req, res, next){
@@ -13,7 +14,7 @@ studentRouter.all("*", function(req, res, next){
         next('route');
     }
     else{
-        res.status(401).send("Not authorized to access student details.")
+        throw createError(401, "Not authorized to access student details")
     }
 })
 

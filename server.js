@@ -38,6 +38,16 @@ app.use("/platform", router.platform);
 app.use("/api", router.api);
 app.use("/", router.home);
 
+// Error handling middleware
+app.use((error, req, res, next) => {
+    if(res.headersSent){
+        return next(error)
+    }
+    res.status(error.status || 500);
+    res.json(error.message);
+});
+
+
 app.listen(PORT, function(){
     console.log('Server started on port ' + PORT);
 });

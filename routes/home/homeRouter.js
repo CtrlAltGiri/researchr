@@ -149,6 +149,11 @@ homeRouter.get('/logout', function (req, res) {
     res.redirect("/");
 });
 
+// DEFAULT ROUTE
+homeRouter.all(function(req, res){
+    next(new Error("Invalid route"))
+})
+
 ////////   TEST APIs
 
 homeRouter.get("/test", function (req, res) {
