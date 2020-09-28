@@ -3,6 +3,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const session = require('express-session');
 const passport = require('./config/passport');
+const morgan = require('morgan');
+const winston = require('./config/winston');
 const cors = require('cors');
 
 require('./config/passport');
@@ -16,6 +18,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public/"));
 app.use(express.static("client/build"))
 app.use(cors())
+
+// Logging middleware
+app.use(morgan('combined', { stream: winston.stream }));
 
 app.set('views', __dirname + '/views');
 app.set('view engine', 'pug');
@@ -43,6 +48,7 @@ app.use((error, req, res, next) => {
     if(res.headersSent){
         return next(error)
     }
+    winston.error(`${error.message} - ${error.stack}`);
     res.status(error.status || 500);
     res.json(error.message);
 });
