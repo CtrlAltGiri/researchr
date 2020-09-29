@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const Applications = require("../../../models/applications");
 const ProfProjects = require('../../../models/profProjects');
 const Async = require('async');
+const student = require('../message/student');
 
 applicationRouter.route('/:projectID')
     // API to view a specific applications
@@ -17,11 +18,11 @@ applicationRouter.route('/:projectID')
                 // STEP 1: Get the required project from profProjects to get the questionnaire variable
                 ProfProjects.findOne({_id: projectID}, function (err, project){
                     if(err) {
-                        console.log(err);
+                        logger.tank(err);
                         callback("Failed");
                     }
                     else if(!project) {
-                        console.log("No project found");
+                        logger.tank("No project found - Student: %s - Project %s", studentID, projectID);
                         callback("Failed");
                     }
                     else {
@@ -36,16 +37,16 @@ applicationRouter.route('/:projectID')
                     {'profApplications.$':  1, name:2},
                     function (err, applications) {
                     if (err) {
-                        console.log(err);
+                        logger.tank(err);
                         callback("Failed");
                     }
                     else if(!applications) {
-                        console.log("No such application exists");
+                        logger.tank("No such application exists - Student: %s - Project %s", studentID, projectID);
                         callback("Application not found");
                     }
                     // sanity check
                     else if(applications.profApplications.length <= 0) {
-                        console.log("No such application exists");
+                        logger.tank("No such applications exists (length = 0) - Student: %s - Project %s", studentID, projectID);
                         callback("Failed");
                     }
                     else {

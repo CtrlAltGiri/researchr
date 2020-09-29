@@ -14,7 +14,7 @@ studentRouter.all("*", function(req, res, next){
         next('route');
     }
     else{
-       logger.info("Not authenticated as student - trying to access student details - %s", req.originalUrl);
+       logger.soldier("Not authenticated as student - trying to access student details - %s", req.originalUrl);
        res.status(401).send("Not authorized to access student details").end();
     }
 })

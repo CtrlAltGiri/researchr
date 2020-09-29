@@ -1,5 +1,6 @@
 const projectsRouter = require('express').Router()
 const ProfProjects = require('../../../models/profProjects');
+const logger = require('../../../config/winston');
 
 // API to show all projects on the main platform page to the students
 projectsRouter.route("/")
@@ -19,7 +20,7 @@ projectsRouter.route("/")
         // query all prof projects with application close date > cur date and based on the view
         ProfProjects.find(filter, function (err, projects){
             if(err){
-                console.log(err);
+                logger.tank(err);
                 return res.status(404).send("Failed");
             }
             else{

@@ -53,7 +53,7 @@ app.use((error, req, res, next) => {
     if(res.headersSent){
         return next(error)
     }
-    winston.error(`${error.message} - ${error.stack}`);
+    winston.nuclear(`${error.message} - ${error.stack}`);
     res.status(error.status || 500);
     res.json("Something did not go right!");
 });

@@ -9,7 +9,7 @@ function authChecker(req, res, next){
     if (req.isAuthenticated())
         next('route')
     else{
-        logger.info("Not authenticated - neither student nor professor - %s", req.originalUrl);
+        logger.soldier("Not authenticated - neither student nor professor - %s", req.originalUrl);
         res.status(401).send("Not authenticated").end();
     }   
 }
