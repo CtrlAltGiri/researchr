@@ -66,6 +66,7 @@ function CreateProfile(props) {
             .catch(function (err) {
                 setShowError(err.response.data)
             })
+            document.title = "Create your profile - researchR"
     }, []);
 
 

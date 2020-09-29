@@ -1,36 +1,52 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { TextField } from './FormComponents';
 import axios from 'axios';
 
-function Test() {
+function CompanyInput(props) {
 
-    const [val, setval] = useState('')
-    const [companies, setCompanies] = useState([])
-  
-    useEffect(() => {
-      if (val.length > 0)
-        axios.get("https://autocomplete.clearbit.com/v1/companies/suggest?query=" + val).then(res => setCompanies(res.data))
-      else
-        setCompanies([])
-    }, [val])
-  
-    return (
-      <div>
-        <TextField
-          text="Company"
-          onChange={e => setval(e.target.value)}
-          value={val}
-          extraClass="w-full flex-col flex items-center mb-4"
-          fieldExtraClass=""
-        />
-        <div className="flex flex-row flex-wrap justify-center">
-          {companies && companies.map(company => {
-            return <p className="bg-teal-300 rounded-lg py-2 px-2 mx-4 mb-2 font-medium text-lg">{company.name}</p>
-          })}
-        </div>
-  
-      </div>
-    );
+  const [companies, setCompanies] = useState([])
+  const [callAPI, setCallAPI] = useState(false);
+
+  useEffect(() => {
+    if (props.value && props.value.length > 0 && setCallAPI)
+      axios.get("https://autocomplete.clearbit.com/v1/companies/suggest?query=" + props.value).then(res => setCompanies(res.data))
+    else
+      setCompanies([])
+  }, [props.value])
+
+  function addCompany(company){
+    // name, domain and logo are returned.
+    // we just need domain and name.
+    let finalObj = {
+      [props.name]: company.name,
+      [props.logoName]: company.domain
+    }
+
+    props.onSelect(undefined, finalObj);
+    setCallAPI(false)
   }
 
-export default Test;
+  return (
+    <div>
+      <TextField
+        text="Company"
+        onChange={e => {props.onChange(e.target.value, props.name); setCallAPI(true)}}
+        value={props.value}
+        extraClass="w-full mb-4"
+        fieldExtraClass="w-3/4 md:w-3/5"
+      />
+      <div className="flex flex-row flex-wrap justify-center">
+        {callAPI && companies && companies.map(company => {
+          return (<div className="py-1 px-4 bg-teal-300 font-medium text-teal-800 rounded-md mx-4 my-2" key={company.name}>
+            <a className="cursor-pointer" onClick={(e) => { addCompany(company) }}>
+              {company.name}
+            </a>
+          </div>
+          )})}
+      </div>
+
+    </div>
+  );
+}
+
+export default CompanyInput;

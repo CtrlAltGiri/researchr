@@ -13,7 +13,7 @@ function ExperienceSection(props) {
                             name={experience[props.name]}
                             title={experience[props.subtitle]}
                             description={experience[props.description]}
-                            logoURL={experience[props.logoURL]}
+                            logoURL={props.logoURL ? props.logoURL === 'e' ? 'e' : experience[props.logoURL]: undefined}
                             research={experience[props.research] ? "Research Project" : "Self Project"}
                             displayParams={props.displayParams}
                             displayModal={props.displayModal}
