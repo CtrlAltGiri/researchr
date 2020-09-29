@@ -19,25 +19,25 @@ passwordRouter
             let studentID = req.user._id;
             Students.findOne({_id: studentID}, function (err, student){
                 if(err) {
-                    console.log(err);
+                    logger.tank(err);
                     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send("Failed");
                 }
                 // sanity check ; shouldn't happen
                 else if(!student) {
-                    console.log("No student found!");
+                    logger.nuclear("No student found - Student: %s", studentID);
                     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send("Failed");
                 }
                 else {
                     // check if current password matches with the one entered
                     if(student.validatePassword(req.body.current_password) !== true) {
-                        console.log("Update password failed: current_password is wrong");
+                        logger.ant("Update password failed: current_password is wrong - Student: %s", studentID);
                         return res.status(StatusCodes.NON_AUTHORITATIVE_INFORMATION).send("Wrong password");
                     }
                     else {
                         // check if current password matches new password
                         if(req.body.current_password === req.body.new_password) {
                             // Don't allow update
-                            console.log("New password cannot be same as current password");
+                            logger.ant("New password cannot be same as current password - Student: %s", studentID);
                             return res.status(StatusCodes.NOT_ACCEPTABLE).send("New password cannot be same as current password");
                         }
                         else {
@@ -46,15 +46,15 @@ passwordRouter
                             // save it to database
                             student.save({}, function (err, result){
                                 if(err){
-                                    console.log(err);
+                                    logger.tank(err);
                                     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send("Failed");
                                 }
                                 else if(!result){
-                                    console.log("Failed to update password for student");
+                                    logger.tank("Failed to update password for student %s", studentID);
                                     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send("Failed");
                                 }
                                 else{
-                                    console.log("Password has been updated");
+                                    logger.ant("Password changed - Student: %s", studentID)
                                     return res.status(StatusCodes.OK).send("Password successfully updated");
                                 }
                             })
@@ -64,7 +64,7 @@ passwordRouter
                 }
             })
         }
-})
+    })
 
 
 module.exports = passwordRouter;

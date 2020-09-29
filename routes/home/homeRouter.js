@@ -3,6 +3,7 @@ const path = require('path');
 const { postLoginStudent , postSignupStudent, getVerifyStudent, postForgotStudent, getResetStudent, postResetStudent } = require('./homeStudent');
 const { colleges, branches, yog, degrees } = require('../../client/src/common/data/collegeData')
 const { postLoginProfessor, postSignupProfessor, getVerifyProfessor, postForgotProfessor, getResetProfessor, postResetProfessor } = require('./homeProfessor')
+const logger = require('../../config/winston');
 
 homeRouter.route("/")
     .get(function (req, res) {
@@ -104,16 +105,19 @@ homeRouter.route('/forgot/:type?')
             res.render('forgot', {c_email: "", type:type});
     })
     .post(async function(req, res){
-
         let type = req.params.type;
         if(type === 'student')
-            await postForgotStudent(req, res);
+            postForgotStudent(req, res)
+            .then(response => logger.ant("%s - Forgot password email successfully sent for %s", req.originalUrl, req.body.c_email))
+            .catch(next)
         
         else if(type === 'professor')
-            await postForgotProfessor(req, res);
+            postForgotProfessor(req, res)
+            .then(response => logger.ant("%s - Forgot password email successfully sent for %s", req.originalUrl, req.body.c_email))
+            .catch(next)
 
         else
-            res.render('error');
+            res.render('error'); 
     });
 
 
@@ -148,6 +152,11 @@ homeRouter.get('/logout', function (req, res) {
     req.logout();
     res.redirect("/");
 });
+
+// DEFAULT ROUTE
+homeRouter.all(function(req, res){
+    next(new Error("Invalid route"))
+})
 
 ////////   TEST APIs
 
