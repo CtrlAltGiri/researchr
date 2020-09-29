@@ -29,7 +29,7 @@ function ProjectPage(props) {
     const [showBackButton, setShowBackButton] = useState(true);
 
     useEffect(() => {
-        
+
         axios.get(props.url ? props.url : ("/api/student/project/" + projectId.toString()))
             .then(res => {
                 setProjDetails(res.data);
@@ -56,6 +56,7 @@ function ProjectPage(props) {
                 if(props.professor){
                     props.retProjDetails(res.data);
                 }
+                document.title = res.data.name + " - Researchr";
             })
             .catch(err => {
                 setError(err.response.data);

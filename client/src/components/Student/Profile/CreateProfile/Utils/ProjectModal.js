@@ -127,15 +127,6 @@ function ProjectModal(props) {
                         fieldExtraClass="w-full md:w-1/2"
                     />
 
-                    <TextField
-                        text="URL (for logo on profile)"
-                        onChange={props.changeInput}
-                        name="logoURL"
-                        value={props.formState.logoURL}
-                        extraClass="w-full md:w-1/2 mb-8"
-                        fieldExtraClass="w-full md:w-3/4"
-                    />
-
                     <TagInput
                         text="ResearchR tags"
                         extraClass="mb-8"

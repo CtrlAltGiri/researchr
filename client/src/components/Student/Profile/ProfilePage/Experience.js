@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import ReactModal from 'react-modal';
 import { CloseButton, Title, Label } from '../../../General/Form/FormComponents';
+import { colleges } from '../../../../common/data/collegeData';
 
 function ModalElement(props) {
   return (
@@ -15,7 +16,14 @@ function Experience(props) {
   
   let description, imageURL;
   const defaultURL = '/images/defaultCompany.jfif';
-  imageURL = props.logoURL ? "//logo.clearbit.com/" + props.logoURL + "?size=400" : defaultURL;
+  let domain = props.logoURL;
+  if(domain === 'e'){
+    domain = colleges.find(college => college.value === props.name); 
+    if(domain){
+      domain = domain.url;
+    }
+  }
+  imageURL = domain ? "//logo.clearbit.com/" + domain + "?size=400" : defaultURL;
 
   const [modalOpen, setModalOpen] = useState(false);
 

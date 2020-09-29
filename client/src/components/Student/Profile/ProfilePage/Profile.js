@@ -64,7 +64,6 @@ function Profile(props) {
                             research="researchProject"
                             name="title"
                             description="experience"
-                            logoURL="logoURL"
                             displayModal={['Professor', 'College', 'Start Date', 'End Date', 'URL (Proof)', 'Experience']}
                             displayParams={['professor', 'college', 'startDate', 'endDate', 'proof', 'experience']}
                         />}
@@ -75,8 +74,8 @@ function Profile(props) {
                             experiences={profile.cvElements.education && profile.cvElements.education.college}
                             subtitle="branch"
                             name="college"
+                            logoURL="e"
                             description="experience"
-                            logoURL="logoURL"
                             displayModal={['Degree', 'Year of Graduation', 'CGPA (out of 10)', 'Experience', 'Coursework']}
                             displayParams={['degree', 'yog', 'cgpa', 'experience', 'coursework']}
                         />}

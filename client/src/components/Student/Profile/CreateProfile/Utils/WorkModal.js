@@ -2,6 +2,7 @@ import React from 'react';
 import ReactModal from 'react-modal';
 import { TextField, Title, TextArea, TealButton, Error, Checkbox } from '../../../../General/Form/FormComponents';
 import TagInput from '../../../../General/TagInput/TagInput';
+import CompanyInput from '../../../../General/Form/CompanyInput';
 import MonthYear from '../../../../General/Dropdown/MonthYear';
 
 function WorkModal(props) {
@@ -40,10 +41,12 @@ function WorkModal(props) {
                         </svg></button>
                     </div>
 
-                    <TextField
+                    <CompanyInput
                         text="Company"
-                        onChange={props.changeInput}
+                        onChange={props.changeDropdown}
+                        onSelect={props.changeInput}
                         name="organization"
+                        logoName="logoURL"
                         value={props.formState.organization}
                         extraClass="mb-8"
                         fieldExtraClass="w-full md:w-1/2"
@@ -109,15 +112,6 @@ function WorkModal(props) {
                         value={props.formState.proof}
                         extraClass="mb-8"
                         fieldExtraClass="w-full md:w-1/2"
-                    />
-
-                    <TextField
-                        text="URL (for logo on profile)"
-                        onChange={props.changeInput}
-                        name="logoURL"
-                        value={props.formState.logoURL}
-                        extraClass="w-full md:w-1/2 mb-8"
-                        fieldExtraClass="w-full md:w-3/4"
                     />
 
                     <TagInput
