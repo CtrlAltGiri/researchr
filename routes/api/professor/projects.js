@@ -136,7 +136,7 @@ projectsRouter.route("/")
                         console.log("Professor not found");
                         callback("Failed");
                     } else {
-                        professor = (({name, college, designation}) => ({name, college, designation}))(professor)
+                        professor = (({name, college, designation, department}) => ({name, college, designation, department}))(professor)
                         callback(null, professor);
                     }
                 })
@@ -144,7 +144,7 @@ projectsRouter.route("/")
             },
             function (professor, callback) {
                 // STEP 2: Insert the new project in the profProjects schema
-
+                console.log(professor.department)
                 const project = new ProfProjects({
                     name: req.body.name,
                     desc: req.body.desc,

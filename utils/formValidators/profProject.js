@@ -27,7 +27,6 @@ async function profProjectValidator(formData) {
         location: 'required|string|maxLength:200',
         applicationCloseDate: 'required|dateAfterToday:1,days',
         startDate: 'required|dateAfterToday:2,days',
-        questionnaire: 'nullable|arrayUnique|maxLength:10',
         'questionnaire.*': 'string|maxLength:300',
         commitment: 'required|numeric|max:168', //hrs per week
         restrictedView: 'required|boolean',
