@@ -10,11 +10,9 @@ function LandingPage(props) {
     const [modalOpen, setModalOpen] = useState(false);
 
     useEffect(() => {
-
         axios.get('/api/professor/projects')
         .then(res => {setProjects(res.data.projects); setCollege(res.data.college)})
         .catch(err => console.log(err));
-
     }, [])
 
 

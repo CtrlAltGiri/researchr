@@ -6,6 +6,8 @@ const passport = require('./config/passport');
 const morgan = require('morgan');
 const winston = require('./config/winston');
 const cors = require('cors');
+const redis = require('redis');
+const redisStore = require('connect-redis')(session);
 require('dotenv').config();
 
 const app = express();
@@ -27,12 +29,19 @@ app.use(morgan('short', { stream: winston.stream }));
 app.set('views', __dirname + '/views');
 app.set('view engine', 'pug');
 
+// Redis configuration
+var redisClient = redis.createClient(process.env.REDISCLOUD_URL, {no_ready_check: true});
+
 // Sessions and passport authentication init
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
-    saveUninitialized: false
+    saveUninitialized: false,
+    cookie: { secure: false, maxAge:86400000 },
+    store: new redisStore({ client: redisClient })
 }));
+
+// Passport initialization
 app.use(passport.initialize());
 app.use(passport.session());
 
