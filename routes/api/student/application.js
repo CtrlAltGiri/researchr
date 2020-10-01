@@ -2,6 +2,7 @@
 const applicationRouter = require('express').Router();
 const Applications = require("../../../models/applications");
 const ProfProjects = require('../../../models/profProjects');
+const ObjectID = require("bson-objectid");
 const Async = require('async');
 const logger = require('../../../config/winston');
 const { StatusCodes } = require('http-status-codes');
@@ -12,6 +13,10 @@ applicationRouter.route('/:projectID')
 
         let studentID = req.user._id;
         let projectID = req.params.projectID;
+        // check if its a valid object id
+        if(!ObjectID.isValid(projectID)){
+            return res.status(StatusCodes.BAD_REQUEST).send("Invalid URL");
+        }
 
         Async.waterfall([
             function (callback) {
@@ -34,7 +39,7 @@ applicationRouter.route('/:projectID')
                 // STEP 2: Find the required application from the applications collection
                 Applications.findOne(
                     {_id: studentID, 'profApplications.projectID': projectID},
-                    {'profApplications.$':  1, name:2},
+                    {'profApplications.$':1, name:2},
                     function (err, applications) {
                     if (err) {
                         logger.tank(err);

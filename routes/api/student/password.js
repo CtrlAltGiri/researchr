@@ -34,7 +34,7 @@ passwordRouter
                         // check if current password matches with the one entered
                         if (student.validatePassword(req.body.current_password) !== true) {
                             logger.ant("Update password failed: current_password is wrong - Student: %s", studentID);
-                            return res.status(StatusCodes.NON_AUTHORITATIVE_INFORMATION).send("Wrong password");
+                            return res.status(StatusCodes.UNAUTHORIZED).send("Wrong password");
                         }
                         else {
                             // check if current password matches new password

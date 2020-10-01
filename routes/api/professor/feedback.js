@@ -4,6 +4,7 @@ const Applications = require("../../../models/applications");
 const { StatusCodes, ReasonPhrases } = require('http-status-codes');
 const ObjectID = require("bson-objectid");
 const Async = require('async');
+const logger = require('../../../config/winston');
 
 // API to get all applications for a particular project
 feedbackRouter.route("/:projectID")
@@ -20,12 +21,12 @@ feedbackRouter.route("/:projectID")
         // TODO(aditya): Add a form validator later for this validation
         // check validity of feedback field
         if(!(feedback) || !(typeof feedback === 'string') || feedback.length > 500) {
-            console.log("Invalid feedback field");
+            logger.ant("Invalid feedback field for project: %s student: %s", projectID, studentID);
             return res.status(StatusCodes.BAD_REQUEST).send("Bad Request");
         }
         // check validity of rating field
         if(![1, 2, 3, 4, 5].includes(rating)) {
-            console.log("Invalid rating field");
+            logger.ant("Invalid rating field for project: %s student: %s", projectID, studentID);
             return res.status(StatusCodes.BAD_REQUEST).send("Bad Request");
         }
         // check if projectID is a valid object id
@@ -42,11 +43,11 @@ feedbackRouter.route("/:projectID")
                 // STEP 1: Check if the project ID and professor ID is present in the profProjects collection
                 ProfProjects.findOne({_id: projectID, professorID: professorID}, function (err, project){
                     if(err) {
-                        console.log(err);
+                        logger.tank(err);
                         callback("Failed");
                     }
                     else if(!project) {
-                        console.log("No project found for adding feedback");
+                        logger.ant("No project with id %s found for adding professor feedback for prof: %s", projectID, professorID);
                         callback("Invalid");
                     }
                     else {
@@ -77,15 +78,17 @@ feedbackRouter.route("/:projectID")
                     },
                     function (err, result) {
                     if (err) {
-                        console.log(err);
+                        logger.tank(err);
                         callback("Failed");
                     }
                     else {
                         const { n, nModified } = result;
                         if (n && nModified) {
+                            logger.ant("Successfully added feedback for student: %s project: %s", studentID, projectID);
                             callback(null, "Successful");
                         }
                         else {
+                            logger.ant("Failed to add feedback for student: %s project: %s", studentID, projectID);
                             callback("Error in adding feedback");
                         }
                     }

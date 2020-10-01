@@ -8,6 +8,8 @@ const winston = require('./config/winston');
 const cors = require('cors');
 const redis = require('redis');
 const redisStore = require('connect-redis')(session);
+const mongoSanitize = require('express-mongo-sanitize');
+
 require('dotenv').config();
 
 const app = express();
@@ -56,6 +58,12 @@ app.use("/professor", router.professor);
 app.use("/platform", router.platform);
 app.use("/api", router.api);
 app.use("/", router.home);
+
+// middleware to protect against mongo injection attacks
+// replaces dangerous characters with _
+app.use(mongoSanitize({
+    replaceWith: '_'
+}))
 
 // Error handling middleware
 app.use((error, req, res, next) => {

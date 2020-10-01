@@ -22,8 +22,8 @@ async function profProjectValidator(formData) {
 
     let retVal = true;
     const v = new Validator(formData, {
-        name: 'required|string|maxLength:50',
-        desc: 'required|string|maxLength:1000',
+        name: 'required|string|maxLength:200',
+        desc: 'required|string|maxLength:2000',
         prereq: 'required|arrayUnique|length:10,0',
         'prereq.*': 'required|string|maxLength:400',
         duration: 'required|numeric|max:100', // in months
