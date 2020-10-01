@@ -5,13 +5,6 @@ var colleges = [
         url: "manipal.edu",
         studentDomain: 'learner.manipal.edu',
         professorDomain: 'manipal.edu'
-    },
-    {
-        value: "IIT Madras", 
-        label: "IIT Madras",
-        url: "iitm.ac.in",
-        studentDomain: 'smail.com',
-        professorDomain: 'smail.com'
     }
 ];
 

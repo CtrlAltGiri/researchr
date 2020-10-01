@@ -1,6 +1,6 @@
 const {Validator} = require('node-input-validator');
 const niv = require('node-input-validator');
-const {collegeValues, branchValues, degreeValues, yogValues} = require('../../client/src/common/data/collegeData');
+const {colleges, collegeValues, branchValues, degreeValues, yogValues} = require('../../client/src/common/data/collegeData');
 
 //custom error messages for each error that is sent to front end
 niv.addCustomMessages({
@@ -43,9 +43,17 @@ async function signUpValidator(formData) {
                 'at least one capital letter, one small letter, one number and one special character'}
     }
 
-    if(!(collegeValues.find(c => c === formData.college) && branchValues.find(b => formData.branch) && degreeValues.find(d => d === formData.degree) && yogValues.find(y => y === formData.yog))){
+    let studDomain;
+    if(!(collegeValues.find(c, index => {c === formData.college; studDomain = index;} ) && branchValues.find(b => formData.branch) && degreeValues.find(d => d === formData.degree) && yogValues.find(y => y === formData.yog))){
         retVal = false;
         v.errors['college'] = {'message': 'Please choose the values from the dropdown.'}
+    }
+
+    // TODO (Giri): Test this, haven't done it - no time. -> just check if studDomain is coming correctly.
+    studDomain = new RegExp(colleges[studDomain].studentDomain);
+    if(!(studDomain.test(formData.c_email))){
+        retVal = false;
+        v.errors['c_email'] = {"message": "The entered college email is not valid."}
     }
 
     return [retVal, v.errors];

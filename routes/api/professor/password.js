@@ -1,5 +1,5 @@
 // Contains API to allow professors to change their passwords
-const { StatusCodes, ReasonPhrases } = require('http-status-codes');
+const { StatusCodes } = require('http-status-codes');
 const passwordRouter = require('express').Router();
 const Professors = require("../../../models/professors");
 const { updatePasswordValidator } = require("../../../utils/formValidators/updatePasword");
@@ -9,8 +9,9 @@ passwordRouter
         // validate all password fields
         const values = await updatePasswordValidator(req.body);
         const retVal = values[0]
-        const errors = values[1]
+        let errors = values[1]
         if (retVal === false) {
+            errors = Object.values(Object.values(errors)[0])[0];
             return res.status(StatusCodes.BAD_REQUEST).send(errors);
         }
         else{

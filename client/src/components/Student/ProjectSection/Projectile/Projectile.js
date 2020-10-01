@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 function Projectile(props) {
 
   let desc;
-  if (props.allItems.desc.length > 150){
+  if (props.allItems.desc.length > 300){
     desc = props.allItems.desc.substr(0, 300) + "...";
   }
   else{
@@ -18,7 +18,7 @@ function Projectile(props) {
             return (<span className="mr-4 py-1 px-3 mb-2 md:mb-0 rounded bg-teal-100 text-teal-500 text-sm font-medium tracking-widest">#{cat}</span>);
           })}
         </div>
-        <h2 className="sm:text-3xl text-2xl title-font font-medium text-gray-900 mt-4 mb-4">{props.allItems.name}</h2>
+        <Link to={`/student/project/${props.allItems._id}`} target="_blank  "><h2 className="sm:text-3xl text-2xl title-font font-medium text-gray-900 mt-4 mb-4 hover:underline">{props.allItems.name}</h2></Link>
         <p className="leading-relaxed mb-8">{desc}</p>
         <div className="flex items-center flex-wrap pb-4 mb-4 border-b-2 border-gray-200 mt-auto w-full">
           <Link to={`/student/project/${props.allItems._id}`} className="text-teal-500 inline-flex items-center" target="_blank">Details
@@ -37,7 +37,7 @@ function Projectile(props) {
         <a className="inline-flex items-center">
           <img alt="blog" src="/images/defaultProfile.png" className="w-12 h-12 rounded-full flex-shrink-0 object-cover object-center" />
           <span className="flex-grow flex flex-col pl-4">
-            <span className="title-font font-medium text-gray-900">{props.allItems.professorName}</span>
+            <Link className="title-font font-medium text-gray-900 hover:underline" target="_blank" to={"/professor/profile/" + props.allItems.professorID}>{props.allItems.professorName}</Link>
             <span className="text-gray-500 text-sm">{props.allItems.college}</span>
           </span>
         </a>

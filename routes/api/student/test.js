@@ -3,6 +3,7 @@ const allTags = require('../../../utils/data/tags')
 const upload = require('../../../config/upload').upload
 const Grid = require('gridfs-stream');
 const mongoose = require('mongoose');
+const logger = require('../../../config/winston');
 
 testRouter
     .get("/platform/tagQuery", function (req, res) {
