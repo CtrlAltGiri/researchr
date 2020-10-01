@@ -1,10 +1,10 @@
 // Contains API to view a specific application
 const applicationRouter = require('express').Router();
-const mongoose = require('mongoose');
 const Applications = require("../../../models/applications");
 const ProfProjects = require('../../../models/profProjects');
 const Async = require('async');
-const student = require('../message/student');
+const logger = require('../../../config/winston');
+const { StatusCodes } = require('http-status-codes');
 
 applicationRouter.route('/:projectID')
     // API to view a specific applications
@@ -59,13 +59,13 @@ applicationRouter.route('/:projectID')
             }
         ], function (err, application){
             if(err) {
-                return res.status(404).send(err);
+                return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(err);
             }
             else {
                 // filter out information to send to the front end
                 application = (({name, studentName, professorName, feedbacks, messages, sop, answers, questionnaire, status}) =>
                     ({name, studentName, professorName, feedbacks, messages, sop, answers, questionnaire, status}))(application);
-                return res.status(200).send(application);
+                return res.status(StatusCodes.OK).send(application);
             }
         })
 

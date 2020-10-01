@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const Applications = require("../../../models/applications");
 const Async = require('async');
 const logger = require('../../../config/winston');
-const student = require('../message/student');
+const { StatusCodes } = require('http-status-codes');
 
 // API to return all applications of the student and to change their status
 applicationsRouter.route('/')
@@ -146,13 +146,13 @@ applicationsRouter.route('/')
             }
         ],function (err, applications){
             if(err){
-                res.status(404).send(err);
+                res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(err);
             }
             else{
                 // return last element because it will contain the result to be returned i.e. applications
                 // res.status(200).send(result[result.length-1]);
                 logger.ant("Found applications succesfully - Student: %s", studentID)
-                res.status(200).send(applications);
+                res.status(StatusCodes.OK).send(applications);
             }
         })
     })
@@ -167,7 +167,7 @@ applicationsRouter.route('/')
             newStatus !== "ongoing" &&
             newStatus !== "declined"
         ) {
-          return res.status(404).send("Not allowed");
+          return res.status(StatusCodes.BAD_REQUEST).send("Not allowed");
         }
 
         Async.series([
@@ -299,10 +299,10 @@ applicationsRouter.route('/')
             }
         ], function (err, result){
             if(err){
-                res.status(404).send(err);
+                res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(err);
             }
             else{
-                res.status(200).send(result);
+                res.status(StatusCodes.OK).send(result);
             }
         })
     })

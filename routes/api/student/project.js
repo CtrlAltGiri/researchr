@@ -7,6 +7,7 @@ const {sopFormCheck} = require("../../../client/src/common/formValidators/sopVal
 const {answersFormCheck} = require("../../../client/src/common/formValidators/sopValidator");
 const Async = require('async');
 const logger = require('../../../config/winston');
+const { StatusCodes } = require('http-status-codes');
 
 // API to view a project and apply for it
 projectRouter.route("/:projectID")
@@ -139,7 +140,7 @@ projectRouter.route("/:projectID")
         ],
         function (err, project){
             if(err){
-                return res.status(404).send(err);
+                return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(err);
             }
             else{
                 // filter information to be sent to front end
@@ -179,7 +180,7 @@ projectRouter.route("/:projectID")
                         errorMsg
                     }))(project);
 
-                return res.status(200).send(project);
+                return res.status(StatusCodes.OK).send(project);
             }
         })
     })
@@ -188,17 +189,17 @@ projectRouter.route("/:projectID")
         //check if request is valid
         if(!req.body.answers || !req.body.sop){
             logger.ant("Invalid application request - %s", req.user._id);
-            return res.status(404).send("Both answers and SOP are required");
+            return res.status(StatusCodes.BAD_REQUEST).send("Both answers and SOP are required");
         }
         // check if all answers are valid
         if(answersFormCheck(req.body.answers) !== true){
             logger.ant("Invalid answers - %s", req.user._id);
-            return res.status(404).send("Answers not validated");
+            return res.status(StatusCodes.BAD_REQUEST).send("Answers not validated");
         }
         // check if sop is valid
         if(sopFormCheck(req.body.sop) !== true){
             logger.ant("Invalid SOP - %s", req.user._id);
-            return res.status(404).send("SOP not validated");
+            return res.status(StatusCodes.BAD_REQUEST).send("SOP not validated");
         }
         // checked if request is valid
         // get the projects id from request params
@@ -346,10 +347,10 @@ projectRouter.route("/:projectID")
             }
         ], function (err, result){
             if(err){
-                return res.status(404).send(err);
+                return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(err);
             }
             else{
-                return res.status(200).send(result);
+                return res.status(StatusCodes.OK).send(result);
             }
         });
     })

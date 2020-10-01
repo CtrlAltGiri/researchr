@@ -126,7 +126,7 @@ function EditProfile(props) {
                 text="URL to website"
                 fieldExtraClass="w-3/5"
                 extraClass="mt-6"
-                onChange={(e) => updateTags(e.target.name, e.target.value)}
+                onChange={(e) => updateTags(e.target.value, e.target.name)}
                 name="url"
                 value={profileDetails.url}
             />  

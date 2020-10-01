@@ -12,7 +12,7 @@ function Filters(props) {
     }
 
     return (
-        <div className="pl-16 md:px-12 w-full md:w-1/4">
+        <div className="pl-8 md:pl-16 md:px-12 w-full md:w-1/4">
             <Dropdown
                 changeDropdown={changeDropdown}
                 name="dropdown"

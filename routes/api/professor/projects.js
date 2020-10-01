@@ -16,7 +16,7 @@ projectsRouter.route("/")
         // statuses that are to be considered
         let statuses = ["active", "selected", "interview"];
         // The college that the professor belongs to
-        let college;
+        let college = req.user.college;
 
         Async.waterfall([
             function(callback) {
@@ -31,7 +31,6 @@ projectsRouter.route("/")
                         callback("Error in fetching projects from collection")
                     }
                     else {
-                        college = projects[0].college;
                         // filter information to be sent to front end
                         let returnProjects = projects.map(function (element) {
                             return ((
@@ -136,7 +135,7 @@ projectsRouter.route("/")
                         console.log("Professor not found");
                         callback("Failed");
                     } else {
-                        professor = (({name, college, designation}) => ({name, college, designation}))(professor)
+                        professor = (({name, college, designation, department}) => ({name, college, designation, department}))(professor)
                         callback(null, professor);
                     }
                 })
@@ -144,7 +143,6 @@ projectsRouter.route("/")
             },
             function (professor, callback) {
                 // STEP 2: Insert the new project in the profProjects schema
-
                 const project = new ProfProjects({
                     name: req.body.name,
                     desc: req.body.desc,

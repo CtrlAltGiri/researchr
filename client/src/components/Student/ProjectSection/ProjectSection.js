@@ -73,7 +73,7 @@ function ProjectSection() {
         apiError === false ? 
         <section className="text-gray-700 body-font">
             
-            <div className="flex flex-row w-full items-center justify-center px-5">
+            <div className="flex flex-row w-full items-center justify-center px-5 pb-4">
                 <Filters setFilter={setNewFilter} />
                 <Toggle text="My College View" onClick={() => setCollegeView(!collegeView)}/>
             </div>
@@ -91,6 +91,7 @@ function ProjectSection() {
                     {projects.map(item => {
                         return filterProjects(item) && <Projectile key={item.name} allItems={item} />  
                     })}
+
                 </InfiniteScroll>
             </div>
         </section>

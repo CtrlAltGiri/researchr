@@ -5,6 +5,8 @@ import EditProfile from './EditProfile';
 import { Error } from '../../General/Form/FormComponents';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
+import ChangePassword from '../../General/ChangePassword/ChangePassword';
+import Modal from '../../General/Modal/Modal';
 
 
 function ProfilePage(props) {
@@ -13,6 +15,7 @@ function ProfilePage(props) {
     const [modalOpen, setModalOpen] = useState(false);
     const [showError, setShowError] = useState('');
     const [allDetails, setAllDetails] = useState({})
+    const [changePass, setChangePass] = useState(false);
 
     useEffect(() => {
 
@@ -33,6 +36,9 @@ function ProfilePage(props) {
                     {allDetails.profile && allDetails.profile.url && <a href={allDetails.profile.url}><p className="text-lg font-normal">{allDetails.profile.url}</p></a>}
                 </div>
 
+                <div>
+                    <p className="underline cursor-pointer" onClick={e => setChangePass(true)}>Update Password</p>
+                </div>
             </div>
 
             {allDetails.mine &&
@@ -64,14 +70,14 @@ function ProfilePage(props) {
                     extraClass="md:w-full"
                 />}
 
-                {allDetails.profile.projects &&  allDetails.profile.publications.length > 0 && 
+                {allDetails.profile.projects &&  allDetails.profile.projects.length > 0 && 
                 <ProfileSection
                     sectionName="Projects"
                     data={allDetails.profile.projects}
                     extraClass="md:w-full"
                 />}
 
-                {allDetails.profile.patents && allDetails.profile.publications.length > 0 && 
+                {allDetails.profile.patents && allDetails.profile.patents.length > 0 && 
                 <ProfileSection
                     sectionName="Patents"
                     data={allDetails.profile.patents}
@@ -89,6 +95,16 @@ function ProfilePage(props) {
                 profileDetails={allDetails.profile}
             />
             }
+
+            <Modal
+                modalOpen={changePass}
+                closeModal={e => setChangePass(false)}
+            >
+                <ChangePassword
+                    professor={true}
+                />
+
+            </Modal>
 
         </section>
     )
