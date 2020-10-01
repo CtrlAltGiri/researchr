@@ -6,6 +6,7 @@ const { resetValidator } = require("../../utils/formValidators/reset");
 const { sendPasswordResetEmail } = require("../../utils/email/sendgirdEmailHelper");
 const { forgotValidator } = require("../../utils/formValidators/forgot");
 const { sendVerificationEmail } = require("../../utils/email/sendgirdEmailHelper");
+const logger = require('../../config/winston');
 
 async function postLoginProfessor(req, res, next) {
     // this validator just checks the email validity
@@ -20,21 +21,20 @@ async function postLoginProfessor(req, res, next) {
     //continue here
     passport.authenticate('local-professor', {}, function (err, user, info) {
         if (err) {
-            console.log(err);
-            return next(err);
+            throw (err);
         }
         if (!user) {
-            console.log("NOT FOUND professor");
+            logger.ant("Incorrect credentials for professor: %s", req.body.c_email);
             return res.render("login", { wrongCreds: true, unverified: false });
         }
         // check if user is active i.e. college email id is verified or not
         if (!user.active) {
+            logger.ant("Unverified user login for professor: %s", req.body.c_email);
             return res.render("login", { wrongCreds: false, unverified: true });
         }
         req.logIn(user, function (err) {
             if (err) {
-                console.log(err);
-                return next(err);
+                throw (err);
             }
             return res.redirect('/platform');
         });
@@ -60,7 +60,7 @@ async function postSignupProfessor(req, res) {
     // check if email is already registered in the database
     Professors.findOne({ 'c_email': req.body.c_email }, function (err, result) {
         if (err) {
-            console.log(err);
+            logger.tank(err);
             return res.redirect('/signup/error');
         }
         // return back to signup page and show email is already in use
@@ -87,15 +87,17 @@ async function postSignupProfessor(req, res) {
             // add user to database and send a verification email
             return result.save({}, function (err, updatedResult) {
                 if (err) {
-                    console.log(err);
+                    logger.tank(err);
                     return res.redirect('/signup/error');
                 }
                 else if (!updatedResult) {
-                    console.log("Error in saving professor to collection");
+                    logger.tank("Error in saving professor to collection: %s", req.body.c_email);
                     return res.redirect('/signup/error');
                 }
                 else {
-                    sendVerificationEmail(req.body.c_email, req.body.name, token, "professor").then(r => console.log(r)).catch(function (err) { console.log(err) });
+                    sendVerificationEmail(req.body.c_email, req.body.name, token, "professor")
+                        .then(r => logger.ant("Sent professor signup verification email successfully to %s", req.body.c_email))
+                        .catch(function (err) { logger.tank(err); });
                     //TODO(aditya): Make a proper webpage for this
                     res.render('signUpComplete');
                 }
@@ -122,15 +124,17 @@ async function postSignupProfessor(req, res) {
             // add user to database and send a verification email
             return finalUser.save({}, function (err, result) {
                 if (err) {
-                    console.log(err);
+                    logger.tank(err);
                     return res.redirect('/signup/error');
                 }
                 else if (!result) {
-                    console.log("Error in saving professor to collection");
+                    logger.tank("Error in saving professor to collection: %s", req.body.c_email);
                     return res.redirect('/signup/error');
                 }
                 else {
-                    sendVerificationEmail(req.body.c_email, req.body.name, token, "professor").then(r => console.log(r)).catch(function (err) { console.log(err) });
+                    sendVerificationEmail(req.body.c_email, req.body.name, token, "professor")
+                        .then(r => logger.ant("Sent professor signup verification email successfully to %s", req.body.c_email))
+                        .catch(function (err) { logger.tank(err); });
                     //TODO(aditya): Make a proper webpage for this
                     res.render('signUpComplete');
                 }
@@ -143,23 +147,23 @@ async function postSignupProfessor(req, res) {
 function getVerifyProfessor(req, res) {
     // check if req.query.token is undefined
     if(!req.query.token) {
-        console.log("Invalid URL");
+        logger.ant("Token not found in professor verification");
         return res.end("<h1>Bad Request</h1>");
     }
 
     Professors.findOne({ verifyHash: req.query.token }, function (err, professor) {
         if (err) {
-            console.log(err);
+            logger.tank(err);
             return res.redirect('/verify/error');
         }
         else if (!professor) {
             // invalid verify link
-            console.log("Invalid professor verification link");
+            logger.ant("Invalid token in professor email verification");
             return res.end("<h1>Bad Request</h1>");
         }
         else if (professor && professor.active) {
             // professor already active
-            console.log("Email has already been verified");
+            logger.ant("Professor email is already verified for %s", professor.c_email);
             return res.end("<h1>Already verified</h1>");
         }
         else {
@@ -175,20 +179,19 @@ function getVerifyProfessor(req, res) {
                 },
                 function (err, result) {
                     if (err) {
-                        console.log(err);
+                        logger.tank(err);
                         return res.redirect('/verify/error');
                     }
                     else {
                         const { n, nModified } = result;
                         // check if document has been successfully updated in collection
                         if (n && nModified) {
-                            console.log("Email has been verified");
-                            console.log("Successfully updated professor to active");
+                            logger.ant("Professor email has been successfully verified for %s", professor.c_email);
                             return res.redirect('/login');
                         }
                         // failed update the professor as active
                         else {
-                            console.log("Failed to update professor to verify the email");
+                            logger.tank("Failed email verification for professor %s", professor.c_email);
                             return res.redirect('/verify/error');
                         }
                     }
@@ -212,7 +215,7 @@ async function postForgotProfessor(req, res){
     // check if email is already registered in the database
     Professors.findOne({'c_email': req.body.c_email}, function(err, professor) {
         if (err) {
-            console.log(err);
+            logger.tank(err);
             return res.redirect('/forgot/error');
         }
         // No professor with the given email found
@@ -230,16 +233,17 @@ async function postForgotProfessor(req, res){
 
             return professor.save({}, function (err, result){
                 if(err){
-                    console.log(err);
+                    logger.tank(err);
                     return res.redirect('/forgot/error');
                 }
                 else if(!result){
-                    console.log("Error in updating professor's reset Hash");
+                    logger.tank("Error in adding reset hash to professor %s", req.body.c_email);
                     return res.redirect('/forgot/error');
                 }
                 else{
-                    sendPasswordResetEmail(req.body.c_email, token, "professor").then(r => console.log(r)).catch(function (err){ console.log(err)});
-                    console.log(token);
+                    sendPasswordResetEmail(req.body.c_email, token, "professor")
+                        .then(r => logger.ant("Sent professor reset password email successfully to %s", req.body.c_email))
+                        .catch(function (err) { logger.tank(err); });
                     return res.render('forgot', {c_email:"", errorMsg:"A password reset link has been sent to your college email address", type:"professor"});
                 }
             })
@@ -250,18 +254,18 @@ async function postForgotProfessor(req, res){
 function getResetProfessor(req, res){
     // check if req.query.token is undefined
     if(!req.query.token) {
-        console.log("Invalid URL");
+        logger.ant("Token not found in professor password reset API");
         return res.end("<h1>Bad Request</h1>");
     }
 
     Professors.findOne({resetHash: req.query.token, resetExpires: {$gt: Date.now()}}, function (err, professor){
         if(err) {
-            console.log(err);
+            logger.tank(err);
             return res.redirect('/reset/error');
         }
         else if (!professor){
             // invalid reset link
-            console.log("Reset link for professor is invalid or expired");
+            logger.ant("Professor password reset link is invalid or expired");
             return res.render('forgot', {c_email:"", errorMsg:"Password reset link is invalid or has expired", type:"professor"});
         }
         else{
@@ -273,7 +277,7 @@ function getResetProfessor(req, res){
 async function postResetProfessor(req, res){
     // check if req.query.token is undefined
     if(!req.query.token) {
-        console.log("Invalid URL");
+        logger.ant("Token not found in professor password reset API");
         return res.end("<h1>Bad Request</h1>");
     }
 
@@ -296,12 +300,12 @@ async function postResetProfessor(req, res){
     // continue here
     Professors.findOne({resetHash: req.query.token, resetExpires: {$gt: Date.now()}}, function (err, professor){
         if(err){
-            console.log(err);
+            logger.tank(err);
             return res.redirect('/reset/error');
         }
         else if (!professor) {
             // invalid reset link
-            console.log("Password Reset link for professor is invalid or expired");
+            logger.ant("Professor password reset link is invalid or expired");
             return res.render('forgot', {c_email:"", errorMsg:"Password reset link is invalid or has expired", type:"professor"});
         }
         else{
@@ -312,16 +316,16 @@ async function postResetProfessor(req, res){
             professor.resetExpires = undefined;
             professor.save({}, function (err, result){
                 if(err){
-                    console.log(err);
+                    logger.tank(err);
                     return res.redirect('/reset/error');
                 }
                 else if(!result){
-                    console.log("Failed to reset password for professor");
+                    logger.tank("Failed to update password in reset for professor: %s", professor.c_email);
                     return res.redirect('/reset/error');
                 }
                 else{
                     //TODO(aditya): Send an email with password change confirmation
-                    console.log("Password has been reset");
+                    logger.ant("Password has been successfully reset for professor: %s", professor.c_email);
                     return res.redirect('/login');
                 }
             })
