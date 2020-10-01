@@ -3,6 +3,7 @@ const { collegeFormValidator, workFormValidator, projectFormValidator } = requir
 const {retrieveStudentDetails} = require('../utils/studentDetails');
 const Students = require('../../../models/students');
 const logger = require('../../../config/winston');
+const { StatusCodes } = require('http-status-codes');
 
 profileRouter
     .get("/myProfile", function(req, res){
@@ -15,7 +16,7 @@ profileRouter
 
 profileRouter
     .get('/getStudentId', function(req, res){
-        res.status(200).send(req.user._id); 
+        res.status(StatusCodes.OK).send(req.user._id); 
     })
 
 profileRouter
@@ -111,23 +112,23 @@ profileRouter.route("/createProfile")
             Students.updateOne({ '_id': studId }, update, function (err, result) {
                 if(err){
                     logger.tank(err);
-                    return res.status(404).send("Failed");
+                    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send("Failed");
                 }
                 const { n, nModified } = result;
                 // check if document has been successfully updated in collection
                 if(n){
                     logger.ant("Student: %s - Successfully updated student cv", studId);
-                    return res.status(200).send("Successfully updated");
+                    return res.status(StatusCodes.OK).send("Successfully updated");
                 }
                 else{
                     logger.nuclear("Student: %s - No student match found", studId);
-                    return res.status(404).send("Failed student cv update");
+                    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send("Failed student cv update");
                 }
             });
         }
         else{
             logger.ant("Student: %s - %s", studId, validate);
-            res.status(404).send(validate)
+            res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(validate)
         }
     })
 

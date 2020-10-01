@@ -1,6 +1,7 @@
 const projectsRouter = require('express').Router()
 const ProfProjects = require('../../../models/profProjects');
 const logger = require('../../../config/winston');
+const { StatusCodes } = require('http-status-codes');
 
 // API to show all projects on the main platform page to the students
 projectsRouter.route("/")
@@ -21,7 +22,7 @@ projectsRouter.route("/")
         ProfProjects.find(filter, function (err, projects){
             if(err){
                 logger.tank(err);
-                return res.status(404).send("Failed");
+                return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send("Failed");
             }
             else{
                 // filter all restricted projects that are not in same college
@@ -36,7 +37,7 @@ projectsRouter.route("/")
                 })
 
                 // send all projects to front end (after reversing the array so newly added projects appear first)
-                return res.status(200).send(returnProjects.reverse());
+                return res.status(StatusCodes.OK).send(returnProjects.reverse());
             }
 
         })
