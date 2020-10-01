@@ -3,6 +3,12 @@ function arrayNullable({ value, args }, validator){
         return true;
     }
     else{
+
+        // Check if array
+        if(!Array.isArray(value)){
+            return false;
+        }
+
         const maxArray = args[0];
         const maxEle = args[1];
         if(value.length > maxArray){
