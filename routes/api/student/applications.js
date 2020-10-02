@@ -2,6 +2,7 @@ const applicationsRouter = require('express').Router();
 const Students = require('../../../models/students');
 const mongoose = require('mongoose');
 const Applications = require("../../../models/applications");
+const ObjectID = require("bson-objectid");
 const Async = require('async');
 const logger = require('../../../config/winston');
 const { StatusCodes } = require('http-status-codes');
@@ -160,6 +161,11 @@ applicationsRouter.route('/')
     .post(function (req, res, next){
         let studentID = req.user._id;
         let projectID = req.body.projectID;
+        // check if its a valid object id
+        if(!ObjectID.isValid(projectID)){
+            return res.status(StatusCodes.BAD_REQUEST).send("Invalid URL");
+        }
+
         let newStatus = req.body.status;
         let cur_time = new Date();
         // Do a preliminary check on new status

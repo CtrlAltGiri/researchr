@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const Applications = require("../../../models/applications");
 const {sopFormCheck} = require("../../../client/src/common/formValidators/sopValidator");
 const {answersFormCheck} = require("../../../client/src/common/formValidators/sopValidator");
+const ObjectID = require("bson-objectid");
 const Async = require('async');
 const logger = require('../../../config/winston');
 const { StatusCodes } = require('http-status-codes');
@@ -19,6 +20,11 @@ projectRouter.route("/:projectID")
         let studentID = req.user._id;
         // get student's college from req
         let studentCollege = req.user.college;
+
+        // check if its a valid object id
+        if(!ObjectID.isValid(projectID)){
+            return res.status(StatusCodes.BAD_REQUEST).send("Invalid URL");
+        }
 
         // query mongoDB's profProjects collection to return the project details
         Async.waterfall([
@@ -208,6 +214,11 @@ projectRouter.route("/:projectID")
         let studentID = req.user._id;
         // get student's college from req
         let studentCollege = req.user.college;
+
+        // check if its a valid object id
+        if(!ObjectID.isValid(projectID)){
+            return res.status(StatusCodes.BAD_REQUEST).send("Invalid Request");
+        }
 
         // check few conditions in series and finally add application if none of the conditions check fail
         Async.waterfall([

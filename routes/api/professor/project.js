@@ -6,6 +6,7 @@ const { StatusCodes, ReasonPhrases } = require('http-status-codes');
 const ObjectID = require("bson-objectid");
 const Async = require('async');
 const { updateProfProjectValidator } = require("../../../utils/formValidators/updateProfProject");
+const logger = require('../../../config/winston');
 
 // API for the professor to view a specific project and edit its details
 projectRouter.route("/:projectID")
@@ -28,11 +29,11 @@ projectRouter.route("/:projectID")
                 // STEP 1: Find the project with given ID and check if it belongs to the professor viewing it and also if it is restricted
                 ProfProjects.findOne({_id: mongoose.Types.ObjectId(projectID)}, function (err, project){
                     if(err) {
-                        console.log(err);
+                        logger.tank(err);
                         callback("Failed");
                     }
                     else if(!project) {
-                        console.log("Project with ID does not exist");
+                        logger.ant("No project found with id: %s", projectID);
                         callback("Bad Request");
                     }
                     else {
@@ -97,16 +98,16 @@ projectRouter.route("/:projectID")
                     // Check here if professor with professorID belongs to same college as project.college
                     Professors.findOne({_id: professorID}, function (err, professor){
                         if(err) {
-                            console.log(err);
+                            logger.tank(err);
                             callback("Failed");
                         }
                         else if(!professor) {
-                            console.log("No professor found");
+                            logger.nuclear("No professor found with id: %s", professorID);
                             callback("Failed");
                         }
                         else {
                             if(professor.college !== project.college) {
-                                console.log("Professor cannot view the project");
+                                logger.ant("Professor %s cannot view the project: %s", professorID, projectID);
                                 callback("Not Viewable");
                             }
                             else {
@@ -127,7 +128,7 @@ projectRouter.route("/:projectID")
                         code = StatusCodes.BAD_REQUEST;
                         break;
                     case "Not Viewable":
-                        code = StatusCodes.NON_AUTHORITATIVE_INFORMATION;
+                        code = StatusCodes.UNAUTHORIZED;
                         break;
                 }
                 return res.status(code).send(err);
@@ -138,67 +139,70 @@ projectRouter.route("/:projectID")
         })
     })
     // API to update a given project
-    // TODO (Adi): Check if the professor is allowed to change.
-    .put(async function (req,res){
-        // validate the req body
-        const values = await updateProfProjectValidator(req.body);
-        const retVal = values[0];
-        const errors = values[1];
-        if (retVal === false) {
-            let error = Object.values(Object.values(errors)[0])[0]
-            return res.status(StatusCodes.BAD_REQUEST).send(error);
-        }
-        // all checks passed
+    .put(async function (req,res, next){
+        try {
+            // validate the req body
+            const values = await updateProfProjectValidator(req.body);
+            const retVal = values[0];
+            const errors = values[1];
+            if (retVal === false) {
+                let error = Object.values(Object.values(errors)[0])[0]
+                return res.status(StatusCodes.BAD_REQUEST).send(error);
+            }
+            // all checks passed
 
-        // get the professor ID from req
-        let professorID = req.user._id;
-        // get projectID from req params
-        let projectID = req.params.projectID;
-        // check if its a valid object id
-        if(!ObjectID.isValid(projectID)){
-            return res.status(StatusCodes.BAD_REQUEST).send("Invalid URL");
-        }
-        // find the given project and update certain allowed fields
-        // currently allowed fields are:
-        /*
-            desc
-            prereq
-            duration
-            location
-            applicationCloseDate
-            startDate
-            commitment
-            restrictedView
-        */
-        let update = ((
-            {desc,prereq,duration,location,applicationCloseDate,startDate,commitment,restrictedView}) =>
-            ({desc,prereq,duration,location,applicationCloseDate,startDate,commitment,restrictedView}))(req.body);
-        Object.keys(update).forEach(key => update[key] === undefined && delete update[key]);
+            // get the professor ID from req
+            let professorID = req.user._id;
+            // get projectID from req params
+            let projectID = req.params.projectID;
+            // check if its a valid object id
+            if(!ObjectID.isValid(projectID)){
+                return res.status(StatusCodes.BAD_REQUEST).send("Invalid URL");
+            }
+            // find the given project and update certain allowed fields
+            // currently allowed fields are:
+            /*
+                desc
+                prereq
+                duration
+                location
+                applicationCloseDate
+                startDate
+                commitment
+                restrictedView
+            */
+            let update = ((
+                {desc,prereq,duration,location,applicationCloseDate,startDate,commitment,restrictedView}) =>
+                ({desc,prereq,duration,location,applicationCloseDate,startDate,commitment,restrictedView}))(req.body);
+            Object.keys(update).forEach(key => update[key] === undefined && delete update[key]);
 
-        console.log("update: ", update);
-        ProfProjects.updateOne({_id: projectID, professorID: mongoose.Types.ObjectId(professorID)},
-            {
-                $set: update
-            },
-            function (err, result){
-                if(err){
-                    console.log(err);
-                    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send("Failed");
-                }
-                else {
-                    const { n, nModified } = result;
-                    // check if document has been successfully updated in collection
-                    if(n && nModified) {
-                        console.log("Successfully updated the project");
-                        return res.status(StatusCodes.OK).send("Successfully updated");
+            ProfProjects.updateOne({_id: projectID, professorID: mongoose.Types.ObjectId(professorID)},
+                {
+                    $set: update
+                },
+                function (err, result){
+                    if(err){
+                        logger.tank(err);
+                        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send("Failed");
                     }
-                    // failed update mostly because the professor is not the owner of this project
                     else {
-                        console.log("Failed to update the project");
-                        return res.status(StatusCodes.NON_AUTHORITATIVE_INFORMATION).send("Not Allowed");
+                        const { n, nModified } = result;
+                        // check if document has been successfully updated in collection
+                        if(n && nModified) {
+                            logger.ant("Successfully updated the project details for project: %s", projectID);
+                            return res.status(StatusCodes.OK).send("Successfully updated");
+                        }
+                        // failed update mostly because the professor is not the owner of this project
+                        else {
+                            logger.ant("Failed to update the project details for project: %s by professor: %s", projectID, professorID);
+                            return res.status(StatusCodes.UNAUTHORIZED).send("Not Allowed");
+                        }
                     }
-                }
-        })
+                })
+        }
+        catch (err) {
+            next(err);
+        }
     })
 
 module.exports = projectRouter;

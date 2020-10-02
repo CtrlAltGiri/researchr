@@ -4,6 +4,7 @@ const Applications = require("../../../models/applications");
 const { StatusCodes, ReasonPhrases } = require('http-status-codes');
 const ObjectID = require("bson-objectid");
 const Async = require('async');
+const logger = require('../../../config/winston');
 
 // API to get all applications for a particular project
 applicationRouter.route("/:projectID")
@@ -55,11 +56,11 @@ applicationRouter.route("/:projectID")
                 // STEP 1: Check if the project ID and professor ID is present in the profProjects collection
                 ProfProjects.findOne({_id: projectID, professorID: professorID}, function (err, project){
                     if(err) {
-                        console.log(err);
+                        logger.tank(err);
                         callback("Failed");
                     }
                     else if(!project) {
-                        console.log("No project found for updating status");
+                        logger.ant("No project found with id %s for professor: %s", projectID, professorID);
                         callback("Invalid");
                     }
                     else {
@@ -71,17 +72,17 @@ applicationRouter.route("/:projectID")
                 // STEP 2: Check if student has applied for the project and its current status and if change to new status is allowed
                 Applications.findOne({_id: studentID, 'profApplications.projectID': projectID}, {'profApplications.$':  1}, function (err, application) {
                     if (err) {
-                        console.log(err);
+                        logger.tank(err);
                         callback("Failed");
                     }
                     // check if result is null which means that the student has not applied for this project
                     else if (!application) {
-                        console.log("Student has not applied for the project");
+                        logger.ant("Student %s has not applied for the project %s", studentID, projectID);
                         callback("No application found");
                     }
                     else if (application.profApplications.length <= 0) {
                         // sanity check
-                        console.log("Should not happen: Application not found");
+                        logger.nuclear("Student %s's document exists in applications schema but no application found", studentID);
                         callback("No application found");
                     }
                     else {
@@ -89,14 +90,14 @@ applicationRouter.route("/:projectID")
                         let curStatus = application.status;
                         // if status change is not allowed from cutState
                         if (!(curStatus in changesAllowedFrom)) {
-                            console.log("Status change not allowed");
+                            logger.ant("Status change not allowed from status %s by professor %s", curStatus, professorID);
                             callback("Not Allowed");
                         }
                         else {
                             let allowedStatuses = changesAllowedFrom[curStatus];
                             if(!allowedStatuses.includes(newStatus)) {
                                 // status change is not allowed
-                                console.log("Status change not allowed");
+                                logger.ant("Status change not allowed to status %s from %s by professor %s", newStatus, curStatus, professorID);
                                 callback("Not allowed");
                             }
                             else {
@@ -130,7 +131,7 @@ applicationRouter.route("/:projectID")
                     update,
                     function (err, result) {
                         if (err) {
-                            console.log(err);
+                            logger.tank(err);
                             callback("Failed");
                         }
                         else {
@@ -139,6 +140,7 @@ applicationRouter.route("/:projectID")
                                 callback(null, "Successful");
                             }
                             else {
+                                logger.tank("Status update by professor %s failed for student: %s project: %s", professorID, studentID, projectID);
                                 callback("Status update failed");
                             }
                         }

@@ -6,12 +6,13 @@ const { logInValidator } = require("../../utils/formValidators/login");
 const { sendVerificationEmail, sendPasswordResetEmail } = require('../../utils/email/sendgirdEmailHelper');
 const { signUpValidator } = require('../../utils/formValidators/signup');
 const { colleges, branches, yog, degrees} = require('../../client/src/common/data/collegeData');
+const logger = require('../../config/winston');
 
 async function postLoginStudent(req, res, next) {
     // this validator just checks the email validity
     const values = await logInValidator(req.body);
-    const retVal = values[0]
-    const error = values[1]
+    const retVal = values[0];
+    const error = values[1];
     if (retVal === false) {
         return res.render("login", { wrongCreds: false, unverified: false, errorMsg: error.c_email.message });
     }
@@ -20,21 +21,20 @@ async function postLoginStudent(req, res, next) {
     //continue here
     passport.authenticate('local-student', {}, function (err, user, info) {
         if (err) {
-            console.log(err);
-            return next(err);
+            throw (err);
         }
         if (!user) {
-            console.log("NOT FOUND");
+            logger.ant("Incorrect credentials for student: %s", req.body.c_email);
             return res.render("login", { wrongCreds: true, unverified: false });
         }
         // check if user is active i.e. college email id is verified or not
         if (!user.active) {
+            logger.ant("Unverified user login for student: %s", req.body.c_email);
             return res.render("login", { wrongCreds: false, unverified: true });
         }
         req.logIn(user, function (err) {
             if (err) {
-                console.log(err);
-                return next(err);
+                throw (err);
             }
             return res.redirect('/platform');
         });
@@ -66,7 +66,7 @@ async function postSignupStudent(req, res) {
     // check if email is already registered in the database
     Students.findOne({ 'c_email': req.body.c_email }, function (err, result) {
         if (err) {
-            console.log(err);
+            logger.tank(err);
             return res.redirect('/signup/error');
         }
         // return back to signup page and show email is already in use
@@ -98,15 +98,17 @@ async function postSignupStudent(req, res) {
             // add user to database and send a verification email
             return result.save({}, function (err, updatedResult) {
                 if (err) {
-                    console.log(err);
+                    logger.tank(err);
                     return res.redirect('/signup/error');
                 }
                 else if (!updatedResult) {
-                    console.log("Error in saving student to collection");
+                    logger.tank("Error in saving student to collection: %s", req.body.c_email);
                     return res.redirect('/signup/error');
                 }
                 else {
-                    sendVerificationEmail(req.body.c_email, req.body.name, token, "student").then(r => console.log(r)).catch(function (err) { console.log(err) });
+                    sendVerificationEmail(req.body.c_email, req.body.name, token, "student")
+                        .then(r => logger.ant("Sent student signup verification email successfully to %s", req.body.c_email))
+                        .catch(function (err) { logger.tank(err); });
                     //TODO(aditya): Make a proper webpage for this
                     res.render('signUpComplete');
                 }
@@ -136,15 +138,17 @@ async function postSignupStudent(req, res) {
             // add user to database and send a verification email
             return finalUser.save({}, function (err, result) {
                 if (err) {
-                    console.log(err);
+                    logger.tank(err);
                     return res.redirect('/signup/error');
                 }
                 else if (!result) {
-                    console.log("Error in saving student to collection");
+                    logger.tank("Error in saving student to collection: %s", req.body.c_email);
                     return res.redirect('/signup/error');
                 }
                 else {
-                    sendVerificationEmail(req.body.c_email, req.body.name, token, "student").then(r => console.log(r)).catch(function (err) { console.log(err) });
+                    sendVerificationEmail(req.body.c_email, req.body.name, token, "student")
+                        .then(r => logger.ant("Sent student signup verification email successfully to %s", req.body.c_email))
+                        .catch(function (err) { logger.tank(err); });
                     //TODO(aditya): Make a proper webpage for this
                     res.render('signUpComplete');
                 }
@@ -157,23 +161,23 @@ async function postSignupStudent(req, res) {
 function getVerifyStudent(req, res) {
     // check if req.query.token is undefined
     if(!req.query.token) {
-        console.log("Invalid URL");
+        logger.ant("Token not found in student verification");
         return res.end("<h1>Bad Request</h1>");
     }
 
     Students.findOne({ verifyHash: req.query.token }, function (err, student) {
         if (err) {
-            console.log(err);
+            logger.tank(err);
             return res.redirect('/verify/error');
         }
         else if (!student) {
             // invalid verify link
-            console.log("Invalid verification link");
+            logger.ant("Invalid token in student email verification");
             return res.end("<h1>Bad Request</h1>");
         }
         else if (student && student.active) {
             // student already active
-            console.log("Email has already been verified");
+            logger.ant("Student email is already verified for %s", student.c_email);
             return res.end("<h1>Already verified</h1>");
         }
         else {
@@ -189,20 +193,19 @@ function getVerifyStudent(req, res) {
                 },
                 function (err, result) {
                     if (err) {
-                        console.log(err);
+                        logger.tank(err);
                         return res.redirect('/verify/error');
                     }
                     else {
                         const { n, nModified } = result;
                         // check if document has been successfully updated in collection
                         if (n && nModified) {
-                            console.log("Email has been verified");
-                            console.log("Successfully updated student to active");
+                            logger.ant("Student email has been successfully verified for %s", student.c_email);
                             return res.redirect('/login');
                         }
                         // failed update or add
                         else {
-                            console.log("Failed to update student and verify the email");
+                            logger.tank("Failed email verification for student %s", student.c_email);
                             return res.redirect('/verify/error');
                         }
                     }
@@ -225,7 +228,7 @@ async function postForgotStudent(req, res){
     // check if email is already registered in the database
     Students.findOne({'c_email': req.body.c_email}, function(err, result) {
         if (err) {
-            console.log(err);
+            logger.tank(err);
             return res.redirect('/forgot/error');
         }
         // No student with the given email found
@@ -243,16 +246,17 @@ async function postForgotStudent(req, res){
 
             return result.save({}, function (err, result){
                 if(err){
-                    console.log(err);
+                    logger.tank(err);
                     return res.redirect('/forgot/error');
                 }
                 else if(!result){
-                    console.log("Error in updating student's reset Hash");
+                    logger.tank("Error in adding reset hash to student %s", req.body.c_email);
                     return res.redirect('/forgot/error');
                 }
                 else{
-                    sendPasswordResetEmail(req.body.c_email, token, "student").then(r => console.log(r)).catch(function (err){ console.log(err)});
-                    console.log(token);
+                    sendPasswordResetEmail(req.body.c_email, token, "student")
+                        .then(r => logger.ant("Sent student reset password email successfully to %s", req.body.c_email))
+                        .catch(function (err) { logger.tank(err); });
                     return res.render('forgot', {c_email:"", errorMsg:"A password reset link has been sent to your college email address", type:"student"});
                 }
             })
@@ -263,18 +267,18 @@ async function postForgotStudent(req, res){
 function getResetStudent(req, res){
     // check if req.query.token is undefined
     if(!req.query.token) {
-        console.log("Invalid URL");
+        logger.ant("Token not found in student password reset API");
         return res.end("<h1>Bad Request</h1>");
     }
 
     Students.findOne({resetHash: req.query.token, resetExpires: {$gt: Date.now()}}, function (err, student){
         if(err) {
-            console.log(err);
+            logger.tank(err);
             return res.redirect('/reset/error');
         }
         else if (!student){
             // invalid reset link
-            console.log("Reset link is invalid or expired");
+            logger.ant("Student password reset link is invalid or expired");
             return res.render('forgot', {c_email:"", errorMsg:"Password reset link is invalid or has expired", type:"student"});
         }
         else{
@@ -286,7 +290,7 @@ function getResetStudent(req, res){
 async function postResetStudent(req, res){
     // check if req.query.token is undefined
     if(!req.query.token) {
-        console.log("Invalid URL");
+        logger.ant("Token not found in student password reset API");
         return res.end("<h1>Bad Request</h1>");
     }
 
@@ -310,13 +314,12 @@ async function postResetStudent(req, res){
     // continue here
     Students.findOne({resetHash: req.query.token, resetExpires: {$gt: Date.now()}}, function (err, student){
         if(err){
-            console.log(err);
+            logger.tank(err);
             return res.redirect('/reset/error');
         }
         else if (!student) {
             // invalid reset link
-            console.log("Password Reset link is invalid or expired");
-            //TODO(aditya): Make separate page for this
+            logger.ant("Student password reset link is invalid or expired");
             return res.render('forgot', {c_email:"", errorMsg:"Password reset link is invalid or has expired", type:"student"});
         }
         else{
@@ -327,16 +330,16 @@ async function postResetStudent(req, res){
             student.resetExpires = undefined;
             student.save({}, function (err, result){
                 if(err){
-                    console.log(err);
+                    logger.tank(err);
                     return res.redirect('/reset/error');
                 }
                 else if(!result){
-                    console.log("Failed to reset password for student");
+                    logger.tank("Failed to update password in reset for student: %s", student.c_email);
                     return res.redirect('/reset/error');
                 }
                 else{
                     //TODO(aditya): Send an email with password change confirmation
-                    console.log("Password has been reset");
+                    logger.ant("Password has been successfully reset for student: %s", student.c_email);
                     return res.redirect('/login');
                 }
             })
