@@ -23,7 +23,8 @@ var logger = new winston.createLogger({
         soldier: 2, // warn 
         ant: 3,     // info - ants can bite
         atom: 4,    // debug - don't really bother
-        quark: 5    // idek
+        quark: 5,    // idek
+        error: 6
     },
     format: logFormat,
     transports: [
