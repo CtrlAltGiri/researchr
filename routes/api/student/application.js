@@ -27,7 +27,7 @@ applicationRouter.route('/:projectID')
                         callback("Failed");
                     }
                     else if(!project) {
-                        logger.tank("No project found - Student: %s - Project %s", studentID, projectID);
+                        logger.soldier("No project found - Student: %s - Project %s", studentID, projectID);
                         callback("Failed");
                     }
                     else {
@@ -46,7 +46,7 @@ applicationRouter.route('/:projectID')
                         callback("Failed");
                     }
                     else if(!applications) {
-                        logger.tank("No such application exists - Student: %s - Project %s", studentID, projectID);
+                        logger.soldier("No such application exists - Student: %s - Project %s", studentID, projectID);
                         callback("Application not found");
                     }
                     // sanity check

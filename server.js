@@ -9,7 +9,6 @@ const cors = require('cors');
 const redis = require('redis');
 const redisStore = require('connect-redis')(session);
 const mongoSanitize = require('express-mongo-sanitize');
-
 require('dotenv').config();
 
 const app = express();

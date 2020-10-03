@@ -10,7 +10,7 @@ projectsRouter.route("/")
         let showAllProjects = req.query.allProjects;
         // get student's college name from req
         let studentCollege = req.user.college;
-
+        
         // construct the filter query
         let filter = {applicationCloseDate: {$gt: Date.now()}};
 
