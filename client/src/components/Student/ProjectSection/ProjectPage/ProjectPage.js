@@ -144,7 +144,7 @@ function ProjectPage(props) {
                                 </div>}
                                 <div className="flex border-t border-gray-300 py-2">
                                     <span className="text-gray-500">Duration</span>
-                                    <span className="ml-auto text-gray-900">{projDetails.duration} months</span>
+                                    <span className="ml-auto text-gray-900">{projDetails.duration} weeks</span>
                                 </div>
                                 <div className="flex border-t border-b border-gray-300 py-2">
                                     <span className="text-gray-500">Location</span>
