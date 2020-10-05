@@ -28,7 +28,7 @@ projectsRouter.route("/")
                         callback("Failed");
                     }
                     //TODO(aditya): Handle empty project list?
-                    else if(!projects || projects.length === 0) {
+                    else if(!projects) {
                         logger.tank("Error in fetching projects from collection for professor: %s", professorID);
                         callback("Error in fetching projects from collection")
                     }
@@ -48,57 +48,61 @@ projectsRouter.route("/")
                 let projectIDs = projects.map(function (element){
                     return mongoose.Types.ObjectId(element._id);
                 })
-
-                Applications.aggregate([
-                    {
-                        $match: { profApplications: { $elemMatch: {projectID: {$in: projectIDs}, status: {$in: statuses}}}}
-                    },
-                    {
-                        $project : {
-                            _id: 1,
-                            matchedApplications: {
-                                $filter: {
-                                    input: "$profApplications",
-                                    as: "app",
-                                    cond: {
-                                        $and: [
-                                            { $in: ["$$app.projectID",  projectIDs] },
-                                            { $in: ["$$app.status", statuses]}]
-                                    }
-                                }},
+                if(projects.length <= 0) {
+                    callback(null, projects);
+                }
+                else {
+                    Applications.aggregate([
+                        {
+                            $match: { profApplications: { $elemMatch: {projectID: {$in: projectIDs}, status: {$in: statuses}}}}
+                        },
+                        {
+                            $project : {
+                                _id: 1,
+                                matchedApplications: {
+                                    $filter: {
+                                        input: "$profApplications",
+                                        as: "app",
+                                        cond: {
+                                            $and: [
+                                                { $in: ["$$app.projectID",  projectIDs] },
+                                                { $in: ["$$app.status", statuses]}]
+                                        }
+                                    }},
+                            }
+                        },
+                        {
+                            $unwind: "$matchedApplications"
+                        },
+                        {
+                            $group: {
+                                "_id": "$matchedApplications.projectID",
+                                "active": { $sum: { $cond: [{ $eq: ["$matchedApplications.status", "active"]}, 1, 0]}},
+                                "selected": { $sum: { $cond: [{ $eq: ["$matchedApplications.status", "selected"]}, 1, 0]}},
+                                "interview": { $sum: { $cond: [{ $eq: ["$matchedApplications.status", "interview"]}, 1, 0]}},
+                            }
+                        },
+                    ], function (err, applications){
+                        if (err) {
+                            logger.tank(err);
+                            callback("Failed");
                         }
-                    },
-                    {
-                        $unwind: "$matchedApplications"
-                    },
-                    {
-                        $group: {
-                            "_id": "$matchedApplications.projectID",
-                            "active": { $sum: { $cond: [{ $eq: ["$matchedApplications.status", "active"]}, 1, 0]}},
-                            "selected": { $sum: { $cond: [{ $eq: ["$matchedApplications.status", "selected"]}, 1, 0]}},
-                            "interview": { $sum: { $cond: [{ $eq: ["$matchedApplications.status", "interview"]}, 1, 0]}},
+                        else if(!applications) {
+                            logger.ant("Failed to get applications count for project of professor: %s", professorID);
+                            callback("Failed");
                         }
-                    },
-                ], function (err, applications){
-                    if (err) {
-                        logger.tank(err);
-                        callback("Failed");
-                    }
-                    else if(!applications) {
-                        logger.ant("Failed to get applications count for project of professor: %s", professorID);
-                        callback("Failed");
-                    }
-                    else {
-                        let merged = [];
-                        for(let i=0; i<projects.length; i++) {
-                            merged.push({
-                                ...projects[i],
-                                ...(applications.find((itmInner) => itmInner._id.equals(projects[i]._id)))}
-                            );
+                        else {
+                            let merged = [];
+                            for(let i=0; i<projects.length; i++) {
+                                merged.push({
+                                    ...projects[i],
+                                    ...(applications.find((itmInner) => itmInner._id.equals(projects[i]._id)))}
+                                );
+                            }
+                            callback(null, merged);
                         }
-                        callback(null, merged);
-                    }
-                })
+                    })
+                }
             }
 
         ], function (err, projects){
