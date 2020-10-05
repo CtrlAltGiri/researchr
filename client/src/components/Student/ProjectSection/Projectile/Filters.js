@@ -12,14 +12,14 @@ function Filters(props) {
     }
 
     return (
-        <div className="px-16 self-end w-full md:w-1/4 z-50">
+        <div className="pl-8 md:pl-16 md:px-12 w-full md:w-1/4">
             <Dropdown
                 changeDropdown={changeDropdown}
                 name="dropdown"
                 val={dept}
                 placeholder="Department"
                 extraClass=""
-                fieldExtraClass="w-fu"
+                fieldExtraClass="w-full"
                 options={[{value:"-", label:"All"}].concat(branches)}
             />
 

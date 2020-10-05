@@ -4,6 +4,7 @@ const Applications = require("../../../models/applications");
 const { StatusCodes, ReasonPhrases } = require('http-status-codes');
 const ObjectID = require("bson-objectid");
 const Async = require('async');
+const logger = require('../../../config/winston');
 
 // API to get all applications for a particular project
 applicationsRouter.route("/:projectID")
@@ -23,11 +24,11 @@ applicationsRouter.route("/:projectID")
                 // STEP 1: Check if the project ID and professor ID is present in the profProjects collection
                 ProfProjects.findOne({_id: projectID, professorID: professorID}, function (err, project){
                     if(err) {
-                        console.log(err);
+                        logger.tank(err);
                         callback("Failed");
                     }
                     else if(!project) {
-                        console.log("No project found for viewing applicants");
+                        logger.ant("No project found with id %s", projectID);
                         callback("Invalid URL");
                     }
                     else {
@@ -37,14 +38,14 @@ applicationsRouter.route("/:projectID")
             },
             function (project, callback) {
                 // STEP 2: Find all applicants for the project
-                Applications.find({'profApplications.projectID': projectID}, {'profApplications.$':  1, name:2, college:3, branch:4},
+                Applications.find({'profApplications.projectID': projectID}, {'profApplications.$':1, name:2, college:3, branch:4},
                     function (err, applications){
                     if(err) {
-                        console.log(err);
+                        logger.tank(err);
                         callback("Failed");
                     }
                     else if(!applications) {
-                        console.log("No applicants found");
+                        logger.tank("Failed to get applications for project: %s", projectID);
                         callback("Failed");
                     }
                     else {
@@ -64,9 +65,9 @@ applicationsRouter.route("/:projectID")
                         applications.forEach(function (element) {
                             // sanity check
                             if(element.profApplications.length <=0) {
+                                logger.soldier("No applications in element for student: %s", element._id);
                                 return;
                             }
-                            console.log("element: ", element);
                             let toAdd = {
                                 studentID: element._id,
                                 name: element.name,
@@ -77,7 +78,6 @@ applicationsRouter.route("/:projectID")
                                 answers: element.profApplications[0].answers,
                                 sop: element.profApplications[0].sop
                             };
-                            console.log("toAdd: ", toAdd);
                             switch(element.profApplications[0].status)
                             {
                                 case "active":
@@ -97,7 +97,7 @@ applicationsRouter.route("/:projectID")
                                     applicants.archived.push(toAdd);
                                     break;
                                 default:
-                                    console.log("Invalid application status found for student: ", element._id);
+                                    logger.soldier("Invalid application status found for student: %s", element._id);
                             }
                         });
                         callback(null, applicants);

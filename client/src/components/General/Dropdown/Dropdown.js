@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import Select from 'react-select';
-import {Label} from '../Form/FormComponents'
+import { LabelMaxChars } from '../Form/FormComponents'
 
 function Dropdown(props) {
 
@@ -40,7 +40,7 @@ function Dropdown(props) {
     return (
 
         <div className={props.extraClass}>
-            <Label text={props.text} />
+            <LabelMaxChars text={props.text} required={props.required} />
             <Select
                 isDisabled={props.isDisabled || false}
                 className={props.fieldExtraClass}

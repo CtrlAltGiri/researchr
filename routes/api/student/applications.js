@@ -2,29 +2,33 @@ const applicationsRouter = require('express').Router();
 const Students = require('../../../models/students');
 const mongoose = require('mongoose');
 const Applications = require("../../../models/applications");
+const ObjectID = require("bson-objectid");
 const Async = require('async');
+const logger = require('../../../config/winston');
+const { StatusCodes } = require('http-status-codes');
 
 // API to return all applications of the student and to change their status
 applicationsRouter.route('/')
     // API to view all applications
     .get(function (req, res){
+
         let studentID = req.user._id;
         let cur_time = new Date(); //current time
+        
         Async.waterfall([
             function (callback){
                 // CHECK 1: Check if given student exists in our mongoDB's students collection
                 Students.findOne({_id: studentID}, function (err, student){
                     if(err){
-                        console.log(err);
+                        logger.tank(err);
                         callback("Failed");
                     }
                     // if no student found with given ID
                     else if(!student){
-                        console.log("No student found with id ", studentID);
+                        logger.nuclear("No student found with id %s", studentID);
                         callback("No student found");
                     }
                     else{
-                        console.log("Found applications.");
                         callback(null);
                     }
                 })
@@ -33,7 +37,7 @@ applicationsRouter.route('/')
                 // All CHECKS done. Now query for applications from the applications collection
                 Applications.findOne({_id: studentID}, function (err, applications){
                     if(err){
-                        console.log(err);
+                        logger.tank(err);
                         callback("Failed");
                     }
                     else{
@@ -44,8 +48,7 @@ applicationsRouter.route('/')
                         }
                         // this will happen if student is yet to make his first application
                         if(!applications){
-                            console.log("No applications found");
-                            console.log("Returning default response");
+                            logger.ant("No applications found, returning default response - Student: %s", studentID)
                             callback(null, false, all_applications);
                         }
                         // the flow below will happen if student has previously applied before
@@ -87,7 +90,7 @@ applicationsRouter.route('/')
                             all_applications.selected = cur_selected_true.concat(cur_interview);
                             if(cur_selected_false.length > 0) {
                                 // if there are any applications that are not yet updated in the database
-                                console.log("Found applications that are to be updated");
+                                logger.ant("Found applications to be updated for %s", studentID)
                                 cur_selected_false.forEach(function (element){
                                     element.status = "declined";
                                 })
@@ -123,19 +126,19 @@ applicationsRouter.route('/')
                         },
                         function (err, result){
                             if(err){
-                                console.log(err);
+                                logger.tank(err);
                                 callback("Failed");
                             }
                             else{
                                 const { n, nModified } = result;
                                 if (n && nModified) {
-                                    console.log("Update successful");
+                                    logger.ant("Updation successful for %d documents - Student: %s", nModified, studentID)
                                     callback(null, applications);
                                 }
                                 else {
                                     // TODO(aditya): If update to DB fails even then send proper response?
                                     //               Returning error for now.
-                                    callback("Update failed");
+                                    logger.ant("Updation of applications failed - Student: %s", studentID)
                                 }
                             }
                         }
@@ -144,19 +147,25 @@ applicationsRouter.route('/')
             }
         ],function (err, applications){
             if(err){
-                res.status(404).send(err);
+                res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(err);
             }
             else{
                 // return last element because it will contain the result to be returned i.e. applications
                 // res.status(200).send(result[result.length-1]);
-                res.status(200).send(applications);
+                logger.ant("Found applications succesfully - Student: %s", studentID)
+                res.status(StatusCodes.OK).send(applications);
             }
         })
     })
     // API for student to change application status
-    .post(function (req, res){
+    .post(function (req, res, next){
         let studentID = req.user._id;
         let projectID = req.body.projectID;
+        // check if its a valid object id
+        if(!ObjectID.isValid(projectID)){
+            return res.status(StatusCodes.BAD_REQUEST).send("Invalid URL");
+        }
+
         let newStatus = req.body.status;
         let cur_time = new Date();
         // Do a preliminary check on new status
@@ -164,7 +173,7 @@ applicationsRouter.route('/')
             newStatus !== "ongoing" &&
             newStatus !== "declined"
         ) {
-          return res.status(404).send("Not allowed");
+          return res.status(StatusCodes.BAD_REQUEST).send("Not allowed");
         }
 
         Async.series([
@@ -173,16 +182,16 @@ applicationsRouter.route('/')
                 // CHECK 1: Check if given student exists in our mongoDB's students collection
                 Students.findOne({_id: studentID}, function (err, student){
                     if(err){
-                        console.log(err);
+                        logger.tank(err);
                         callback("Failed");
                     }
                     // if no student found with given ID
                     else if(!student){
-                        console.log("No student found with id ", studentID);
+                        logger.nuclear("No student found with id %s", studentID);
                         callback("No student found");
                     }
                     else{
-                        console.log("student: ", student);
+                        logger.ant("Posting to student: %s", student);
                         callback(null, 1);
                     }
                 })
@@ -191,12 +200,12 @@ applicationsRouter.route('/')
                 // CHECK 2: Check if student has applied for the project and its current status and if change to new status is allowed
                 Applications.findOne({_id: studentID, 'profApplications.projectID': projectID}, function (err, result) {
                     if (err) {
-                        console.log(err);
+                        logger.tank(err);
                         callback("Failed");
                     }
                     // check if result is null which means that the student has not applied for this project/ project does not exist
                     else if (!result) {
-                        console.log("Student has not applied for the project");
+                        logger.soldier("Student has not applied for the project / Project does not exist - Student: %s - Project: %s", studentID, projectID);
                         callback("No application found");
                     }
                     else if (result) {
@@ -211,12 +220,12 @@ applicationsRouter.route('/')
                         }
                         // Allow condition 1
                         if (application.status === "selected" && application.timeToAccept > cur_time && newStatus === "ongoing") {
-                            console.log("Allowed condition 1");
+                            logger.atom("Allowed condition 1 - Student: %s - Project: %s", studentID, projectID);
                             callback(null, 21);
                         }
                         // Allow condition 2
                         else if (application.status === "selected" && newStatus === "declined") {
-                            console.log("Allowed condition 2");
+                            logger.atom("Allowed condition 2 - Student: %s - Project: %s", studentID, projectID);
                             callback(null, 22);
                         }
                         // Disallow all other changes to status
@@ -252,7 +261,7 @@ applicationsRouter.route('/')
                         },
                         function (err, result) {
                             if (err) {
-                                console.log(err);
+                                logger.tank(err);
                                 callback("Failed");
                             } else {
                                 const {n, nModified} = result;
@@ -275,7 +284,7 @@ applicationsRouter.route('/')
                         },
                         function (err, result){
                             if (err) {
-                                console.log(err);
+                                logger.tank(err);
                                 callback("Failed");
                             }
                             else {
@@ -296,10 +305,10 @@ applicationsRouter.route('/')
             }
         ], function (err, result){
             if(err){
-                res.status(404).send(err);
+                res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(err);
             }
             else{
-                res.status(200).send(result);
+                res.status(StatusCodes.OK).send(result);
             }
         })
     })

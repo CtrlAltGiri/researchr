@@ -2,10 +2,10 @@ const Professors = require('../../../models/professors');
 const ObjectID = require("bson-objectid");
 const mongoose = require('mongoose');
 const { StatusCodes } = require('http-status-codes');
+const logger = require('../../../config/winston');
 
 function profProfileDetails(professorID, urlProfID, res){
 
-    // TODO(aditya): Add these check everywhere necessary
     // check if its a valid object id
     if(!ObjectID.isValid(urlProfID)){
         return res.status(StatusCodes.BAD_REQUEST).send("Invalid URL");
@@ -18,11 +18,11 @@ function profProfileDetails(professorID, urlProfID, res){
 
     Professors.findOne({_id: urlProfID}, function (err, professor){
         if(err) {
-            console.log(err);
+            logger.tank(err);
             return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send("Failed");
         }
         else if(!professor) {
-            console.log("No professor found");
+            logger.ant("No professor found with id: %s", urlProfID);
             return res.status(StatusCodes.BAD_REQUEST).send("Invalid request");
         }
         else {

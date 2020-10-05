@@ -4,18 +4,19 @@ html(lang='en', style='scroll-behavior: smooth;')
     meta(charset='UTF-8')
     meta(name='viewport', content='width=device-width, initial-scale=1.0')
     link(rel='stylesheet', href='/css/index.css')
-    title ReSEARCHr
+    title researchR
   body
     include includes/header.pug
         
     section#home.text-gray-700.body-font(class="mb-2")
       .container.px-5.py-5.mx-auto.flex.flex-wrap.items-center(class='lg:py-20')
-        .pr-0(class='lg:w-3/5 md:w-1/2 md:pr-16 lg:pr-0')
-          h1.title-font.font-medium.text-3xl.text-gray-900(class="text-center md:text-left") Collaborate. Innovate. Create.
+        .pr-0(class='lg:w-3/5 md:w-1/2 md:pr-8 lg:px-16')
+          h1.title-font.font-medium.text-3xl.text-gray-900(class="text-center md:text-left") Collaboration made easy.
           p.leading-relaxed.mt-4
-            |researchR is a platform that brings together students and professors from varied 
+            span.font-medium researchR 
+            | is an online platform that democratizes collaboration 
             br(class="hidden sm:block")
-            |backgrounds to collaborate on research projects based on similar fields of interest.
+            |through a radically simple recruitment process.
         .bg-gray-200.rounded-lg.p-8.flex.flex-col.w-full.mt-10(class='lg:w-2/6 md:w-1/2 md:ml-auto md:mt-0')
           h2.text-gray-900.text-lg.font-medium.title-font.mb-5 Sign Up
           form(action="/", method="post" class="flex flex-col")

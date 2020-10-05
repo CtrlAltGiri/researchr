@@ -2,6 +2,8 @@ const profileRouter = require('express').Router();
 const { collegeFormValidator, workFormValidator, projectFormValidator } = require('../../../client/src/common/formValidators/cvValidator');
 const {retrieveStudentDetails} = require('../utils/studentDetails');
 const Students = require('../../../models/students');
+const logger = require('../../../config/winston');
+const { StatusCodes } = require('http-status-codes');
 
 profileRouter
     .get("/myProfile", function(req, res){
@@ -14,7 +16,7 @@ profileRouter
 
 profileRouter
     .get('/getStudentId', function(req, res){
-        res.status(200).send(req.user._id); 
+        res.status(StatusCodes.OK).send(req.user._id); 
     })
 
 profileRouter
@@ -109,23 +111,24 @@ profileRouter.route("/createProfile")
         if (verification === true) {
             Students.updateOne({ '_id': studId }, update, function (err, result) {
                 if(err){
-                    console.log(err);
-                    return res.status(404).send("Failed");
+                    logger.tank(err);
+                    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send("Failed");
                 }
                 const { n, nModified } = result;
                 // check if document has been successfully updated in collection
                 if(n){
-                    console.log("Successfully updated student cv");
-                    return res.status(200).send("Successfully updated");
+                    logger.ant("Student: %s - Successfully updated student cv", studId);
+                    return res.status(StatusCodes.OK).send("Successfully updated");
                 }
                 else{
-                    console.log("No student match found");
-                    return res.status(404).send("Failed student cv update");
+                    logger.nuclear("Student: %s - No student match found", studId);
+                    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send("Failed student cv update");
                 }
             });
         }
         else{
-            res.status(404).send(validate)
+            logger.ant("Student: %s - %s", studId, validate);
+            res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(validate)
         }
     })
 

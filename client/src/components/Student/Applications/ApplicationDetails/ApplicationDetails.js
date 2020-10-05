@@ -60,17 +60,19 @@ function ApplicationDetails(props) {
             </div>
             }
 
-            {details.messages && details.messages.length > 0 && <div className="px-8 md:px-24 max-h-screen mb-24">
-                <p className="text-2xl">Messages</p>
-                <Messages
-                    studentID={undefined}
-                    projectID={projectId}
-                    professor={false}
-                    messages={details.messages}
-                />
-
+            <div className="px-8 md:px-24 max-h-screen mb-24">
+                <p className="text-2xl my-2">Messages</p>
+                {details.messages && details.messages.length > 0 ? 
+                    <Messages
+                        studentID={undefined}
+                        projectID={projectId}
+                        professor={false}
+                        messages={details.messages}
+                    />
+                :
+                    <p>The professor has to send you a message first before you can send him one!</p>
+                }
             </div>
-            }
 
             <Error text={errorText} divClass="flex justify-center" />
 

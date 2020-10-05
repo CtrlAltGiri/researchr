@@ -61,26 +61,30 @@ function AddProject(props) {
             text="Add a Project">
 
             <TextField
-                text="Project Name"
+                text="Project Headline"
                 extraClass="w-full my-4"
                 fieldExtraClass="w-full md:w-3/5"
                 onChange={changeInput}
                 name="name"
                 value={projDetails.name}
                 disabled={props.editMode}
+                maxChars={200}
+                required={true}
             />
 
             <TextArea
-                text="Description (please include the work and commitment)"
+                text="Description (Please include nature and scope of Project)"
                 extraClass="my-4"
                 onChange={changeInput}
                 name="desc"
                 value={projDetails.desc}
                 rows={10}
+                maxChars={1000}
+                required={true}
             />
 
             <TagInput
-                text="Enter Prerequisities"
+                text="Skills / Prerequisites required"
                 extraClass="flex justify-center mx-auto flex-col"
                 fieldExtraClass="w-full md:3/5"
                 updateTags={changeTags}
@@ -89,6 +93,7 @@ function AddProject(props) {
                 noSuggestions={false}
                 name="prereq"
                 heading="Chosen Prerequisites"
+                required={true}
             />
 
             <div className="flex flex-col md:flex-row mb-2 mt-4">
@@ -101,15 +106,17 @@ function AddProject(props) {
                     extraClass="w-full mb-8"
                     innerClass="flex"
                     fieldExtraClass="w-full md:w-3/4 mr-4 md:mr-12"
+                    required={true}
                 />
 
                 <TextField
-                    text="Duration (in months)"
+                    text="Number of Weeks"
                     extraClass="w-full md:w-1/3 mt-1 mb-4 md:mb-0"
                     fieldExtraClass="w-full"
                     onChange={changeInput}
                     name="duration"
                     value={projDetails.duration}
+                    required={true}
                 />
             </div>
 
@@ -123,15 +130,17 @@ function AddProject(props) {
                     extraClass="w-full mb-8"
                     innerClass="flex"
                     fieldExtraClass="w-full md:w-3/4 mr-4 md:mr-12"
+                    required={true}
                 />
 
                 <TextField
-                    text="Commitment per week (in hrs)"
+                    text="Weekly Commitment(in hrs)"
                     extraClass="w-full md:w-1/3 mt-1 mb-4 md:mb-0"
                     fieldExtraClass="w-full"
                     onChange={changeInput}
                     name="commitment"
                     value={projDetails.commitment}
+                    required={true}
                 />
             </div>
 
@@ -145,6 +154,7 @@ function AddProject(props) {
                     extraClass="mb-8 w-1/2"
                     fieldExtraClass="w-4/5"
                     options={[{ value: "WFH", label: "Work From Home" }, { value: projDetails.college || props.college, label: projDetails.college || props.college }]}
+                    required={true}
                 />
 
                 <Dropdown
@@ -156,6 +166,7 @@ function AddProject(props) {
                     extraClass="mb-8 w-1/2"
                     fieldExtraClass="w-4/5"
                     options={[{ value: true, label: "Show it only to students in my college" }, { value: false, label: "Show it to everyone" }]}
+                    required={true}
                 />
 
             </div>
@@ -174,7 +185,7 @@ function AddProject(props) {
             />}
 
             {!props.editMode && <TagInput
-                text="Tags which will help match students"
+                text="Tags which will help match students (eg. machine-learning)"
                 extraClass="flex justify-center mx-auto flex-col mb-4"
                 fieldExtraClass="w-full md:w-3/5"
                 updateTags={changeTags}
@@ -182,6 +193,7 @@ function AddProject(props) {
                 maxNumberOfTags={3}
                 name="tags"
                 heading="Chosen Tags"
+                required={true}
             />}
 
             <TealButton

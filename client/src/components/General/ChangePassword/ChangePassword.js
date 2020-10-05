@@ -12,7 +12,7 @@ function ChangePassword(props){
     function changePass(passes){
         if(newPass === newPassConfirm && newPass !== oldPassword){
 
-            let apiEndpoint = props.professor ? '/api/student/password' : '/api/professor/password';
+            let apiEndpoint = props.professor ? '/api/professor/password' : '/api/student/password';
             axios.post(apiEndpoint, {
                 current_password: passes.oldPassword,
                 new_password: passes.newPass,

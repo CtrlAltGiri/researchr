@@ -40,10 +40,10 @@ async function professorSignUpValidator(formData) {
                 'at least one capital letter, one small letter, one number and one special character'}
     }
 
-    // if(!(collegeValues.find(c => c === formData.college) && branchValues.find(b => formData.department))){
-    //     retVal = false;
-    //     v.errors['college'] = {'message': 'Please choose the values from the dropdown.'}
-    // }
+    if(!(collegeValues.find(c => c === formData.college) && branchValues.find(b => formData.department))){
+        retVal = false;
+        v.errors['college'] = {'message': 'Please choose the values from the dropdown.'}
+    }
 
     return [retVal, v.errors];
 }

@@ -13,9 +13,10 @@ function ProjectSection() {
     const [apiError, setApiError] = useState(false);
     const [collegeView, setCollegeView] = useState(false);
     const [filters, setFilters] = useState({});
+    const [oppositeView, setOppositeView] = useState([]);
 
     useEffect(() => {
-        newLoader()
+        newLoader(0)
         return () => {
             setProjects([]);
         }
@@ -34,51 +35,63 @@ function ProjectSection() {
         return true;
     }
     
-    function newLoader() {
-        axios.get('/api/student/projects', {
-            params: {
-                allProjects: !collegeView
-            }
-        })
-        .then(res => {
-            if(collegeView){
-                setProjects(res.data);
-            }
-            else{
-                setProjects(res.data);
-                //setProjects([...projects, ...res.data]);
-            }
-            setHasMore(false);
-            setApiError(false);
-        })
-        .catch(err => setApiError(err.response.data));
-    }
+    function newLoader(pageNo){
 
-    let items = []
-    projects.forEach((item) => {
-        if(filterProjects(item) === true)
-            items.push(<Projectile key={item.name} allItems={item} />);
-    });
+        if(pageNo !== 0 || (pageNo === 0 && oppositeView.length === 0)){
+            axios.get('/api/student/projects', {
+                params: {
+                    allProjects: !collegeView
+                }
+            })
+            .then(res => {
+
+                // TEMPORARY SOLUTION.
+                if(pageNo === 0)
+                    setOppositeView(projects);
+                
+                // CHANGE THIS TOO EVENTUALLY.
+                if(collegeView){
+                    setProjects(res.data);
+                }
+                else{
+                    setProjects(res.data);
+                    //setProjects([...projects, ...res.data]);
+                }
+                setHasMore(false);
+                setApiError(false);
+            })
+            .catch(err => setApiError(err.response.data));
+        }
+        else{
+            let temp = projects;
+            setProjects(oppositeView);
+            setOppositeView(temp);
+        }
+    }
 
     return (
         apiError === false ? 
         <section className="text-gray-700 body-font">
             
-            <div className="flex flex-col w-full justify-end space-y-4">
+            <div className="flex flex-row w-full items-center justify-center px-5 pb-4">
                 <Filters setFilter={setNewFilter} />
-                <Toggle text="College View" onClick={() => setCollegeView(!collegeView)}/>
+                <Toggle text="My College View" onClick={() => setCollegeView(!collegeView)}/>
             </div>
 
-            <div className="container px-5 py-0 md:py-8 mx-auto">
+            <div className="container px-5 mx-auto">
                 <InfiniteScroll
                     pageStart={0}
                     loadMore={newLoader}
                     hasMore={hasMore}
+                    initialLoad={false}
                     loader={<h1 key="LoadingScreen">Loading....</h1>}
                     element={'div'}
                     className="flex flex-row flex-wrap"
                 >
-                    {items}
+                    {projects.map(item => {
+                        return filterProjects(item) && <Projectile key={item.name} allItems={item} />  
+                    })}
+
                 </InfiniteScroll>
             </div>
         </section>

@@ -18,7 +18,8 @@ const sendVerificationEmail = (to, name, token, type) => {
                 }
             ],
             from: {
-                email: "jzllnontepedmwxqml@kiabws.online"
+                email: "aditya@researchr.in",
+                name: "Team researchR"
             },
             content: [
                 {
@@ -58,7 +59,8 @@ const sendPasswordResetEmail = (to, token, type) => {
                 }
             ],
             from: {
-                email: "jzllnontepedmwxqml@kiabws.online"
+                email: "aditya@researchr.in",
+                name: "Team researchR"
             },
             content: [
                 {

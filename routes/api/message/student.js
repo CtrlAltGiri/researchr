@@ -1,6 +1,7 @@
 const Applications = require("../../../models/applications");
 const { StatusCodes, ReasonPhrases } = require('http-status-codes');
 const ObjectID = require("bson-objectid");
+const logger = require('../../../config/winston');
 
 async function addStudentMessages(req, res) {
     // get the student ID from req
@@ -12,7 +13,7 @@ async function addStudentMessages(req, res) {
 
     // check validity of message field
     if(message && (!(typeof message === 'string') || message.length > 500)) {
-        console.log("Invalid message field");
+        logger.ant("Invalid student message field for project: %s student: %s", projectID, studentID);
         return res.status(StatusCodes.BAD_REQUEST).send("Bad Request");
     }
     // check if projectID is a valid object id
@@ -42,7 +43,7 @@ async function addStudentMessages(req, res) {
         },
         function (err, result) {
             if (err) {
-                console.log(err);
+                logger.tank(err);
                 return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send("Failed");
             }
             else {
@@ -51,6 +52,7 @@ async function addStudentMessages(req, res) {
                     return res.status(StatusCodes.OK).send("Successfully added student message");
                 }
                 else {
+                    logger.tank("Failed to add student message for project: %s student: %s", projectID, studentID);
                     return res.status(StatusCodes.BAD_REQUEST).send("Adding message failed");
                 }
             }

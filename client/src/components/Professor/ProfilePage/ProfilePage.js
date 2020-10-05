@@ -5,7 +5,10 @@ import EditProfile from './EditProfile';
 import { Error } from '../../General/Form/FormComponents';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
-
+import ChangePassword from '../../General/ChangePassword/ChangePassword';
+import Modal from '../../General/Modal/Modal';
+import ProfTitle from './ProfTitle';
+import { FloatingButtonBottomRight } from '../../General/Form/Buttons'
 
 function ProfilePage(props) {
 
@@ -13,6 +16,7 @@ function ProfilePage(props) {
     const [modalOpen, setModalOpen] = useState(false);
     const [showError, setShowError] = useState('');
     const [allDetails, setAllDetails] = useState({})
+    const [changePass, setChangePass] = useState(false);
 
     useEffect(() => {
 
@@ -23,22 +27,50 @@ function ProfilePage(props) {
             .catch(err => setShowError(err.response.data))
     }, []);
 
+    function checkValid(props) {
+        if (props && props.length > 0) {
+            return true;
+        }
+        return false;
+    }
+
+    function showFullProfile() {
+
+        if (allDetails.profile) {
+            let retVal = false;
+            let vals = [allDetails.profile.areasOfInterest, allDetails.profile.courses, allDetails.profile.eductaion, allDetails.profile.books, allDetails.profile.publications, allDetails.profile.projects, allDetails.profile.patents]
+            vals.every(val => {
+                if (checkValid(val)) {
+                    retVal = true;
+                    return false;
+                }
+                return true;
+            })
+            return retVal;
+        }
+        else {
+            return false;
+        }
+    }
+
     return (
         <section className="px-12 md:px-24 py-4">
-            <div name="intro-section" className="flex flex-col md:flex-row md:justify-between">
-                <div className="">
-                    <p className="text-3xl font-semibold">{allDetails.name}</p>
-                    <p className="text-xl font-thin">{allDetails.designation}</p>
-                    <p className="text-xl font-thin">{allDetails.college}</p>
-                    {allDetails.profile && allDetails.profile.url && <a href={allDetails.profile.url}><p className="text-lg font-normal">{allDetails.profile.url}</p></a>}
-                </div>
 
-            </div>
+            <ProfTitle
+                name={allDetails.name}
+                designation={allDetails.designation}
+                college={allDetails.college}
+                mine={allDetails.mine}
+                url={allDetails.profile && allDetails.profile.url ? allDetails.profile.url : undefined}
+                openModal={setChangePass}
+                fullProfile={showFullProfile()}
+            />
 
             {allDetails.mine &&
-                <div className="fixed bottom-0 right-0 w-auto h-16 mr-12 mb-2 cursor-pointer" onClick={e => setModalOpen(true)}>
-                    <p className="px-4 py-2 bg-teal-500 text-white rounded-full font-medium">Edit Profile</p>
-                </div>
+                <FloatingButtonBottomRight 
+                    text="Edit Profile"
+                    onClick={e => setModalOpen(true)}
+                />
             }
 
             {allDetails.profile && <div className="px-0 md:px-6 mt-6">
@@ -57,26 +89,26 @@ function ProfilePage(props) {
                     data2={allDetails.profile.books}
                 />
 
-                {allDetails.profile.publications && allDetails.profile.publications.length > 0 && 
-                <ProfileSection
-                    sectionName="Publications"
-                    data={allDetails.profile.publications}
-                    extraClass="md:w-full"
-                />}
+                {allDetails.profile.publications && allDetails.profile.publications.length > 0 &&
+                    <ProfileSection
+                        sectionName="Publications"
+                        data={allDetails.profile.publications}
+                        extraClass="md:w-full my-8"
+                    />}
 
-                {allDetails.profile.projects &&  allDetails.profile.publications.length > 0 && 
-                <ProfileSection
-                    sectionName="Projects"
-                    data={allDetails.profile.projects}
-                    extraClass="md:w-full"
-                />}
+                {allDetails.profile.projects && allDetails.profile.projects.length > 0 &&
+                    <ProfileSection
+                        sectionName="Projects"
+                        data={allDetails.profile.projects}
+                        extraClass="md:w-full my-8"
+                    />}
 
-                {allDetails.profile.patents && allDetails.profile.publications.length > 0 && 
-                <ProfileSection
-                    sectionName="Patents"
-                    data={allDetails.profile.patents}
-                    extraClass="md:w-full mb-12"
-                />}
+                {allDetails.profile.patents && allDetails.profile.patents.length > 0 &&
+                    <ProfileSection
+                        sectionName="Patents"
+                        data={allDetails.profile.patents}
+                        extraClass="md:w-full my-12"
+                    />}
 
             </div>
             }
@@ -90,8 +122,18 @@ function ProfilePage(props) {
             />
             }
 
+            <Modal
+                modalOpen={changePass}
+                closeModal={e => setChangePass(false)}
+            >
+                <ChangePassword
+                    professor={true}
+                />
+
+            </Modal>
+
         </section>
-    )
+    );
 }
 
 export default ProfilePage;

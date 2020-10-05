@@ -3,6 +3,7 @@ const Applications = require("../../../models/applications");
 const { StatusCodes, ReasonPhrases } = require('http-status-codes');
 const ObjectID = require("bson-objectid");
 const Async = require('async');
+const logger = require('../../../config/winston');
 
 async function addProfessorMessages(req, res) {
     // get the professor ID from req
@@ -15,7 +16,7 @@ async function addProfessorMessages(req, res) {
 
     // check validity of message field
     if(message && (!(typeof message === 'string') || message.length > 500)) {
-        console.log("Invalid message field");
+        logger.ant("Invalid professor message field for project: %s student: %s", projectID, studentID);
         return res.status(StatusCodes.BAD_REQUEST).send("Bad Request");
     }
     // check if projectID is a valid object id
@@ -32,11 +33,11 @@ async function addProfessorMessages(req, res) {
             // STEP 1: Check if the project ID and professor ID is present in the profProjects collection
             ProfProjects.findOne({_id: projectID, professorID: professorID}, function (err, project){
                 if(err) {
-                    console.log(err);
+                    logger.tank(err);
                     callback("Failed");
                 }
                 else if(!project) {
-                    console.log("No project found for adding message");
+                    logger.ant("No project with id %s found for adding professor message", projectID);
                     callback("Invalid");
                 }
                 else {
@@ -68,7 +69,7 @@ async function addProfessorMessages(req, res) {
                 },
                 function (err, result) {
                     if (err) {
-                        console.log(err);
+                        logger.tank(err);
                         callback("Failed");
                     }
                     else {
@@ -77,6 +78,7 @@ async function addProfessorMessages(req, res) {
                             callback(null, "Successful");
                         }
                         else {
+                            logger.tank("Failed to add professor message for project: %s student: %s", projectID, studentID);
                             callback("Adding message failed");
                         }
                     }
@@ -107,16 +109,15 @@ async function getProfessorMessages(req, res) {
     if (!ObjectID.isValid(studentID)) {
         return res.status(StatusCodes.BAD_REQUEST).send("Bad Request");
     }
-    console.log("Here");
     await Async.waterfall([
         function (callback) {
             // STEP 1: Check if the project ID and professor ID is present in the profProjects collection
             ProfProjects.findOne({_id: projectID, professorID: professorID}, function (err, project) {
                 if (err) {
-                    console.log(err);
+                    logger.tank(err);
                     callback("Failed");
                 } else if (!project) {
-                    console.log("No project found for adding message");
+                    logger.ant("No project with id %s found for fetching messages", projectID);
                     callback("Invalid");
                 } else {
                     callback(null);
@@ -141,15 +142,15 @@ async function getProfessorMessages(req, res) {
                 },
                 function (err, application) {
                     if (err) {
-                        console.log(err);
+                        logger.tank(err);
                         callback("Failed");
                     } else if (!application) {
-                        console.log("No application found for fetching messages");
+                        logger.ant("No application found for fetching messages for project: %s student: %s", projectID, studentID);
                         callback("Bad request");
                     }
                     // sanity check
                     else if (application.profApplications.length <= 0) {
-                        console.log("Should not happen; No application found for fetching messages");
+                        logger.nuclear("No application found for fetching messages for project: %s student: %s", projectID, studentID);
                         callback("Failed");
                     } else {
                         const messages = application.profApplications[0].messages;

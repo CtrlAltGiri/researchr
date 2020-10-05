@@ -6,6 +6,8 @@ const projectsRouter = require('./projects');
 const projectRouter = require('./project')
 const testRouter = require('./test');
 const passwordRouter = require('./password');
+const logger = require('../../../config/winston');
+const { StatusCodes } = require('http-status-codes');
 
 // Check if userType is Student and only allow students to access this router.
 studentRouter.all("*", function(req, res, next){
@@ -13,7 +15,8 @@ studentRouter.all("*", function(req, res, next){
         next('route');
     }
     else{
-        res.status(401).send("Not authorized to access student details.")
+       logger.soldier("Not authenticated as student - trying to access student details - %s", req.originalUrl);
+       res.status(StatusCodes.UNAUTHORIZED).send("Not authorized to access student details").end();
     }
 })
 

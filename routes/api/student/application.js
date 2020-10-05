@@ -1,9 +1,11 @@
 // Contains API to view a specific application
 const applicationRouter = require('express').Router();
-const mongoose = require('mongoose');
 const Applications = require("../../../models/applications");
 const ProfProjects = require('../../../models/profProjects');
+const ObjectID = require("bson-objectid");
 const Async = require('async');
+const logger = require('../../../config/winston');
+const { StatusCodes } = require('http-status-codes');
 
 applicationRouter.route('/:projectID')
     // API to view a specific applications
@@ -11,17 +13,21 @@ applicationRouter.route('/:projectID')
 
         let studentID = req.user._id;
         let projectID = req.params.projectID;
+        // check if its a valid object id
+        if(!ObjectID.isValid(projectID)){
+            return res.status(StatusCodes.BAD_REQUEST).send("Invalid URL");
+        }
 
         Async.waterfall([
             function (callback) {
                 // STEP 1: Get the required project from profProjects to get the questionnaire variable
                 ProfProjects.findOne({_id: projectID}, function (err, project){
                     if(err) {
-                        console.log(err);
+                        logger.tank(err);
                         callback("Failed");
                     }
                     else if(!project) {
-                        console.log("No project found");
+                        logger.soldier("No project found - Student: %s - Project %s", studentID, projectID);
                         callback("Failed");
                     }
                     else {
@@ -33,19 +39,19 @@ applicationRouter.route('/:projectID')
                 // STEP 2: Find the required application from the applications collection
                 Applications.findOne(
                     {_id: studentID, 'profApplications.projectID': projectID},
-                    {'profApplications.$':  1, name:2},
+                    {'profApplications.$':1, name:2},
                     function (err, applications) {
                     if (err) {
-                        console.log(err);
+                        logger.tank(err);
                         callback("Failed");
                     }
                     else if(!applications) {
-                        console.log("No such application exists");
+                        logger.soldier("No such application exists - Student: %s - Project %s", studentID, projectID);
                         callback("Application not found");
                     }
                     // sanity check
                     else if(applications.profApplications.length <= 0) {
-                        console.log("No such application exists");
+                        logger.tank("No such applications exists (length = 0) - Student: %s - Project %s", studentID, projectID);
                         callback("Failed");
                     }
                     else {
@@ -58,13 +64,13 @@ applicationRouter.route('/:projectID')
             }
         ], function (err, application){
             if(err) {
-                return res.status(404).send(err);
+                return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(err);
             }
             else {
                 // filter out information to send to the front end
                 application = (({name, studentName, professorName, feedbacks, messages, sop, answers, questionnaire, status}) =>
                     ({name, studentName, professorName, feedbacks, messages, sop, answers, questionnaire, status}))(application);
-                return res.status(200).send(application);
+                return res.status(StatusCodes.OK).send(application);
             }
         })
 

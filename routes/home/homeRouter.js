@@ -1,33 +1,47 @@
 const homeRouter = require('express').Router();
 const path = require('path');
 const { postLoginStudent , postSignupStudent, getVerifyStudent, postForgotStudent, getResetStudent, postResetStudent } = require('./homeStudent');
-const { colleges, branches, yog, degrees } = require('../../client/src/common/data/collegeData')
+const { colleges, branches, yog, degrees } = require('../../client/src/common/data/collegeData');
+const { StatusCodes, ReasonPhrases } = require('http-status-codes');
 const { postLoginProfessor, postSignupProfessor, getVerifyProfessor, postForgotProfessor, getResetProfessor, postResetProfessor } = require('./homeProfessor')
+const logger = require('../../config/winston');
 
 homeRouter.route("/")
     .get(function (req, res) {
-        if (!req.isAuthenticated())
+        if (!req.isAuthenticated()) {
             res.render('homepage');
+        }
         else {
-            res.redirect('/platform')
+            res.redirect('/platform');
         }
 })
     .post(function (req, res) {
-        if(req.body.type === 'student'){
-           res.render('student/signup', {
-                name: req.body.name, 
-                p_email: req.body.email, 
-                colleges: colleges,
-                degrees: degrees,
-                yogs: yog,
-                branches: branches
-            });
+        if(req.body.type === 'student') {
+            if(process.env.BLOCK_STUDENT_SIGNUP === "true") {
+                return res.render('landingPage');
+            }
+            else {
+                res.render('student/signup', {
+                    name: req.body.name,
+                    p_email: req.body.email,
+                    colleges: colleges,
+                    degrees: degrees,
+                    yogs: yog,
+                    branches: branches
+                });
+            }
         }
-        else if(req.body.type === 'professor'){
-            res.render('professor/signup', { name: req.body.name, p_email: req.body.email, colleges: colleges }) // TODO(giri): Manage dropdowns here and in form vaildator
+        else if(req.body.type === 'professor') {
+            if(process.env.BLOCK_PROFESSOR_SIGNUP === "true") {
+                return res.render('landingPage');
+            }
+            else {
+                // TODO(giri): Manage dropdowns here and in form vaildator
+                res.render('professor/signup', { name: req.body.name, p_email: req.body.email, colleges: colleges });
+            }
         }
-        else{
-            res.redirect('/')
+        else {
+            res.redirect('/');
         }
     });
 
@@ -38,13 +52,17 @@ homeRouter.route("/login/:type?")
         else
             res.render("login", { wrongCreds: false, unverified: false, professor: true});
     })
-    .post(async function (req, res, next) {
+    .post(function (req, res, next) {
         let type = req.params.type;
         if(type === 'student')
-            await postLoginStudent(req, res, next);
+            postLoginStudent(req, res, next)
+                .then(response => logger.ant("Successfully called student login API"))
+                .catch(next);
 
         else if(type === 'professor')
-            await postLoginProfessor(req, res, next);
+            postLoginProfessor(req, res, next)
+                .then(response => logger.ant("Successfully called professor login API"))
+                .catch(next);
 
         else
             res.redirect('/login');
@@ -53,32 +71,61 @@ homeRouter.route("/login/:type?")
 homeRouter.route('/signup/:type?')
     .get(function(req, res){
         let type = req.params.type;
-        if(type === 'student')
-            res.render('student/signup', {
-                name: "", 
-                p_email: "", 
-                colleges: colleges,
-                degrees: degrees,
-                yogs: yog,
-                branches: branches
-            });
+        if(type === 'student') {
+            if(process.env.BLOCK_STUDENT_SIGNUP === "true") {
+                return res.render('landingPage');
+            }
+            else {
+                res.render('student/signup', {
+                    name: "",
+                    p_email: "",
+                    colleges: colleges,
+                    degrees: degrees,
+                    yogs: yog,
+                    branches: branches
+                });
+            }
+        }
 
-        else if(type === 'professor')
-            res.render('professor/signup', {colleges: colleges});       // replace this with professor implementation
+        else if(type === 'professor') {
+            if(process.env.BLOCK_PROFESSOR_SIGNUP === "true") {
+                return res.render('landingPage');
+            }
+            else {
+                res.render('professor/signup', {colleges: colleges});       // replace this with professor implementation
+            }
+        }
 
         else
-            res.render('signup')
+            res.render('signup');
     })
-    .post(async function(req, res){
+    .post(function(req, res, next){
         let type = req.params.type;
-        if(type === 'student')
-            await postSignupStudent(req, res);
+        if(type === 'student') {
+            if(process.env.BLOCK_STUDENT_SIGNUP === "true") {
+                return res.status(StatusCodes.NOT_FOUND).send("<h1>NOT FOUND</h1>");
+            }
+            else {
+                postSignupStudent(req, res)
+                    .then(response => logger.ant("Successfully called student signup API"))
+                    .catch(next);
+            }
+        }
 
-        else if(type === 'professor')
-            await postSignupProfessor(req, res);
+        else if(type === 'professor') {
+            if(process.env.BLOCK_PROFESSOR_SIGNUP === "true") {
+                return res.status(StatusCodes.NOT_FOUND).send("<h1>NOT FOUND</h1>");
+            }
+            else {
+                postSignupProfessor(req, res)
+                    .then(response => logger.ant("Successfully called professor signup API"))
+                    .catch(next);
+            }
+        }
+
 
         else
-            res.redirect('/signup');   
+            res.redirect('/signup');
     });
 
 homeRouter.get('/verify/:type',function(req, res){
@@ -91,7 +138,7 @@ homeRouter.get('/verify/:type',function(req, res){
         getVerifyProfessor(req, res);
 
     else
-        res.render('error')
+        res.render('error');
 });
 
 // router for forgot password flow
@@ -103,17 +150,20 @@ homeRouter.route('/forgot/:type?')
         else
             res.render('forgot', {c_email: "", type:type});
     })
-    .post(async function(req, res){
-
+    .post(function(req, res, next){
         let type = req.params.type;
         if(type === 'student')
-            await postForgotStudent(req, res);
+            postForgotStudent(req, res)
+            .then(response => logger.ant("Successfully called forgot password API for student"))
+            .catch(next);
         
         else if(type === 'professor')
-            await postForgotProfessor(req, res);
+            postForgotProfessor(req, res)
+            .then(response => logger.ant("Successfully called forgot password API for professor"))
+            .catch(next);
 
         else
-            res.render('error');
+            res.render('error'); 
     });
 
 
@@ -130,13 +180,17 @@ homeRouter.route('/reset/:type')
         else
             res.render('error');
     })
-    .post(async function(req, res) {  
+    .post(function(req, res, next) {
         let type = req.params.type;
         if(type === 'student')
-            await postResetStudent(req, res);
+            postResetStudent(req, res)
+                .then(response => logger.ant("Successfully called reset password API for student"))
+                .catch(next);
         
         else if(type === 'professor')
-            await postResetProfessor(req, res);
+            postResetProfessor(req, res)
+                .then(response => logger.ant("Successfully called reset password API for professor"))
+                .catch(next);
         
         else
             res.render('error');
@@ -148,6 +202,11 @@ homeRouter.get('/logout', function (req, res) {
     req.logout();
     res.redirect("/");
 });
+
+// DEFAULT ROUTE
+homeRouter.all(function(req, res){
+    next(new Error("Invalid route"))
+})
 
 ////////   TEST APIs
 

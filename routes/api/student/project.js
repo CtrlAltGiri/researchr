@@ -5,7 +5,10 @@ const mongoose = require('mongoose');
 const Applications = require("../../../models/applications");
 const {sopFormCheck} = require("../../../client/src/common/formValidators/sopValidator");
 const {answersFormCheck} = require("../../../client/src/common/formValidators/sopValidator");
+const ObjectID = require("bson-objectid");
 const Async = require('async');
+const logger = require('../../../config/winston');
+const { StatusCodes } = require('http-status-codes');
 
 // API to view a project and apply for it
 projectRouter.route("/:projectID")
@@ -18,6 +21,11 @@ projectRouter.route("/:projectID")
         // get student's college from req
         let studentCollege = req.user.college;
 
+        // check if its a valid object id
+        if(!ObjectID.isValid(projectID)){
+            return res.status(StatusCodes.BAD_REQUEST).send("Invalid URL");
+        }
+
         // query mongoDB's profProjects collection to return the project details
         Async.waterfall([
             function (callback){
@@ -25,12 +33,12 @@ projectRouter.route("/:projectID")
                 // Simultaneously check if project is a restricted view and if so check if colleges match and only then return the project
                 ProfProjects.findOneAndUpdate({_id: projectID}, {$inc: {views: 1}}, {new: true, useFindAndModify: false}, function (err, project) {
                     if (err) {
-                        console.log(err);
+                        logger.tank(err);
                         callback("Failed");
                     }
                     // if no project with the given projectID return error
                     else if (!project) {
-                        console.log("No project with id ", projectID);
+                        logger.tank("No project with id %s", projectID);
                         callback("No project found");
                     }
                     else{
@@ -61,17 +69,17 @@ projectRouter.route("/:projectID")
                     // Else do the check 2
                     Students.findOne({_id: studentID}, function (err, student){
                         if(err){
-                            console.log(err);
+                            logger.tank(err);
                             callback("Failed");
                         }
                         // no student with given id exists in mongoDB
                         else if(!student){
-                            console.log("No student found with id ", studentID);
+                            logger.tank("No student found with id %s", studentID);
                             callback("No student found");
                         }
                         // if student has not completed his CV
                         else if(student && !student.completed){
-                            console.log("Not completed CV id: ", studentID);
+                            logger.ant("Not completed CV id: %s", studentID);
                             project.apply = false;
                             project.errorMsg = "Please complete your profile first";
                             callback(null, project, student.college);
@@ -93,7 +101,7 @@ projectRouter.route("/:projectID")
                     // Else do the check 3
                     Applications.findOne({_id: studentID}, function (err, studentApplication) {
                         if (err) {
-                            console.log(err);
+                            logger.tank(err);
                             callback("Failed");
                         }
                         else if (!studentApplication) {
@@ -110,20 +118,20 @@ projectRouter.route("/:projectID")
                                 return element.status === "ongoing";
                             })
                             if (alreadyApplied) {
-                                console.log("Already applied for this project");
+                                logger.ant("Already applied for this project - Student: %s, Project: %s", studentID, projectID);
                                 project.apply = false;
                                 project.errorMsg = "You have already applied for this project";
                                 callback(null, project);
                             }
                             else if (ongoing) {
-                                console.log("Already has an ongoing project");
+                                logger.ant("Already has an ongoing project - Student: %s, Project: %s",studentID, projectID);
                                 project.apply = false;
                                 project.errorMsg = "You already have an ongoing project";
                                 callback(null, project);
                             }
                             else if ((project.college !== college) && (!checkOutsideLimit(applications))) {
                                 // if college is not same then and limit for the current month is over
-                                console.log("Already reached limit on number of outside applications in this month");
+                                logger.ant("Already reached limit on number of outside applications in this month - Student: %s, Project: %s", studentID, projectID);
                                 project.apply = false;
                                 project.errorMsg = "You have already reached the limit on the number of outside project applications this month";
                                 callback(null, project);
@@ -138,7 +146,7 @@ projectRouter.route("/:projectID")
         ],
         function (err, project){
             if(err){
-                return res.status(404).send(err);
+                return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(err);
             }
             else{
                 // filter information to be sent to front end
@@ -178,7 +186,7 @@ projectRouter.route("/:projectID")
                         errorMsg
                     }))(project);
 
-                return res.status(200).send(project);
+                return res.status(StatusCodes.OK).send(project);
             }
         })
     })
@@ -186,18 +194,18 @@ projectRouter.route("/:projectID")
     .post(function (req, res) {
         //check if request is valid
         if(!req.body.answers || !req.body.sop){
-            console.log("Invalid application request");
-            return res.status(404).send("Both answers and SOP are required");
+            logger.ant("Invalid application request - %s", req.user._id);
+            return res.status(StatusCodes.BAD_REQUEST).send("Both answers and SOP are required");
         }
         // check if all answers are valid
         if(answersFormCheck(req.body.answers) !== true){
-            console.log("Invalid answers");
-            return res.status(404).send("Answers not validated");
+            logger.ant("Invalid answers - %s", req.user._id);
+            return res.status(StatusCodes.BAD_REQUEST).send("Answers not validated");
         }
         // check if sop is valid
         if(sopFormCheck(req.body.sop) !== true){
-            console.log("Invalid answers");
-            return res.status(404).send("SOP not validated");
+            logger.ant("Invalid SOP - %s", req.user._id);
+            return res.status(StatusCodes.BAD_REQUEST).send("SOP not validated");
         }
         // checked if request is valid
         // get the projects id from request params
@@ -207,6 +215,11 @@ projectRouter.route("/:projectID")
         // get student's college from req
         let studentCollege = req.user.college;
 
+        // check if its a valid object id
+        if(!ObjectID.isValid(projectID)){
+            return res.status(StatusCodes.BAD_REQUEST).send("Invalid Request");
+        }
+
         // check few conditions in series and finally add application if none of the conditions check fail
         Async.waterfall([
             function (callback){
@@ -215,12 +228,12 @@ projectRouter.route("/:projectID")
                 // Also check if number of answers is equal to the number of questions in the questionnaire
                 ProfProjects.findOne({_id: projectID, applicationCloseDate: {$gt: Date.now()}}, function (err, project){
                     if(err){
-                        console.log(err);
+                        logger.tank(err);
                         callback("Failed");
                     }
                     // if no project with the given projectID or if its a closed project return error
                     else if(!project){
-                        console.log("Applications closed or no project with id ", projectID);
+                        logger.ant("Applications closed or no project with id ", projectID);
                         callback("Applications closed or invalid project");
                     }
                     else{
@@ -241,17 +254,17 @@ projectRouter.route("/:projectID")
                 // CHECK 2: Check if student has completed his CV
                 Students.findOne({_id: studentID}, function (err, student) {
                     if (err) {
-                        console.log(err);
+                        logger.tank(err);
                         callback("Failed");
                     }
                     // no student with given id exists in mongoDB
                     else if (!student) {
-                        console.log("No student found with id ", studentID);
+                        logger.nuclear("No student found with id ", studentID);
                         callback("No student found");
                     }
                     // if student has not completed his CV
                     else if (student && !student.completed) {
-                        console.log("Not completed CV, student id: ", studentID);
+                        logger.ant("Not completed CV, student id: ", studentID);
                         callback("Not completed CV");
                     }
                     else if (student && student.completed) {
@@ -264,7 +277,7 @@ projectRouter.route("/:projectID")
                 // Also check if the limit on number of outside applications in the current month has been reached if the colleges are not same
                 Applications.findOne({_id: studentID}, function (err, studentApplication) {
                     if (err) {
-                        console.log(err);
+                        logger.tank(err);
                         callback("Failed");
                     } else if (!studentApplication) {
                         callback(null, project, student);
@@ -279,15 +292,15 @@ projectRouter.route("/:projectID")
                             return element.status === "ongoing";
                         })
                         if (alreadyApplied) {
-                            console.log("Already applied for this project");
+                            logger.ant("Already applied for this project - Student: %s", studentID);
                             callback("Already applied");
                         }
                         else if (ongoing) {
-                            console.log("Already has an ongoing project");
+                            logger.ant("Already has an ongoing project- Student: %s", studentID);
                             callback("Already has an ongoing project");
                         }
                         else if ((project.college !== student.college) && (!checkOutsideLimit(applications))) {
-                            console.log("Limit on outside applications for this month reached");
+                            logger.ant("Limit on outside applications for this month reached - Student: %s", studentID);
                             callback("Limit on number of outside applications for this month reached");
                         }
                         else {
@@ -325,19 +338,19 @@ projectRouter.route("/:projectID")
                     {upsert: true}, // insert if not already exists
                     function (err, result){
                         if(err){
-                            console.log(err);
+                            logger.tank(err);
                             callback("Failed");
                         }
                         else{
                             const { n, nModified, upserted } = result;
                             // check if document has been successfully updated/added in collection
                             if((n && upserted) || (n && nModified)) {
-                                console.log("Successfully added a new application");
+                                logger.ant("Successfully added a new application - Student: %s", studentID);
                                 callback(null, result);
                             }
                             // failed update or add
                             else {
-                                console.log("Failed to add new application");
+                                logger.tank("Failed to add new application - Student: %s", studentID);
                                 callback("Failed to add new application");
                             }
                         }
@@ -345,11 +358,10 @@ projectRouter.route("/:projectID")
             }
         ], function (err, result){
             if(err){
-                return res.status(404).send(err);
+                return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(err);
             }
             else{
-                console.log("result: ", result);
-                return res.status(200).send(result);
+                return res.status(StatusCodes.OK).send(result);
             }
         });
     })

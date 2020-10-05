@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Select from 'react-select';
-import { Label } from '../Form/FormComponents';
+import { LabelMaxChars } from '../Form/FormComponents';
 import { retDayOptions, retMonthOptions, retYearOptions } from './DateOptions'
 
 // changeInput, date, name, extraClass
@@ -52,7 +52,7 @@ function DayMonthYear(props) {
 
     return (
         <div className={props.extraClass}>
-            <Label text={props.text} />
+            <LabelMaxChars text={props.text} required={props.required} />
             <div className={props.innerClass}>
 
                 <Select

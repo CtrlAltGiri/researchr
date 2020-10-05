@@ -102,15 +102,6 @@ function CollegeModal(props) {
                         name="coursework"
                     />
 
-                    <TextField
-                        text="URL to website (for logo on profile page)"
-                        onChange={props.changeInput}
-                        name="logoURL"
-                        value={props.formState.logoURL}
-                        extraClass="w-full md:w-1/2 mb-8"
-                        fieldExtraClass="w-full md:w-3/4"
-                    />
-
                     <TealButton
                         type="submit"
                         extraClass="flex mx-auto mt-6"

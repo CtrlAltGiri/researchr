@@ -1,8 +1,7 @@
 NEW FEATURES
 
-- Add uploading of transcripts as needed.
+- Add uploading of transcripts / profile photos as needed.
 - Experience Input should be better (Markdown)
-- Autocomplete + Logo API.
 - Animations while moving from one page to another. V V important.
 - Make a beautiful error page :)
 --------------------------------------------------------------------------------------------------------------
@@ -15,11 +14,6 @@ Refactoring
 
 1. MonthYear.js
 2. ProjectPage.js
----------------------------------------------------------------------------------------------------------------
-Eventually before release
-
-1. Email verification.                                            (SendGrid - Adi)
-2. Make the textfield a recommender too (logo API)
 --------------------------------------------------------------------------------------------------------------------
 Upcoming:
 
@@ -34,6 +28,7 @@ Adi Stuff (Discuss)
 3. Accepted domains
 4. The project location must be tested in the backend to be either WFH or the dropdown.
 5. Prof _id should be returned in /student/projects to make the student click prof.
+6. SendGrid should be configured properly.
 ----------------------------------------------------------------------------------------------------------------
 Rahul - Giri
 
@@ -41,7 +36,6 @@ Rahul - Giri
 2. User profile -> green tick if we find it reviewed.
 
 4. Each Student is a card.
-5. Make the API for messages.
 6. Department classification for 
 7. Show feedback of prof.
 8. # the links for different tabs

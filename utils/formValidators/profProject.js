@@ -1,5 +1,6 @@
 const { Validator } = require('node-input-validator');
 const niv = require('node-input-validator');
+const arrayNullable = require('./arrayNullable');
 
 //custom error messages for each error that is sent to front end
 niv.addCustomMessages({
@@ -15,20 +16,21 @@ niv.addCustomMessages({
     'startDate.dateAfterToday': 'The starting date must be at least two days later'
 });
 
+niv.extend('arrayNullable', arrayNullable);
+
 async function profProjectValidator(formData) {
 
     let retVal = true;
     const v = new Validator(formData, {
-        name: 'required|string|maxLength:50',
-        desc: 'required|string|maxLength:1000',
+        name: 'required|string|maxLength:200',
+        desc: 'required|string|maxLength:2000',
         prereq: 'required|arrayUnique|length:10,0',
         'prereq.*': 'required|string|maxLength:400',
         duration: 'required|numeric|max:100', // in months
         location: 'required|string|maxLength:200',
         applicationCloseDate: 'required|dateAfterToday:1,days',
         startDate: 'required|dateAfterToday:2,days',
-        questionnaire: 'nullable|arrayUnique|maxLength:10',
-        'questionnaire.*': 'string|maxLength:300',
+        questionnaire: 'arrayNullable:10,300',
         commitment: 'required|numeric|max:168', //hrs per week
         restrictedView: 'required|boolean',
         tags: 'required|arrayUnique|length:5,0',
