@@ -1,7 +1,8 @@
 const homeRouter = require('express').Router();
 const path = require('path');
 const { postLoginStudent , postSignupStudent, getVerifyStudent, postForgotStudent, getResetStudent, postResetStudent } = require('./homeStudent');
-const { colleges, branches, yog, degrees } = require('../../client/src/common/data/collegeData')
+const { colleges, branches, yog, degrees } = require('../../client/src/common/data/collegeData');
+const { StatusCodes, ReasonPhrases } = require('http-status-codes');
 const { postLoginProfessor, postSignupProfessor, getVerifyProfessor, postForgotProfessor, getResetProfessor, postResetProfessor } = require('./homeProfessor')
 const logger = require('../../config/winston');
 
@@ -16,17 +17,28 @@ homeRouter.route("/")
 })
     .post(function (req, res) {
         if(req.body.type === 'student') {
-           res.render('student/signup', {
-                name: req.body.name, 
-                p_email: req.body.email, 
-                colleges: colleges,
-                degrees: degrees,
-                yogs: yog,
-                branches: branches
-            });
+            if(process.env.BLOCK_STUDENT_SIGNUP === "true") {
+                return res.render('landingPage');
+            }
+            else {
+                res.render('student/signup', {
+                    name: req.body.name,
+                    p_email: req.body.email,
+                    colleges: colleges,
+                    degrees: degrees,
+                    yogs: yog,
+                    branches: branches
+                });
+            }
         }
         else if(req.body.type === 'professor') {
-            res.render('professor/signup', { name: req.body.name, p_email: req.body.email, colleges: colleges }); // TODO(giri): Manage dropdowns here and in form vaildator
+            if(process.env.BLOCK_PROFESSOR_SIGNUP === "true") {
+                return res.render('landingPage');
+            }
+            else {
+                // TODO(giri): Manage dropdowns here and in form vaildator
+                res.render('professor/signup', { name: req.body.name, p_email: req.body.email, colleges: colleges });
+            }
         }
         else {
             res.redirect('/');
@@ -59,36 +71,61 @@ homeRouter.route("/login/:type?")
 homeRouter.route('/signup/:type?')
     .get(function(req, res){
         let type = req.params.type;
-        if(type === 'student')
-            res.render('student/signup', {
-                name: "", 
-                p_email: "", 
-                colleges: colleges,
-                degrees: degrees,
-                yogs: yog,
-                branches: branches
-            });
+        if(type === 'student') {
+            if(process.env.BLOCK_STUDENT_SIGNUP === "true") {
+                return res.render('landingPage');
+            }
+            else {
+                res.render('student/signup', {
+                    name: "",
+                    p_email: "",
+                    colleges: colleges,
+                    degrees: degrees,
+                    yogs: yog,
+                    branches: branches
+                });
+            }
+        }
 
-        else if(type === 'professor')
-            res.render('professor/signup', {colleges: colleges});       // replace this with professor implementation
+        else if(type === 'professor') {
+            if(process.env.BLOCK_PROFESSOR_SIGNUP === "true") {
+                return res.render('landingPage');
+            }
+            else {
+                res.render('professor/signup', {colleges: colleges});       // replace this with professor implementation
+            }
+        }
 
         else
             res.render('signup');
     })
     .post(function(req, res, next){
         let type = req.params.type;
-        if(type === 'student')
-            postSignupStudent(req, res)
-                .then(response => logger.ant("Successfully called student signup API"))
-                .catch(next);
+        if(type === 'student') {
+            if(process.env.BLOCK_STUDENT_SIGNUP === "true") {
+                return res.status(StatusCodes.NOT_FOUND).send("<h1>NOT FOUND</h1>");
+            }
+            else {
+                postSignupStudent(req, res)
+                    .then(response => logger.ant("Successfully called student signup API"))
+                    .catch(next);
+            }
+        }
 
-        else if(type === 'professor')
-            postSignupProfessor(req, res)
-                .then(response => logger.ant("Successfully called professor signup API"))
-                .catch(next);
+        else if(type === 'professor') {
+            if(process.env.BLOCK_PROFESSOR_SIGNUP === "true") {
+                return res.status(StatusCodes.NOT_FOUND).send("<h1>NOT FOUND</h1>");
+            }
+            else {
+                postSignupProfessor(req, res)
+                    .then(response => logger.ant("Successfully called professor signup API"))
+                    .catch(next);
+            }
+        }
+
 
         else
-            res.redirect('/signup');   
+            res.redirect('/signup');
     });
 
 homeRouter.get('/verify/:type',function(req, res){
