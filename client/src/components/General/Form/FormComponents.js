@@ -39,13 +39,22 @@ function Title(props) {
 }
 
 function Label(props) {
-    return (<p className="text-l text-gray-700 px-1 mb-1 font-medium">{props.text}</p>);
+    return (<p className="text-l text-gray-700 px-1 mb-1 font-medium">{props.text}{props.required && <span className="text-red-500">*</span>}</p>);
+}
+
+function LabelMaxChars(props){
+    return (
+        <div className="flex flex-row space-x-1 items-center">
+            <Label text={props.text} required={props.required}/>
+            {props.maxChars && <p className="mx-1 text-gray-600 text-xs">(max {props.maxChars} characters)</p>}
+        </div>
+    );
 }
 
 function TextField(props) {
     return (
         <div className={props.extraClass}>
-            <Label text={props.text} />
+            <LabelMaxChars text={props.text} maxChars={props.maxChars} required={props.required}/>
             <input type={props.type || 'text'} onChange={props.onChange} className={`outline-none focus:border-teal-500 border-2 rounded-lg py-1 px-2 ${props.fieldExtraClass}`} name={props.name} value={props.value || ''} disabled={props.disabled}/>
         </div>
     );
@@ -81,7 +90,7 @@ function TextArea(props) {
 
     return (
         <div className={props.extraClass}>
-            <Label text={props.text} />
+            <LabelMaxChars text={props.text} maxChars={props.maxChars} required={props.required} />
             <textarea
                 rows={props.rows || 5}
                 onChange={props.onChange}
@@ -114,4 +123,4 @@ function AddButton(props) {
 }
 
 
-export { Error, Label, TealButton, TextField, Title, Checkbox, CloseButton, TextArea, BackButton, RedButton, AddButton };
+export { Error, Label, TealButton, TextField, Title, Checkbox, CloseButton, TextArea, BackButton, RedButton, AddButton, LabelMaxChars };

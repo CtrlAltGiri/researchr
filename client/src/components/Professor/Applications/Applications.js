@@ -15,6 +15,7 @@ function Applications(props) {
     const [ongoing, setOngoing] = useState([]);
     const [archived, setArchived] = useState([]);
     const [errorText, setErrorText] = useState('');
+    const [name, setName] = useState('')
     const [appType, setAppType] = useState(0);
 
     useEffect(() => {
@@ -25,6 +26,7 @@ function Applications(props) {
                 setOngoing(res.data.ongoing);
                 setArchived(res.data.archived);
                 setQuestionnaire(res.data.questionnaire);
+                setName(res.data.name);
             })
             .catch(err => {
                 setErrorText(err.response.data);
@@ -34,7 +36,7 @@ function Applications(props) {
     return (
         <div>
             <Tabs
-                text={<p>Applications for <span className="text-teal-500">project_name</span></p>}
+                text={<p>Applications for <span className="text-teal-500">{name}</span></p>}
                 onClick={setAppType}
                 tab={appType}
                 data={['Active', 'Selected', 'Ongoing', 'Archived']}
@@ -50,6 +52,7 @@ function Applications(props) {
                         questionnaire={questionnaire || []}
                         active={true}
                         key="active"
+                        status="active"
                     />
                     : appType === 1 ?
                         <ActiveTable
@@ -59,6 +62,7 @@ function Applications(props) {
                             data={selected}
                             questionnaire={questionnaire || []}
                             key="selected"
+                            status="selected"
                         />
                         : appType === 2 ?
                             <Ongoing
@@ -74,6 +78,7 @@ function Applications(props) {
                                 data={archived}
                                 questionnaire={questionnaire || []}
                                 key="archived"
+                                status="archived"
                             />
             }
 

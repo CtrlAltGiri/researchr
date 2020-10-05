@@ -18,7 +18,7 @@ messageRouter.route('/:projectID')
         }
     })
     // API to add message to a particular application
-    .post(function (req, res) {
+    .post(function (req, res, next) {
         if(req.user.userType === "Professor"){
             addProfessorMessages(req, res)
                 .then(response => logger.ant("Successfully called professor add message API"))

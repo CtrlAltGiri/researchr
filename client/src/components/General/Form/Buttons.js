@@ -43,4 +43,12 @@ function SettingsButton(props) {
     )
 }
 
-export { ResearchRLogo, AcceptButton, DeclineButton, SettingsButton };
+function FloatingButtonBottomRight(props) {
+    return (
+        <div className="fixed bottom-0 right-0 w-auto h-16 mr-12 mb-2 cursor-pointer" onClick={props.onClick}>
+            <p className="px-4 py-2 bg-teal-500 text-white rounded-full font-medium">{props.text}</p>
+        </div>
+    );
+}
+
+export { ResearchRLogo, AcceptButton, DeclineButton, SettingsButton, FloatingButtonBottomRight };

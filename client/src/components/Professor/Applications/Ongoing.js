@@ -6,6 +6,7 @@ import Modal from '../../General/Modal/Modal';
 import Messages from '../../General/Messaging/Messages';
 import BeautyStars from 'beauty-stars';
 import axios from 'axios';
+import NoApplications from './NoApplications';
 
 
 function FeedbackModal(props) {
@@ -182,14 +183,17 @@ function Ongoing(props) {
     return (
 
         <div>
-            {props.data && props.data.map(stud => {
+            {props.data && props.data.length > 0 ? props.data.map(stud => {
                 return (
                     <div>
                         <OngoingBlock student={stud} projectID={props.projectID} setErrorText={props.setErrorText} />
                         <hr className="text-gray-500 mx-24 border-gray-500" />
                     </div>
-                );
-            })}
+                )
+            })
+            :
+            <NoApplications status="ongoing"/>
+        }
 
 
         </div>
