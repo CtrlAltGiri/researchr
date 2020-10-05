@@ -4,6 +4,7 @@ const { postLoginStudent , postSignupStudent, getVerifyStudent, postForgotStuden
 const { colleges, branches, yog, degrees } = require('../../client/src/common/data/collegeData');
 const { StatusCodes, ReasonPhrases } = require('http-status-codes');
 const { postLoginProfessor, postSignupProfessor, getVerifyProfessor, postForgotProfessor, getResetProfessor, postResetProfessor } = require('./homeProfessor')
+const { sendContactUsEmail } = require('../../utils/email/sendgirdEmailHelper');
 const logger = require('../../config/winston');
 
 homeRouter.route("/")
@@ -195,6 +196,21 @@ homeRouter.route('/reset/:type')
         else
             res.render('error');
     });
+
+// Route to handle any contact messages from home page
+homeRouter.post('/contactus', function (req, res){
+    sendContactUsEmail(req.body.name, req.body.email, req.body.message)
+        .then(r => {
+            logger.ant("Sent a ContactUs email successfully");
+            return res.render('homepage', {response: "Your message has been recorded successfully"});
+        })
+        .catch(function (err) {
+            logger.tank(err);
+            return res.render('homepage',
+                {response: "Sorry there was an error in recording your message. " +
+                        "Please try again later or contact us using the contact details provided."})
+        });
+})
 
 ///  LOGOUT ROUTE
 
