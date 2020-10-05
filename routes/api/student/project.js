@@ -166,6 +166,7 @@ projectRouter.route("/:projectID")
                         location,
                         questionnaire,
                         apply,
+                        commitment,
                         errorMsg
                      }) =>
                     ({
@@ -183,6 +184,7 @@ projectRouter.route("/:projectID")
                         location,
                         questionnaire,
                         apply,
+                        commitment,
                         errorMsg
                     }))(project);
 
