@@ -45,14 +45,14 @@ function Projectblock(props) {
                     </svg>
                 </Link>
                 </div>
-                <div className="text-center mt-2 leading-none flex justify-center absolute bottom-0 left-0 w-full py-4">
-                    <span className={data.active && Number(data.active) > 0 ? "text-teal-600" : "text-gray-600" +" mr-3 ml-3 md:ml-0 inline-flex items-center leading-none text-sm pr-3 py-1 border-r-2 border-gray-300"}>
-                        NEW APPLICATIONS: {data.active ? data.active : 0}
+                <div className="text-center mt-2 leading-none flex space-x-2 justify-center absolute bottom-0 left-0 w-full py-4">
+                    <span className={data.active && Number(data.active) > 0 ? "text-teal-600" : "text-gray-600" +" inline-flex items-center leading-none text-sm py-1 border-r-2 border-gray-300 pr-2"}>
+                        APPLICATIONS: {data.active ? data.active : 0}
                     </span>
-                    <span className="text-gray-600 mr-3 inline-flex items-center leading-none text-sm pr-3 py-1 border-r-2 border-gray-300">
+                    <span className="text-gray-600 inline-flex items-center leading-none text-sm py-1 border-r-2 border-gray-300 pr-2">
                         INTERVIEWING / SELECTED: {(data.selected != null && data.interview != null) ? data.selected + data.interview : 0}
                     </span>
-                    <span className="mr-3 text-gray-600 inline-flex items-center leading-none text-sm pr-3 py-1">
+                    <span className="text-gray-600 inline-flex items-center leading-none text-sm py-1">
                         <svg className="w-4 h-4 mr-1" stroke="currentColor" strokeWidth={2} fill="none" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
                             <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
                             <circle cx={12} cy={12} r={3} />

@@ -61,7 +61,7 @@ function AddProject(props) {
             text="Add a Project">
 
             <TextField
-                text="Project Name"
+                text="Project Headline"
                 extraClass="w-full my-4"
                 fieldExtraClass="w-full md:w-3/5"
                 onChange={changeInput}
@@ -73,7 +73,7 @@ function AddProject(props) {
             />
 
             <TextArea
-                text="Description"
+                text="Description (Please include nature and scope of Project)"
                 extraClass="my-4"
                 onChange={changeInput}
                 name="desc"
@@ -84,7 +84,7 @@ function AddProject(props) {
             />
 
             <TagInput
-                text="Enter Prerequisities"
+                text="Skills / Prerequisites required"
                 extraClass="flex justify-center mx-auto flex-col"
                 fieldExtraClass="w-full md:3/5"
                 updateTags={changeTags}
@@ -110,7 +110,7 @@ function AddProject(props) {
                 />
 
                 <TextField
-                    text="Duration (in months)"
+                    text="Number of Weeks"
                     extraClass="w-full md:w-1/3 mt-1 mb-4 md:mb-0"
                     fieldExtraClass="w-full"
                     onChange={changeInput}
@@ -134,7 +134,7 @@ function AddProject(props) {
                 />
 
                 <TextField
-                    text="Commitment per week (in hrs)"
+                    text="Weekly Commitment(in hrs)"
                     extraClass="w-full md:w-1/3 mt-1 mb-4 md:mb-0"
                     fieldExtraClass="w-full"
                     onChange={changeInput}
@@ -185,7 +185,7 @@ function AddProject(props) {
             />}
 
             {!props.editMode && <TagInput
-                text="Tags which will help match students"
+                text="Tags which will help match students (eg. machine-learning)"
                 extraClass="flex justify-center mx-auto flex-col mb-4"
                 fieldExtraClass="w-full md:w-3/5"
                 updateTags={changeTags}

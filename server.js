@@ -31,16 +31,24 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'pug');
 
 // Redis configuration
-var redisClient = redis.createClient(process.env.REDISCLOUD_URL, {no_ready_check: true});
+var redisClient;
+if(process.env.NODE_ENV === "production"){
+    redisClient = redis.createClient(process.env.REDISCLOUD_URL, {no_ready_check: true});
+}
 
 // Sessions and passport authentication init
-app.use(session({
+let sessionConfig = {
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     cookie: { secure: false, maxAge:86400000 },
-    store: new redisStore({ client: redisClient })
-}));
+};
+
+if(process.env.NODE_ENV === "production"){
+    sessionConfig.store = new redisStore({ client: redisClient })
+}
+
+app.use(session(sessionConfig));
 
 // Passport initialization
 app.use(passport.initialize());
