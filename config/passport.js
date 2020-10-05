@@ -55,7 +55,6 @@ passport.serializeUser(function (user, done) {
     let sessionConstructor = new SessionConstructor(user._id, userGroup);
     done(null, sessionConstructor);
 
-    // done(null, user._id);
 });
 
 passport.deserializeUser(function (sessionConstructor, done) {
