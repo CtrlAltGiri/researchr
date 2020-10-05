@@ -83,5 +83,56 @@ const sendPasswordResetEmail = (to, token, type) => {
     });
 };
 
-exports.sendVerificationEmail = sendVerificationEmail
-exports.sendPasswordResetEmail = sendPasswordResetEmail
+
+const sendContactUsEmail = (name, from, message) => {
+    const request = sg.emptyRequest({
+        method: "POST",
+        path: "/v3/mail/send",
+        body: {
+            personalizations: [
+                {
+                    to: [
+                        {
+                            email: "aditya@researchr.in"
+                        }
+                    ],
+                    subject:"Someone reached out to us"
+                }
+            ],
+            from: {
+                email: "aditya@researchr.in",
+                name: "ContactUs researchR"
+            },
+            content: [
+                {
+                    type: 'text/html',
+                    value: `<!DOCTYPE html><html lang="en">
+                            <head>
+                            <meta charset="UTF-8">
+                            <title>researchR</title>
+                            </head>
+                            <body>
+                            <p> Name: ${name}</p>
+                            <p> Email: ${from}</p>
+                            <p> Message: ${message}</p>
+                            </body></html>`
+                }
+            ]
+        }
+    });
+
+    return new Promise(function (resolve, reject) {
+        sg.API(request, function (error, response) {
+            if (error) {
+                return reject(error);
+            }
+            else {
+                return resolve(response);
+            }
+        });
+    });
+};
+
+exports.sendVerificationEmail = sendVerificationEmail;
+exports.sendPasswordResetEmail = sendPasswordResetEmail;
+exports.sendContactUsEmail = sendContactUsEmail;
