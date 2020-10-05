@@ -25,8 +25,6 @@ function Projectblock(props) {
                 {data.tags && data.tags.map(tag => {return <h2 key={tag} className="tracking-widest text-xs title-font font-medium text-gray-500 mb-1">#{tag.toUpperCase()}</h2>})}
                 </div>
                 <Link className="title-font sm:text-2xl text-xl font-medium text-gray-900 hover:underline cursor-pointer" to={data.url}>{data.title}</Link>
-                {/*<p className="leading-relaxed my-3">Project Description is a major boost in terms of how much we need to grow and scale based on that. It is ultimately the role of the professor to do the same.</p>
-                */}
                 <div className="my-6">
                     <p className="font-medium mb-1">Start Date for Project: {new Date(data.startDate).toDateString()}</p>
                     <p className="font-medium mb-1">Application Deadline: <span className="underline">{new Date(data.closeDate).toDateString()}</span></p>
@@ -52,9 +50,9 @@ function Projectblock(props) {
                         NEW APPLICATIONS: {data.active ? data.active : 0}
                     </span>
                     <span className="text-gray-600 mr-3 inline-flex items-center leading-none text-sm pr-3 py-1 border-r-2 border-gray-300">
-                        INTERVIEWING / SELECTED: {data.selected && data.interview ? data.selected + data.interview : 0}
+                        INTERVIEWING / SELECTED: {(data.selected != null && data.interview != null) ? data.selected + data.interview : 0}
                     </span>
-                    <span className="mr-2 text-gray-600 inline-flex items-center leading-none text-sm pr-3 py-1">
+                    <span className="mr-3 text-gray-600 inline-flex items-center leading-none text-sm pr-3 py-1">
                         <svg className="w-4 h-4 mr-1" stroke="currentColor" strokeWidth={2} fill="none" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
                             <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
                             <circle cx={12} cy={12} r={3} />

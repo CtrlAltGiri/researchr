@@ -4,6 +4,7 @@ import axios from 'axios';
 import AddProject from './AddProject';
 import { Error } from '../../General/Form/FormComponents';
 import Welcome from './Welcome';
+import { FloatingButtonBottomRight } from '../../General/Form/Buttons'
 
 function LandingPage(props) {
 
@@ -31,9 +32,11 @@ function LandingPage(props) {
                     }
 
                 </div>
-                <div className="fixed bottom-0 right-0 w-auto h-16 mr-12 mb-2 cursor-pointer" onClick={(e) => setModalOpen(true)}>
-                    <p className="px-4 py-2 bg-teal-500 text-white rounded-full font-medium">Add Project (+)</p>
-                </div>   
+                
+                <FloatingButtonBottomRight 
+                    text="Add Project (+)"
+                    onClick={e => setModalOpen(true)}
+                />  
             </div>
         
             <AddProject 

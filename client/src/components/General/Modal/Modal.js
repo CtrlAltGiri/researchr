@@ -3,6 +3,8 @@ import ReactModal from 'react-modal';
 import { Title, CloseButton } from '../../General/Form/FormComponents';
 
 function Modal(props){
+
+    ReactModal.setAppElement('#root');
     return(
         <ReactModal
             isOpen={props.modalOpen}

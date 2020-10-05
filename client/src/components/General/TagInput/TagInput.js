@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { AddButton, Label } from '../Form/FormComponents';
+import { AddButton, LabelMaxChars } from '../Form/FormComponents';
 import axios from 'axios';
 
 /*
@@ -76,7 +76,7 @@ function TagInputs(props) {
 
     return (
         <div className={props.extraClass}>
-            <Label text={props.text} />
+            <LabelMaxChars text={props.text} required={props.required} maxChars={props.maxChars} />
             <div className="flex flex-row">
                 <input type="text" 
                     onChange={(e) => props.allCases ? setVal(e.target.value) : setVal(e.target.value.toLowerCase())} 

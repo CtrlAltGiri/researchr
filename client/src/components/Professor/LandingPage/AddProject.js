@@ -68,15 +68,19 @@ function AddProject(props) {
                 name="name"
                 value={projDetails.name}
                 disabled={props.editMode}
+                maxChars={200}
+                required={true}
             />
 
             <TextArea
-                text="Description (please include the work and commitment)"
+                text="Description"
                 extraClass="my-4"
                 onChange={changeInput}
                 name="desc"
                 value={projDetails.desc}
                 rows={10}
+                maxChars={1000}
+                required={true}
             />
 
             <TagInput
@@ -89,6 +93,7 @@ function AddProject(props) {
                 noSuggestions={false}
                 name="prereq"
                 heading="Chosen Prerequisites"
+                required={true}
             />
 
             <div className="flex flex-col md:flex-row mb-2 mt-4">
@@ -101,6 +106,7 @@ function AddProject(props) {
                     extraClass="w-full mb-8"
                     innerClass="flex"
                     fieldExtraClass="w-full md:w-3/4 mr-4 md:mr-12"
+                    required={true}
                 />
 
                 <TextField
@@ -110,6 +116,7 @@ function AddProject(props) {
                     onChange={changeInput}
                     name="duration"
                     value={projDetails.duration}
+                    required={true}
                 />
             </div>
 
@@ -123,6 +130,7 @@ function AddProject(props) {
                     extraClass="w-full mb-8"
                     innerClass="flex"
                     fieldExtraClass="w-full md:w-3/4 mr-4 md:mr-12"
+                    required={true}
                 />
 
                 <TextField
@@ -132,6 +140,7 @@ function AddProject(props) {
                     onChange={changeInput}
                     name="commitment"
                     value={projDetails.commitment}
+                    required={true}
                 />
             </div>
 
@@ -145,6 +154,7 @@ function AddProject(props) {
                     extraClass="mb-8 w-1/2"
                     fieldExtraClass="w-4/5"
                     options={[{ value: "WFH", label: "Work From Home" }, { value: projDetails.college || props.college, label: projDetails.college || props.college }]}
+                    required={true}
                 />
 
                 <Dropdown
@@ -156,6 +166,7 @@ function AddProject(props) {
                     extraClass="mb-8 w-1/2"
                     fieldExtraClass="w-4/5"
                     options={[{ value: true, label: "Show it only to students in my college" }, { value: false, label: "Show it to everyone" }]}
+                    required={true}
                 />
 
             </div>
@@ -182,6 +193,7 @@ function AddProject(props) {
                 maxNumberOfTags={3}
                 name="tags"
                 heading="Chosen Tags"
+                required={true}
             />}
 
             <TealButton
