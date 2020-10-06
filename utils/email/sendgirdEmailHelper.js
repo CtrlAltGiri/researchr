@@ -24,7 +24,7 @@ const sendVerificationEmail = (to, name, token, type) => {
             content: [
                 {
                     type: 'text/html',
-                    value: `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>researchR</title></head><body><p>Hello ${name}. Click on this link to verify your email <a href="${hostUrl}/verify/${type}?token=${token}">${hostUrl}/verify?token=${token}</a></p></body></html>`
+                    value: `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>researchR</title></head><body><p>Hello ${name}. Click on this link to verify your email <a href="${hostUrl}/verify/${type}?token=${token}">${hostUrl}/verify/${type}?token=${token}</a></p></body></html>`
                 }
             ]
         }
@@ -65,7 +65,7 @@ const sendPasswordResetEmail = (to, token, type) => {
             content: [
                 {
                     type: 'text/html',
-                    value: `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>researchR</title></head><body><p>Click on this link to reset your password <a href="${hostUrl}/reset/${type}?token=${token}">${hostUrl}/reset?token=${token}</a></p></body></html>`
+                    value: `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>researchR</title></head><body><p>Click on this link to reset your password <a href="${hostUrl}/reset/${type}?token=${token}">${hostUrl}/reset/${type}?token=${token}</a></p></body></html>`
                 }
             ]
         }
