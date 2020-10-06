@@ -40,7 +40,7 @@ projectsRouter.route("/")
                                 ({_id, name, startDate, restrictedView, applicationCloseDate, actualAppCloseDate, tags, views}))
                             (element);
 
-                            retElement.open = (retElement.actualAppCloseDate === undefined || retElement.applicationCloseDate > Date.now());
+                            retElement.open = (retElement.applicationCloseDate > Date.now());
 
                             return retElement;
                         })
