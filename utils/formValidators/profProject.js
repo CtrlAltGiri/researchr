@@ -12,8 +12,8 @@ niv.addCustomMessages({
     max: 'The :attribute exceeds its maximum allowed value',
     length: 'The :attribute exceeds its maximum length',
     numeric: 'The :attribute must be a number',
-    'applicationCloseDate.dateAfterToday': 'The application closing date must be at least one day later',
-    'startDate.dateAfterToday': 'The starting date must be at least two days later'
+    'applicationCloseDate.dateAfterToday': 'The application closing date must be valid',
+    'startDate.dateAfterToday': 'The starting date must be at least one day later'
 });
 
 niv.extend('arrayNullable', arrayNullable);
@@ -28,8 +28,8 @@ async function profProjectValidator(formData) {
         'prereq.*': 'required|string|maxLength:400',
         duration: 'required|numeric|max:100', // in months
         location: 'required|string|maxLength:200',
-        applicationCloseDate: 'required|dateAfterToday:1,days',
-        startDate: 'required|dateAfterToday:2,days',
+        applicationCloseDate: 'required|dateAfterToday:0,days',
+        startDate: 'required|dateAfterToday:1,days',
         questionnaire: 'arrayNullable:10,300',
         commitment: 'required|numeric|max:168', //hrs per week
         restrictedView: 'required|boolean',
