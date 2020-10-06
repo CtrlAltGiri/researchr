@@ -129,7 +129,7 @@ homeRouter.route('/signup/:type?')
             res.redirect('/signup');
     });
 
-homeRouter.get('/verify/:type',function(req, res){
+homeRouter.get('/verify/:type?',function(req, res){
 
     let type = req.params.type;
     if(type === 'student')
@@ -137,7 +137,6 @@ homeRouter.get('/verify/:type',function(req, res){
 
     else if(type === 'professor')
         getVerifyProfessor(req, res);
-
     else
         res.render('error');
 });
@@ -168,7 +167,7 @@ homeRouter.route('/forgot/:type?')
     });
 
 
-homeRouter.route('/reset/:type')
+homeRouter.route('/reset/:type?')
     .get(function(req,res) {
         
         let type = req.params.type;
