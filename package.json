@@ -8,12 +8,14 @@
     "build:react": "cd client && npm run build",
     "start:dev": "concurrently \"nodemon server.js\" \"cd client && npm start\"",
     "start:prod": "npm run build:react && npm run build:css && node server.js",
-    "start": "npm run build:css && node server.js", 
+    "start": "npm run build:css && node server.js",
     "heroku-postbuild": "cd client && npm i && npm run build-heroku"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@timberio/node": "^0.35.0",
+    "@timberio/winston": "^0.35.0",
     "app-root-path": "^3.0.0",
     "async": "^3.2.0",
     "autoprefixer": "^9.8.6",
