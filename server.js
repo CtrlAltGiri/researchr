@@ -54,7 +54,7 @@ app.use(session(sessionConfig));
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Mongoose Connection initialization
+// Mongoose Connection initialization 
 mongoose.connect(process.env.DB_URL, { useUnifiedTopology: true, useNewUrlParser: true });
 mongoose.set("useCreateIndex", true);
 

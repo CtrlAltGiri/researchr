@@ -5,10 +5,10 @@
   "main": "server.js",
   "scripts": {
     "build:css": "postcss public/css/tailwind.css -o public/css/index.css",
-    "build": "cd client && npm run build",
+    "build:react": "cd client && npm run build",
     "start:dev": "concurrently \"nodemon server.js\" \"cd client && npm start\"",
-    "start:prod": "npm run build && node server.js",
-    "start": "node server.js",
+    "start:prod": "npm run build:react && npm run build:css && node server.js",
+    "start": "npm run build:css && node server.js", 
     "heroku-postbuild": "cd client && npm i && npm run build-heroku"
   },
   "author": "",
