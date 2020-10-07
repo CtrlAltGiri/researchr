@@ -1,7 +1,12 @@
-import React from 'react';
+import axios from 'axios';
+import React, { useState } from 'react';
 import {Link} from 'react-router-dom'
+import Toggle from '../../General/Form/Toggle';
 
 function Projectblock(props) {
+
+    const [open, setOpen] = useState(props.project.open)
+    const [error, setError] = useState('')
 
     const data = {
         tags: props.project.tags,
@@ -18,6 +23,16 @@ function Projectblock(props) {
         views:props.project.views
     }
 
+    function sendNewOpenStatus(url){
+        let newVal = !open;
+        console.log(url);
+        axios.patch(url, {
+            open: newVal
+        })
+        .then(res => setOpen(!open))
+        .catch(err => setError(err.response.data));
+    }
+
     return (
         <div className="p-2 lg:w-1/2">
             <div className="h-full bg-gray-200 px-8 pt-12 pb-20 rounded-lg overflow-hidden relative">
@@ -29,6 +44,8 @@ function Projectblock(props) {
                     <p className="font-medium mb-1">Start Date for Project: {new Date(data.startDate).toDateString()}</p>
                     <p className="font-medium mb-1">Application Deadline: <span className="underline">{new Date(data.closeDate).toDateString()}</span></p>
                     <p className="font-medium underline">{data.restricted ? "Restricted to " + props.college : "Shown to everyone"}</p>
+                    <Toggle name={data.url} text="Should the project be visible?" extraClass="px-1 w-full my-4" labelClass="flex items-center cursor-pointer" checked={open} onClick={() => {sendNewOpenStatus("/api" + data.url); }}/>
+                    <p className="text-red-500 text-md">{error}</p>
                 </div>
 
                 <div className="items-end flex flex-col">

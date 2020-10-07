@@ -4,10 +4,10 @@ import './toggle.css';
 function Toggle(props) {
 
     return (
-        <div className="px-2 mx-8 w-full md:w-1/4">
-            <label htmlFor="toogleA" className="flex justify-center items-center cursor-pointer">
+        <div className={props.extraClass}>
+            <label htmlFor={props.name || "toggleA"} className={props.labelClass}>
                 <div className="relative">
-                    <input id="toogleA" type="checkbox" className="hidden" onChange={e => {(props.onClick && props.onClick());}}/>
+                    <input id={props.name || "toggleA"} type="checkbox" className="hidden" onChange={e => {(props.onClick && props.onClick())}} checked={props.checked}/>
                     <div className="toggle__line w-10 h-4 bg-gray-400 rounded-full shadow-lg"/>
                     <div className="toggle__dot absolute w-6 h-6 bg-white rounded-full shadow-lg" />
                 </div>

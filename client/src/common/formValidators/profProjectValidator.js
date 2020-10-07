@@ -29,7 +29,7 @@ function projectValidator(props, editMode){
         return "Please enter atleast one prerequisite for the project";
     }
     else if(!(props.duration && !isNaN(props.duration))){
-        return "Please enter duration (in months) of the project"
+        return "Please enter duration (in weeks - only numerical value) of the project"
     }
     else if(!(props.commitment && !isNaN(props.commitment))){
         return "Please enter commitment (in hours/week) of the project";

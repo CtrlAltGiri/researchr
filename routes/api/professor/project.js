@@ -201,6 +201,10 @@ projectRouter.route("/:projectID")
                             return res.status(StatusCodes.OK).send("Successfully updated");
                         }
                         // failed update mostly because the professor is not the owner of this project
+                        else if(n){
+                            logger.ant("No change to project: %s", projectID)
+                            return res.status(StatusCodes.OK).send("No changes")
+                        }
                         else {
                             logger.ant("Failed to update the project details for project: %s by professor: %s", projectID, professorID);
                             return res.status(StatusCodes.UNAUTHORIZED).send("Not Allowed");
@@ -210,7 +214,7 @@ projectRouter.route("/:projectID")
         }
         catch (err) {
             next(err);
-        }
+        } 
     })
     // API to handle toggling on/off of profProjects
     .patch(function (req, res) {
@@ -224,7 +228,7 @@ projectRouter.route("/:projectID")
         }
         // get the new toggle status from req.body
         let openStatus = req.body.open;
-
+        
         let curDate = new Date();
 
         if(openStatus === true) {
