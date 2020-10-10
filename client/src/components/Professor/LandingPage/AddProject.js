@@ -40,6 +40,8 @@ function AddProject(props) {
 
     function submitForm(event){
         event.preventDefault();
+
+        // TODO (Giri): Please make sure they can't press button twice
         if(btnRef.current){
             btnRef.current.setAttribute("disabled", "true");
         }
