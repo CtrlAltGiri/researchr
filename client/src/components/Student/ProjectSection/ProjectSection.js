@@ -75,7 +75,7 @@ function ProjectSection() {
             
             <div className="flex flex-row w-full items-center justify-center px-5 pb-4">
                 <Filters setFilter={setNewFilter} />
-                <Toggle text="My College View" onClick={() => setCollegeView(!collegeView)}/>
+                <Toggle extraClass="px-2 mx-8 w-full md:w-1/4" text="My College View" onClick={() => setCollegeView(!collegeView)} labelClass="flex justify-center items-center cursor-pointer" />
             </div>
 
             <div className="container px-5 mx-auto">
