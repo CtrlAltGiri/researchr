@@ -1,7 +1,9 @@
 import React from 'react';
 import ReactModal from 'react-modal';
+import { CloseButton } from '../Form/FormComponents';
 
 function SmallModal(props){
+    ReactModal.setAppElement('#root');
     return(
         <ReactModal
             isOpen={props.isOpen}
@@ -17,6 +19,7 @@ function SmallModal(props){
                 }
             }}
         >
+            <CloseButton onClick={props.onRequestClose} />
             {props.children}
 
         </ReactModal>

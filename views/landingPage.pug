@@ -1,16 +1,106 @@
-doctype html
-html(lang='en')
-    head
-        meta(charset='UTF-8')
-        meta(name='viewport', content='width=device-width, initial-scale=1.0')
-        link(rel='stylesheet', href='/css/index.css')
-        title Error - researchR
-    body
-        section
-            div(class='flex flex-col text-center w-full')
-                h1(class='text-xl font-medium title-font mb-4 text-gray-900') Sorry! Only invited users have access at the moment.
-                p(class='lg:w-2/3 mx-auto leading-relaxed text-base')
-                    | We appreciate your interest in us. For enquiries please connect with us on 
-                    a.text-blue-600(class="hover:underline", href='https://www.linkedin.com/company/researchr/') LinkedIn
-                input(type='button' onclick='javascript:history.back();return false;' value='Back')
-                //a.button.mt-4.mb-4.bg-teal-500.text-white.rounded-md.px-4.py-2(class='lg:mr-24 focus:outline-none' href='/login') Clink here to go to the Login page
+html
+  head
+    title
+      | researchR
+    meta(name='viewport' content='width=device-width, initial-scale=1.0')
+    link(rel='stylesheet' href='/css/index.css') 
+    style.
+      .video-container {
+      overflow: hidden;
+      position: relative;
+      width: 100%;
+      }
+      .video-container::after {
+      padding-top: 56.25%;
+      display: block;
+      content: '';
+      }
+      .video-container iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      }
+      .svg-icon {
+        width: 2.5em;
+        height: 2.5em;
+      }
+
+      .svg-icon path{
+        fill: #38b2ac;
+      }     
+  body
+    header.text-gray-700.body-font
+      .container.mx-auto.flex.flex-wrap.p-5.flex-col.items-center.justify-between(class='md:flex-row')
+        a(href="/")
+          svg(viewBox='0 0 60 60' class='svg-icon m-1 md:m-3')
+            path(fill='none' d='M26.76,42l-8.1-11.7h-0.48H9.72V42H0V0h18.18c3.72,0,6.95,0.62,9.69,1.86c2.74,1.24,4.85,3,6.33,5.28\
+    c1.48,2.28,2.22,4.98,2.22,8.1c0,3.12-0.75,5.81-2.25,8.07s-3.63,3.99-6.39,5.19L37.2,42H26.76z M24.3,9.81\
+    c-1.52-1.26-3.74-1.89-6.66-1.89H9.72v14.64h7.92c2.92,0,5.14-0.64,6.66-1.92c1.52-1.28,2.28-3.08,2.28-5.4\
+    C26.58,12.88,25.82,11.07,24.3,9.81z')
+      
+        a(href="/login")
+          button.inline-flex.items-center.bg-gray-200.border-0.py-1.px-3.rounded.text-base.mt-4(class='focus:outline-none hover:bg-gray-300 md:mt-0')
+            | Sign
+            | in
+            svg.w-4.h-4.ml-1(fill='none' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' viewBox='0 0 24 24')
+              path(d='M5 12h14M12 5l7 7-7 7')
+    // HERO SECTION
+    //- section.text-gray-700.body-font
+    //-   .container.mx-auto.flex.px-5.py-6.flex-col.items-center(class='md:py-8 md:flex-row')
+    //-     .mb-10(class='lg:max-w-lg lg:w-full md:w-1/2 w-5/6 md:mb-0')
+    //-       img.object-cover.object-center.rounded(alt='hero' src='/images/landingPage.png')
+    //-     .flex.flex-col.items-center.text-center(class='lg:flex-grow md:w-1/2 lg:pl-24 md:pl-16 md:items-start md:text-left')
+    //-       h1.title-font.text-3xl.mb-4.font-medium.text-gray-900(class='sm:text-4xl')
+    //-         | Collaboration made easy.
+    //-       p.mb-8.leading-relaxed
+    //-         | Enter your email and your lucky stars could bring you exclusive access to our
+    //-         | platform
+    //-       form.flex.w-full.justify-center(class='md:justify-start', action="", method="post")
+    //-         input.bg-gray-100.rounded.mr-4.border.border-gray-400.text-base.px-4(class='focus:outline-none focus:border-teal-500 lg:w-full xl:w-1/2 w-2/4' placeholder='Email ID' type='text')
+    //-         button.inline-flex.text-white.bg-teal-500.border-0.py-2.px-6.rounded.text-lg(class='focus:outline-none hover:bg-teal-600') Request
+    //-       p.text-sm.mt-2.text-gray-500.mb-8.w-full You'll get access in no time
+    // THE VIDEO SECTION
+    section
+      .flex.flex-col.mb-20.space-y-12.px-8(class='md:flex-row md:space-y-0 md:space-x-12 md:px-12')
+        .w-full(class='md:w-1/2')
+          .video-container
+            iframe(src='https://www.youtube.com/embed/hGryQDDDKTo' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen='')
+        .w-full(class='md:w-1/2')
+          .video-container
+            iframe(src='https://www.youtube.com/embed/nuCgpP4GFrE' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen='')
+    section#get-access.text-gray-700.body-font.relative
+      .container.px-5.pb-12.mx-auto
+        .flex.flex-col.text-center.w-full.mb-12
+          h1.text-2xl.font-medium.title-font.mb-4.text-gray-900(class='sm:text-3xl') Get Access
+          p.mx-auto.leading-relaxed.text-base(class='lg:w-2/3') Your lucky stars could grant you access to the most awaited student-professor platform.
+        .mx-auto(class='lg:w-1/2 md:w-2/3')
+          form(action="/landingpage", method="post").flex.flex-wrap.-m-2
+            .p-2(class='w-full md:w-1/2')
+              input.w-full.bg-gray-100.rounded.border.border-gray-400.text-base.px-4.py-2(class='focus:outline-none focus:border-teal-500' placeholder='Name' type='text' value=name)
+            .p-2(class='w-full md:w-1/2')
+              input.w-full.bg-gray-100.rounded.border.border-gray-400.text-base.px-4.py-2(class='focus:outline-none focus:border-teal-500' placeholder='Work Email' type='email', value=email)
+            .p-2(class='w-full md:w-1/2 flex flex-row md:flex-col items-center')
+              p.text-gray-600.font-thin.px-1(class="w-3/4 md:w-full mb-1") How did you hear about us?
+              select#HearAboutUs.border-2.py-2.px-2.w-full.rounded-lg(class='focus:outline-none')
+                option(value='others') Others
+                option(value='linkedin') Linkedin
+                option(value='wordOfMouth') Word of Mouth
+            .p-2(class='w-full md:w-1/2 flex flex-row md:flex-col')
+              p.text-gray-600.font-thin.px-1(class="w-3/4 md:w-full mb-1")  Are you a?
+              select#AreYouA.border-2.py-2.px-2.w-full.rounded-lg(class='focus:outline-none')
+                option(value='student') Student
+                option(value='professor') Professor
+                option(value='others') Other
+            .p-6.w-full
+              button.flex.mx-auto.text-white.bg-teal-500.border-0.py-2.px-8.rounded.text-lg(class='focus:outline-none hover:bg-teal-600') Request
+            p.text-red-600.text-lg.mx-auto #{done}
+            script.
+              res="!{email}";
+              if(!res){
+                res = "!{done}"
+              }
+              if(res && res.length > 0){
+                document.getElementById("get-access").scrollIntoView()
+              }

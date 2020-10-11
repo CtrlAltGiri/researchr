@@ -1,18 +1,25 @@
 import { BandwidthLimitExceeded } from 'http-errors';
-import React, { useRef } from 'react'
+import React, { Component, useRef, useState } from 'react'
+import DatePicker from 'react-date-picker/dist/entry.nostyle';
+import '../../assets/datepicker.css'
+
 
 function Error(props){
 
-    const btnRef = useRef()
-    
-    function Ban(){
-        console.log("not disabled lool");
-        btnRef.current.setAttribute("disabled", "true")
-    }
-
-    return <button ref={btnRef} onClick={e => Ban()}>
-        Please click here
-    </button>
+    return <MyApp />
 }
+
+function MyApp() {
+    const [value, onChange] = useState(new Date());
+  
+    return (
+      <div>
+        <DatePicker
+          onChange={onChange}
+          value={value}
+        />
+      </div>
+    );
+  }
 
 export default Error;

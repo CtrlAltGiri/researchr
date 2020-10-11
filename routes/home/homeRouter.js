@@ -19,7 +19,7 @@ homeRouter.route("/")
     .post(function (req, res) {
         if(req.body.type === 'student') {
             if(process.env.BLOCK_STUDENT_SIGNUP === "true") {
-                return res.render('landingPage');
+                return res.redirect('/landingpage/' + req.body.email);
             }
             else {
                 res.render('student/signup', {
@@ -34,7 +34,7 @@ homeRouter.route("/")
         }
         else if(req.body.type === 'professor') {
             if(process.env.BLOCK_PROFESSOR_SIGNUP === "true") {
-                return res.render('landingPage');
+                return res.redirect('/landingpage/' + req.body.email);
             }
             else {
                 // TODO(giri): Manage dropdowns here and in form vaildator
@@ -45,6 +45,21 @@ homeRouter.route("/")
             res.redirect('/');
         }
     });
+
+homeRouter.route("/landingpage/:email?")
+    .get(function(req, res){
+        let email = req.params.email;
+        if(email === "complete"){
+            res.render("landingPage", {done: "Details submitted successfully!"})
+        }
+        else{
+            res.render("landingPage", { email: req.params.email });
+        }
+    })
+    .post(function(req, res){
+        //TODO (Adi): Store details / email (decide)
+        res.redirect("/landingpage/complete")
+    })
 
 homeRouter.route("/login/:type?")
     .get(function (req, res) {
