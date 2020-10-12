@@ -70,7 +70,6 @@ homeRouter.route("/landingpage/:email?")
     })
     // adds information to the waiting list collection
     .post(function(req, res){
-        console.log(req.body);
         let email = req.body.email;
         let name = req.body.name;
         let type = req.body.type;
@@ -97,7 +96,12 @@ homeRouter.route("/landingpage/:email?")
                     }
                     // TODO(aditya): What to do if it fails?
                     else {
-                        return res.render("landingPage", {done: true});
+                        if(type === 'student') {
+                            return res.render("landingPage", {done: "student"});
+                        }
+                        else {
+                            return res.render("landingPage", {done: "professor"});
+                        }
                     }
             })
         }
