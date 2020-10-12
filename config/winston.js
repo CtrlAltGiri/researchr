@@ -2,6 +2,7 @@ var appRoot = require('app-root-path');
 var winston = require('winston');
 var winstonDailyRotate = require('winston-daily-rotate-file');
 
+
 var logFormat = winston.format.combine(
     winston.format.timestamp(),
     winston.format.align(),
@@ -45,19 +46,22 @@ var logger = new winston.createLogger({
             maxsize: 5242880,
             maxFiles: 5,
             handleExceptions: true
-        }),    
+        }),  
+        new winston.transports.Console({
+          level: 'ant'
+        })
     ],
     exitOnError: false, // do not exit on handled exceptions
 });
 
-if(process.env.NODE_ENV !== 'production'){
-  logger.add(new winston.transports.Console({
-    format: winston.format.combine(
-      winston.format.colorize(),
-      winston.format.simple()
-    )
-  }));
-}
+// if(process.env.NODE_ENV !== 'production'){
+//   logger.add(new winston.transports.Console({
+//     format: winston.format.combine(
+//       winston.format.colorize(),
+//       winston.format.simple()
+//     )
+//   }));
+// }
 
 winston.addColors({
     nuclear: 'red', // fatal

@@ -15,6 +15,7 @@ const ProfProjectsSchema = new mongoose.Schema({
     dateOfCreation: Date,
     commitment: Number, // hours per week
     applicationCloseDate: Date,
+    actualAppCloseDate: Date, // internally used to know if a project is manually toggled off or not
     location: String, // WFH or specific location
     restrictedView: Boolean,
     questionnaire: [ String ],

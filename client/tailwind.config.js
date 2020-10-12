@@ -1,5 +1,11 @@
 const tailwindcss = require('tailwindcss');
 module.exports = {
+    purge:{
+        enabled: true,     // this will be enabled only if prod env
+        content: [
+            './src/**/*.js',
+        ]
+    },
     plugins: [
         tailwindcss('./tailwind.js'),
         require('autoprefixer')

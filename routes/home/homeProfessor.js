@@ -151,8 +151,10 @@ function getVerifyProfessor(req, res) {
         return res.end("<h1>Bad Request</h1>");
     }
 
+    console.log(req.query.token);
+    
     Professors.findOne({ verifyHash: req.query.token }, function (err, professor) {
-        if (err) {
+        if (err) {  
             logger.tank(err);
             return res.redirect('/verify/error');
         }

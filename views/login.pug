@@ -28,7 +28,7 @@ body.bg-white
         #tabs-id.flex.flex-wrap
           .w-full
             .relative.flex.flex-col.min-w-0.break-words.bg-white.w-full.mb-0.rounded
-              .px-4.py-5.flex-auto
+              .px-4.py-2.flex-auto
                 .tab-content.tab-space
                   #tab-student.block
                     form.mt-2(action='/login/student' method='POST')
@@ -51,7 +51,7 @@ body.bg-white
                           span.absolute.left-0.inset-y-0.flex.items-center.pl-3
                             svg.h-5.w-5.text-teal-300.transition.ease-in-out.duration-150(class='group-hover:text-teal-400' fill='currentColor' viewbox='0 0 20 20')
                               path(fill-rule='evenodd' d='M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z' clip-rule='evenodd')
-                          |  Sign in as Student
+                          |  Sign in as Student*
                       hr.mt-6.border-gray-300
                       h1.font-bold.mt-4.text-red-500
                   #tab-professor.hidden
@@ -75,8 +75,9 @@ body.bg-white
                           span.absolute.left-0.inset-y-0.flex.items-center.pl-3
                             svg.h-5.w-5.text-teal-300.transition.ease-in-out.duration-150(class='group-hover:text-teal-400' fill='currentColor' viewbox='0 0 20 20')
                               path(fill-rule='evenodd' d='M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z' clip-rule='evenodd')
-                          |  Sign in as Professor
+                          |  Sign in as Professor*
                       hr.mt-6.border-gray-300
+                  p.text-gray-500.font-thin.text-sm.mt-4.self-center * By clicking sign in, you are agreeing to the use of cookies
                   if wrongCreds
                     h1.font-bold.mt-4.text-red-500 Incorrect Email Address or Password
                   else if unverified

@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
+import React, { Component, useRef, useState } from 'react'
+
 
 function Error(props){
-    return (
-        <h1>Error done boys.</h1>  
-    );
+
+    return <h1> Error </h1>
 }
 
 export default Error;

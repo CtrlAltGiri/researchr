@@ -5,6 +5,7 @@ const { colleges, branches, yog, degrees } = require('../../client/src/common/da
 const { StatusCodes, ReasonPhrases } = require('http-status-codes');
 const { postLoginProfessor, postSignupProfessor, getVerifyProfessor, postForgotProfessor, getResetProfessor, postResetProfessor } = require('./homeProfessor')
 const { sendContactUsEmail } = require('../../utils/email/sendgirdEmailHelper');
+const WaitingList = require('../../models/waitingList');
 const logger = require('../../config/winston');
 
 homeRouter.route("/")
@@ -19,7 +20,18 @@ homeRouter.route("/")
     .post(function (req, res) {
         if(req.body.type === 'student') {
             if(process.env.BLOCK_STUDENT_SIGNUP === "true") {
-                return res.render('landingPage');
+                // check if req.body.email a valid email
+                if (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(req.body.email))
+                {
+                   // valid email ; store it in waitingList collection
+                    WaitingList.updateOne({email: req.body.email}, {$set: {addedAt: Date.now()}}, {upsert: true}, function (err, result) {
+                        if(err) {
+                            logger.tank(err);
+                        }
+                        // TODO(aditya): What to do if it fails?
+                    })
+                }
+                return res.redirect('/landingpage/' + req.body.email);
             }
             else {
                 res.render('student/signup', {
@@ -34,7 +46,7 @@ homeRouter.route("/")
         }
         else if(req.body.type === 'professor') {
             if(process.env.BLOCK_PROFESSOR_SIGNUP === "true") {
-                return res.render('landingPage');
+                return res.redirect('/landingpage/' + req.body.email);
             }
             else {
                 // TODO(giri): Manage dropdowns here and in form vaildator
@@ -45,6 +57,58 @@ homeRouter.route("/")
             res.redirect('/');
         }
     });
+
+homeRouter.route("/landingpage/:email?")
+    .get(function(req, res){
+        let email = req.params.email;
+        if(email === "complete"){
+            res.render("landingPage", {done: "Details submitted successfully!"})
+        }
+        else{
+            res.render("landingPage", { email: req.params.email });
+        }
+    })
+    // adds information to the waiting list collection
+    .post(function(req, res){
+        let email = req.body.email;
+        let name = req.body.name;
+        let type = req.body.type;
+        let from = req.body.from;
+        if (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(req.body.email) &&
+            (name && typeof name === 'string' && name.length < 500) &&
+            (type && typeof type === 'string' && type.length < 500) &&
+            (from && typeof from === 'string' && from.length < 500)) {
+            WaitingList.updateOne(
+                {email: email},
+                {
+                    $set: {
+                        addedAt: Date.now(),
+                        name: name,
+                        type: type,
+                        from: from
+                    }
+                },
+                {upsert: true},
+                function (err, result) {
+                    if(err) {
+                        logger.tank(err);
+                        return res.render("landingPage", {errorMsg: "There was an error in requesting access. Please try again later."});
+                    }
+                    // TODO(aditya): What to do if it fails?
+                    else {
+                        if(type === 'student') {
+                            return res.render("landingPage", {done: "student"});
+                        }
+                        else {
+                            return res.render("landingPage", {done: "professor"});
+                        }
+                    }
+            })
+        }
+        else {
+            return res.render("landingPage", {errorMsg: "Please enter all fields correctly."})
+        }
+    })
 
 homeRouter.route("/login/:type?")
     .get(function (req, res) {
@@ -129,7 +193,7 @@ homeRouter.route('/signup/:type?')
             res.redirect('/signup');
     });
 
-homeRouter.get('/verify/:type',function(req, res){
+homeRouter.get('/verify/:type?',function(req, res){
 
     let type = req.params.type;
     if(type === 'student')
@@ -137,7 +201,6 @@ homeRouter.get('/verify/:type',function(req, res){
 
     else if(type === 'professor')
         getVerifyProfessor(req, res);
-
     else
         res.render('error');
 });
@@ -168,7 +231,7 @@ homeRouter.route('/forgot/:type?')
     });
 
 
-homeRouter.route('/reset/:type')
+homeRouter.route('/reset/:type?')
     .get(function(req,res) {
         
         let type = req.params.type;

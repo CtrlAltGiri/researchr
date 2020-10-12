@@ -176,10 +176,18 @@ projectRouter.route("/:projectID")
                 ({desc,prereq,duration,location,applicationCloseDate,startDate,commitment,restrictedView}))(req.body);
             Object.keys(update).forEach(key => update[key] === undefined && delete update[key]);
 
+            let updateQuery = {
+                $set: update
+            };
+            // unset the actualAppCloseDate if present if applicationCloseDate is being updated
+            if('applicationCloseDate' in update) {
+                updateQuery.$unset = {
+                    actualAppCloseDate: 1
+                };
+            }
+
             ProfProjects.updateOne({_id: projectID, professorID: mongoose.Types.ObjectId(professorID)},
-                {
-                    $set: update
-                },
+                updateQuery,
                 function (err, result){
                     if(err){
                         logger.tank(err);
@@ -193,16 +201,110 @@ projectRouter.route("/:projectID")
                             return res.status(StatusCodes.OK).send("Successfully updated");
                         }
                         // failed update mostly because the professor is not the owner of this project
+                        else if(n){
+                            logger.ant("No change to project: %s", projectID)
+                            return res.status(StatusCodes.OK).send("No changes")
+                        }
                         else {
                             logger.ant("Failed to update the project details for project: %s by professor: %s", projectID, professorID);
                             return res.status(StatusCodes.UNAUTHORIZED).send("Not Allowed");
                         }
                     }
-                })
+                });
         }
         catch (err) {
             next(err);
+        } 
+    })
+    // API to handle toggling on/off of profProjects
+    .patch(function (req, res) {
+        // get the professor ID from req
+        let professorID = req.user._id;
+        // get projectID from req params
+        let projectID = req.params.projectID;
+        // check if its a valid object id
+        if(!ObjectID.isValid(projectID)){
+            return res.status(StatusCodes.BAD_REQUEST).send("Invalid URL");
         }
+        // get the new toggle status from req.body
+        let openStatus = req.body.open;
+        
+        let curDate = new Date();
+
+        if(openStatus === true) {
+            ProfProjects.updateOne(
+                {
+                    _id: projectID,
+                    professorID: mongoose.Types.ObjectId(professorID),
+                    actualAppCloseDate: {$gt: curDate}
+                },
+                [
+                    {
+                        $set: {
+                            applicationCloseDate: '$actualAppCloseDate',
+                        }
+
+                    },
+                    {
+                        $unset: ['actualAppCloseDate']
+                    }
+                ],
+                function (err, result) {
+                    if(err){
+                        logger.tank(err);
+                        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send("Failed");
+                    }
+                    else {
+                        const { n, nModified } = result;
+                        // check if document has been successfully updated in collection
+                        if(n && nModified) {
+                            logger.ant("Successfully opened the project: %s", projectID);
+                            return res.status(StatusCodes.OK).send("Successfully opened");
+                        }
+                        else {
+                            logger.ant("Failed to open the project: %s", projectID);
+                            return res.status(StatusCodes.BAD_REQUEST).send("If you intend to open the project " +
+                                "again please update the application close date");
+                        }
+                    }
+                });
+        }
+        else if(openStatus === false) {
+            ProfProjects.updateOne(
+                {
+                    _id: projectID,
+                    professorID: mongoose.Types.ObjectId(professorID),
+                    applicationCloseDate: {$gt: curDate}
+                },
+                [{
+                    $set: {
+                        actualAppCloseDate: '$applicationCloseDate',
+                        applicationCloseDate: curDate
+                    }
+                }],
+                function (err, result) {
+                    if(err){
+                        logger.tank(err);
+                        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send("Failed");
+                    }
+                    else {
+                        const { n, nModified } = result;
+                        // check if document has been successfully updated in collection
+                        if(n && nModified) {
+                            logger.ant("Successfully closed the project: %s", projectID);
+                            return res.status(StatusCodes.OK).send("Successfully closed");
+                        }
+                        else {
+                            logger.ant("Failed to close the project: %s", projectID);
+                            return res.status(StatusCodes.BAD_REQUEST).send("Failed");
+                        }
+                    }
+                });
+        }
+        else {
+            return res.status(StatusCodes.BAD_REQUEST).send("Bad Request");
+        }
+
     })
 
 module.exports = projectRouter;

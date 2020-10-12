@@ -1,5 +1,11 @@
 module.exports = {
-  purge: [],
+  purge: {
+    enabled: false,   // enable this if you want to purge even in dev mode.
+    content: [
+      './views/*.pug',
+      './views/**/*.pug'
+    ]
+  },
   theme: {
     extend: {},
     screens: {

@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactModal from 'react-modal';
-import { Title, CloseButton } from '../../General/Form/FormComponents';
+import { Title, CloseButton, BackButton } from '../../General/Form/FormComponents';
 
 function Modal(props){
 
@@ -14,9 +14,11 @@ function Modal(props){
                 <div className="flex flex-col">
 
                     <div className="flex flex-row justify-between">
-                        <Title text={props.text} />
+                        {props.backButton ? <BackButton extraClass="mb-8" onClick={props.backButtonClick}/>
+                        : <Title text={props.text} />}
                         <CloseButton onClick={props.closeModal} />
                     </div>
+                    {props.backButton && <Title text={props.text} />}
                 
                 </div>
             </div>

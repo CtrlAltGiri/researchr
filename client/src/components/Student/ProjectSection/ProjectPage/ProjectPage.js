@@ -5,6 +5,7 @@ import ReactModal from 'react-modal';
 import { CloseButton, TextArea, Title, TealButton, Error, BackButton } from '../../../General/Form/FormComponents'
 import axios from 'axios';
 import { answersFormCheck, sopFormCheck } from '../../../../common/formValidators/sopValidator';
+import DetailsTab from './DetailsTab';
 
 const slideValues = {
     DESCRIPTION: "desc",
@@ -137,45 +138,7 @@ function ProjectPage(props) {
                                     {projDetails.prereq && projDetails.prereq.map( (skill,index) => <Skill key={"skill" + index} skill={skill} />)}
                                 </div>
                             :
-                            <div className="mt-8">
-                                {projDetails.startDate && <div className="flex py-2">
-                                    <span className="text-gray-500">Start Date</span>
-                                    <span className="ml-auto text-gray-900">{(new Date(projDetails.startDate)).toDateString()}</span>
-                                </div>}
-                                <div className="flex border-t border-gray-300 py-2">
-                                    <span className="text-gray-500">Duration</span>
-                                    <span className="ml-auto text-gray-900">{projDetails.duration} weeks</span>
-                                </div>
-                                <div className="flex border-t border-b border-gray-300 py-2">
-                                    <span className="text-gray-500">Location</span>
-                                    <span className="ml-auto text-gray-900">{projDetails.location}</span>
-                                </div>  
-                                <div className="flex py-2">
-                                    <span className="text-gray-500">Professor's Name</span>
-                                    <span className="ml-auto text-gray-900">{projDetails.professorName}</span>
-                                </div>
-                                <div className="flex border-t border-gray-300 py-2">
-                                    <span className="text-gray-500">Associated College</span>
-                                    <span className="ml-auto text-gray-900">{projDetails.college}</span>
-                                </div>
-                                <div className="flex border-t border-gray-300 py-2">
-                                    <span className="text-gray-500">Designation of Professor</span>
-                                    <span className="ml-auto text-gray-900">{projDetails.professorDesignation}</span>
-                                </div>
-                                {projDetails.applicationCloseDate && <div className="flex border-t border-gray-300 py-2">
-                                    <span className="text-gray-500">Close date for application</span>
-                                    <span className="ml-auto text-gray-900">{(new Date(projDetails.applicationCloseDate)).toDateString()}</span>
-                                </div>}
-                                {projDetails.commitment && <div className="flex border-t border-gray-300 py-2">
-                                    <span className="text-gray-500">Commitment per week</span>
-                                    <span className="ml-auto text-gray-900">{projDetails.commitment + " hours/week"}</span>
-                                </div>}
-                                {projDetails.tags && <div className="flex border-t border-gray-300 py-2">
-                                    <span className="text-gray-500">Tags</span>
-                                    <span className="ml-auto text-gray-900">{projDetails.tags.join(",")}</span>
-                                </div>}
-                                
-                            </div>
+                            <DetailsTab projDetails={projDetails} professor={props.professor}/>
                         }
 
                         {props.professor ? <TealButton text="Edit" extraClass="mt-8 ml-auto flex" submitForm={(e) => props.editAction()}/> :

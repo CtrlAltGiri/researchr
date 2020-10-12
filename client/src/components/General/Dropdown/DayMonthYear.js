@@ -11,13 +11,20 @@ function DayMonthYear(props) {
     const yearOptions = retYearOptions(props.onlyFuture);
 
     let finalDate = props.date;
-    if(typeof(finalDate) === typeof('')){
+    if(finalDate !== undefined && typeof(finalDate) === typeof('')){
         finalDate = new Date(finalDate);
     }
 
-    const [day, setDay] = useState((finalDate && dayOptions[finalDate.getDate() - 1].value) || '-')
-    const [month, setMonth] = useState((finalDate && (monthOptions[finalDate.getMonth()].value)) || '-')
-    const [year, setYear] = useState( (finalDate && finalDate.getFullYear()) || '-')
+    function isValidDate(dateObject){
+        if(!dateObject){
+            return false;
+        }
+        return new Date(dateObject).toString() !== 'Invalid Date';
+    }
+
+    const [day, setDay] = useState((isValidDate(finalDate) && dayOptions[finalDate.getDate() - 1].value) || '-')
+    const [month, setMonth] = useState((isValidDate(finalDate) && (monthOptions[finalDate.getMonth()].value)) || '-')
+    const [year, setYear] = useState( (isValidDate(finalDate) && finalDate.getFullYear()) || '-')
 
     const customStyles = {
         control: (base, state) => ({
@@ -40,13 +47,10 @@ function DayMonthYear(props) {
         }),
     };
 
-    // make this useEffect()
-    useEffect(function updateProps() {
+    useEffect(() => {
         if (day !== '-' && month !== '-' && year !== '-') {
-            console.log(year, month, day);
             let date = new Date(year, month - 1, day);
-            console.log(date);
-            props.onChange(date, props.name);
+            props.onChange(date, props.name);  
         }
     },[day, month, year])
 
@@ -56,6 +60,7 @@ function DayMonthYear(props) {
             <div className={props.innerClass}>
 
                 <Select
+                    isDisabled={props.isDisabled || false}
                     className={props.fieldExtraClass}
                     styles={customStyles}
                     value={dayOptions.find(item => item.value === day)}
@@ -65,6 +70,7 @@ function DayMonthYear(props) {
                 />
 
                 <Select
+                    isDisabled={props.isDisabled || false}
                     className={props.fieldExtraClass}
                     styles={customStyles}
                     value={monthOptions.find(item => item.value === month)}
@@ -74,6 +80,7 @@ function DayMonthYear(props) {
                 />
 
                 <Select
+                    isDisabled={props.isDisabled || false}
                     className={props.fieldExtraClass}
                     styles={customStyles}
                     value={yearOptions.find(item => item.value === year)}

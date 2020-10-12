@@ -35,9 +35,14 @@ projectsRouter.route("/")
                     else {
                         // filter information to be sent to front end
                         let returnProjects = projects.map(function (element) {
-                            return ((
-                                {_id, name, startDate, restrictedView, applicationCloseDate, tags, views}) =>
-                                ({_id, name, startDate, restrictedView, applicationCloseDate, tags, views}))(element);
+                            let retElement = ((
+                                {_id, name, startDate, restrictedView, applicationCloseDate, actualAppCloseDate, tags, views}) =>
+                                ({_id, name, startDate, restrictedView, applicationCloseDate, actualAppCloseDate, tags, views}))
+                            (element);
+
+                            retElement.open = (retElement.applicationCloseDate > Date.now());
+
+                            return retElement;
                         })
                         callback(null, returnProjects);
                     }
