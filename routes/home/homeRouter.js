@@ -5,6 +5,7 @@ const { colleges, branches, yog, degrees } = require('../../client/src/common/da
 const { StatusCodes, ReasonPhrases } = require('http-status-codes');
 const { postLoginProfessor, postSignupProfessor, getVerifyProfessor, postForgotProfessor, getResetProfessor, postResetProfessor } = require('./homeProfessor')
 const { sendContactUsEmail } = require('../../utils/email/sendgirdEmailHelper');
+const WaitingList = require('../../models/waitingList');
 const logger = require('../../config/winston');
 
 homeRouter.route("/")
@@ -19,6 +20,17 @@ homeRouter.route("/")
     .post(function (req, res) {
         if(req.body.type === 'student') {
             if(process.env.BLOCK_STUDENT_SIGNUP === "true") {
+                // check if req.body.email a valid email
+                if (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(req.body.email))
+                {
+                   // valid email ; store it in waitingList collection
+                    WaitingList.updateOne({email: req.body.email}, {$set: {addedAt: Date.now()}}, {upsert: true}, function (err, result) {
+                        if(err) {
+                            logger.tank(err);
+                        }
+                        // TODO(aditya): What to do if it fails?
+                    })
+                }
                 return res.redirect('/landingpage/' + req.body.email);
             }
             else {
@@ -56,9 +68,42 @@ homeRouter.route("/landingpage/:email?")
             res.render("landingPage", { email: req.params.email });
         }
     })
+    // adds information to the waiting list collection
     .post(function(req, res){
-        //TODO (Adi): Store details / email (decide)
-        res.redirect("/landingpage/complete")
+        console.log(req.body);
+        let email = req.body.email;
+        let name = req.body.name;
+        let type = req.body.type;
+        let from = req.body.from;
+        if (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(req.body.email) &&
+            (name && typeof name === 'string' && name.length < 500) &&
+            (type && typeof type === 'string' && type.length < 500) &&
+            (from && typeof from === 'string' && from.length < 500)) {
+            WaitingList.updateOne(
+                {email: email},
+                {
+                    $set: {
+                        addedAt: Date.now(),
+                        name: name,
+                        type: type,
+                        from: from
+                    }
+                },
+                {upsert: true},
+                function (err, result) {
+                    if(err) {
+                        logger.tank(err);
+                        return res.render("landingPage", {errorMsg: "There was an error in requesting access. Please try again later."});
+                    }
+                    // TODO(aditya): What to do if it fails?
+                    else {
+                        return res.render("landingPage", {done: true});
+                    }
+            })
+        }
+        else {
+            return res.render("landingPage", {errorMsg: "Please enter all fields correctly."})
+        }
     })
 
 homeRouter.route("/login/:type?")

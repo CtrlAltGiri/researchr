@@ -5,6 +5,9 @@ html
     meta(name='viewport' content='width=device-width, initial-scale=1.0')
     link(rel='stylesheet' href='/css/index.css') 
     style.
+      body {
+        /*background-color: #e6fffa;*/
+      }
       .video-container {
       overflow: hidden;
       position: relative;
@@ -28,24 +31,55 @@ html
       }
 
       .svg-icon path{
-        fill: #38b2ac;
-      }     
+        fill: white;
+      }
+
+      .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 100; /* Sit on top */
+        padding-top: 22%; /* Location of the box */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(0, 0, 0); /* Fallback color */
+        background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+      }
+
+      .modal-content {
+        background-image: linear-gradient(to bottom right, #38b2ac, teal);
+        color: #fff;
+        font-size: 18px;
+        background-color: #38b2ac;
+        margin: auto;
+        padding: 20px;
+        border: 2px solid white;
+        width: 50%;
+        text-align: center;
+      }
+
+
+
   body
     header.text-gray-700.body-font
-      .container.mx-auto.flex.flex-wrap.p-5.flex-col.items-center.justify-between(class='md:flex-row')
-        a(href="/")
-          svg(viewBox='0 0 60 60' class='svg-icon m-1 md:m-3')
-            path(fill='none' d='M26.76,42l-8.1-11.7h-0.48H9.72V42H0V0h18.18c3.72,0,6.95,0.62,9.69,1.86c2.74,1.24,4.85,3,6.33,5.28\
-    c1.48,2.28,2.22,4.98,2.22,8.1c0,3.12-0.75,5.81-2.25,8.07s-3.63,3.99-6.39,5.19L37.2,42H26.76z M24.3,9.81\
-    c-1.52-1.26-3.74-1.89-6.66-1.89H9.72v14.64h7.92c2.92,0,5.14-0.64,6.66-1.92c1.52-1.28,2.28-3.08,2.28-5.4\
-    C26.58,12.88,25.82,11.07,24.3,9.81z')
-      
-        a(href="/login")
-          button.inline-flex.items-center.bg-gray-200.border-0.py-1.px-3.rounded.text-base.mt-4(class='focus:outline-none hover:bg-gray-300 md:mt-0')
-            | Sign
-            | in
-            svg.w-4.h-4.ml-1(fill='none' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' viewBox='0 0 24 24')
-              path(d='M5 12h14M12 5l7 7-7 7')
+    a.flex.title-font.font-medium.justify-center.text-gray-900.mb-0
+      img.ml-0.h-32(class='lg:-ml-4', src='/images/logo.png')
+    //  .container.mx-auto.flex.flex-wrap.p-5.flex-col.items-center.justify-between(class='md:flex-row')
+    //    a(href="/")
+    //      svg(viewBox='0 0 60 60' class='svg-icon m-1 md:m-3')
+    //        path(fill='none' d='M26.76,42l-8.1-11.7h-0.48H9.72V42H0V0h18.18c3.72,0,6.95,0.62,9.69,1.86c2.74,1.24,4.85,3,6.33,5.28\
+    //c1.48,2.28,2.22,4.98,2.22,8.1c0,3.12-0.75,5.81-2.25,8.07s-3.63,3.99-6.39,5.19L37.2,42H26.76z M24.3,9.81\
+    //c-1.52-1.26-3.74-1.89-6.66-1.89H9.72v14.64h7.92c2.92,0,5.14-0.64,6.66-1.92c1.52-1.28,2.28-3.08,2.28-5.4\
+    //C26.58,12.88,25.82,11.07,24.3,9.81z')
+    //
+    //    a(href="/login")
+    //      button.inline-flex.items-center.bg-gray-200.border-0.py-1.px-3.rounded.text-base.mt-4(class='focus:outline-none hover:bg-gray-300 md:mt-0')
+    //        | Sign
+    //        | in
+    //        svg.w-4.h-4.ml-1(fill='none' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' viewBox='0 0 24 24')
+    //          path(d='M5 12h14M12 5l7 7-7 7')
     // HERO SECTION
     //- section.text-gray-700.body-font
     //-   .container.mx-auto.flex.px-5.py-6.flex-col.items-center(class='md:py-8 md:flex-row')
@@ -62,45 +96,85 @@ html
     //-         button.inline-flex.text-white.bg-teal-500.border-0.py-2.px-6.rounded.text-lg(class='focus:outline-none hover:bg-teal-600') Request
     //-       p.text-sm.mt-2.text-gray-500.mb-8.w-full You'll get access in no time
     // THE VIDEO SECTION
-    section
-      .flex.flex-col.mb-20.space-y-12.px-8(class='md:flex-row md:space-y-0 md:space-x-12 md:px-12')
-        .w-full(class='md:w-1/2')
-          .video-container
-            iframe(src='https://www.youtube.com/embed/hGryQDDDKTo' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen='')
-        .w-full(class='md:w-1/2')
-          .video-container
-            iframe(src='https://www.youtube.com/embed/nuCgpP4GFrE' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen='')
+    //section
+    //  .flex.flex-col.mb-20.space-y-12.px-8(class='md:flex-row md:space-y-0 md:space-x-12 md:px-12')
+    //    .w-full(class='md:w-1/2')
+    //      .video-container
+    //        iframe(src='https://www.youtube.com/embed/hGryQDDDKTo' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen='')
+    //    .w-full(class='md:w-1/2')
+    //      .video-container
+    //        iframe(src='https://www.youtube.com/embed/nuCgpP4GFrE' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen='')
     section#get-access.text-gray-700.body-font.relative
       .container.px-5.pb-12.mx-auto
         .flex.flex-col.text-center.w-full.mb-12
           h1.text-2xl.font-medium.title-font.mb-4.text-gray-900(class='sm:text-3xl') Get Access
           p.mx-auto.leading-relaxed.text-base(class='lg:w-2/3') Your lucky stars could grant you access to the most awaited student-professor platform.
         .mx-auto(class='lg:w-1/2 md:w-2/3')
-          form(action="/landingpage", method="post").flex.flex-wrap.-m-2
+          form(action="/landingpage", method="POST").flex.flex-wrap.-m-2
             .p-2(class='w-full md:w-1/2')
-              input.w-full.bg-gray-100.rounded.border.border-gray-400.text-base.px-4.py-2(class='focus:outline-none focus:border-teal-500' placeholder='Name' type='text' value=name)
+              input.w-full.bg-gray-100.rounded.border.border-gray-400.text-base.px-4.py-2(class='focus:outline-none focus:border-teal-500' placeholder='Your Name' name='name' type='text' value=name required='')
             .p-2(class='w-full md:w-1/2')
-              input.w-full.bg-gray-100.rounded.border.border-gray-400.text-base.px-4.py-2(class='focus:outline-none focus:border-teal-500' placeholder='Work Email' type='email', value=email)
+              input.w-full.bg-gray-100.rounded.border.border-gray-400.text-base.px-4.py-2(class='focus:outline-none focus:border-teal-500' placeholder='College Email' name='email' type='email', value=email required='')
             .p-2(class='w-full md:w-1/2 flex flex-row md:flex-col items-center')
               p.text-gray-600.font-thin.px-1(class="w-3/4 md:w-full mb-1") How did you hear about us?
-              select#HearAboutUs.border-2.py-2.px-2.w-full.rounded-lg(class='focus:outline-none')
-                option(value='others') Others
+              select#HearAboutUs.border-2.py-2.px-2.w-full.rounded-lg(class='focus:outline-none' name='from' required='')
+                option(value='none') I'm too lazy to fill this option
                 option(value='linkedin') Linkedin
-                option(value='wordOfMouth') Word of Mouth
+                option(value='insta') Instagram
+                option(value='fb') Facebook
+                option(value='student') Fellow Student
+                option(value='professor') Fellow Professor
             .p-2(class='w-full md:w-1/2 flex flex-row md:flex-col')
               p.text-gray-600.font-thin.px-1(class="w-3/4 md:w-full mb-1")  Are you a?
-              select#AreYouA.border-2.py-2.px-2.w-full.rounded-lg(class='focus:outline-none')
+              select#AreYouA.border-2.py-2.px-2.w-full.rounded-lg(class='focus:outline-none' name='type' required='')
                 option(value='student') Student
                 option(value='professor') Professor
-                option(value='others') Other
+                //option(value='others') Other
             .p-6.w-full
-              button.flex.mx-auto.text-white.bg-teal-500.border-0.py-2.px-8.rounded.text-lg(class='focus:outline-none hover:bg-teal-600') Request
-            p.text-red-600.text-lg.mx-auto #{done}
-            script.
+              button.flex.mx-auto.text-white.bg-teal-500.border-0.py-6.px-16.rounded.text-lg(class='focus:outline-none hover:bg-teal-600' style="font-size: 20px; font-weight: 600; height: 100%;") Request Access
+            p.text-red-600.text-lg.mx-auto #{errorMsg}
+    #requestAccessSuccessful.modal
+      .modal-content
+        span.close
+        p.text-white.font-thin(style="font-size: 20px;") Thank you for requesting access. We will get back to you as soon as possible.
+        hr(style="height:10pt; visibility:hidden;")
+        p.text-white.font-thin Meanwhile please help us spread the word by sharing this platform with others.
+        hr(style="height:6pt; visibility:hidden;")
+        div.flex.justify-center.items-center(class='space-x-10')
+          <a href="mailto:?subject=Feedback&body=Message">
+          svg.svg-icon(class='mt-1' viewbox="0 0 18 18")
+            path(d="M17.388,4.751H2.613c-0.213,0-0.389,0.175-0.389,0.389v9.72c0,0.216,0.175,0.389,0.389,0.389h14.775c0.214,0,0.389-0.173,0.389-0.389v-9.72C17.776,4.926,17.602,4.751,17.388,4.751 M16.448,5.53L10,11.984L3.552,5.53H16.448zM3.002,6.081l3.921,3.925l-3.921,3.925V6.081z M3.56,14.471l3.914-3.916l2.253,2.253c0.153,0.153,0.395,0.153,0.548,0l2.253-2.253l3.913,3.916H3.56z M16.999,13.931l-3.921-3.925l3.921-3.925V13.931z")
+          </a>
+          <a href="https://www.linkedin.com/shareArticle?mini=true&url=&title=&summary=&source=" target="_blank" rel="noopener noreferrer">
+          svg.svg-icon(class='mt-1' xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewbox="0 0 24 24")
+            path(d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z")
+          </a>
+          script.
               res="!{email}";
               if(!res){
-                res = "!{done}"
+                res = "!{errorMsg}"
               }
               if(res && res.length > 0){
                 document.getElementById("get-access").scrollIntoView()
               }
+
+              const modal = document.getElementById("requestAccessSuccessful");
+              const span = document.getElementsByClassName("close")[0];
+              if("!{done}") {
+                modal.style.display = "block";
+              }
+
+              // When the user clicks anywhere outside of the modal, close it
+              window.onclick = function (event) {
+                if (event.target === modal) {
+                  modal.style.display = "none";
+                }
+              }
+  section
+    .flex.flex-col.mb-20.space-y-12.px-8(class='md:flex-row md:space-y-0 md:space-x-12 md:px-12')
+      .w-full(class='md:w-1/2')
+        .video-container
+          iframe(src='https://www.youtube.com/embed/hGryQDDDKTo' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen='')
+      .w-full(class='md:w-1/2')
+        .video-container
+          iframe(src='https://www.youtube.com/embed/nuCgpP4GFrE' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen='')
