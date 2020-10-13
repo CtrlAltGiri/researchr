@@ -160,6 +160,9 @@ homeRouter.route('/signup/:type?')
                 res.render('professor/signup', {colleges: colleges});       // replace this with professor implementation
             }
         }
+
+        else
+            res.render('landingPage');
     })
     .post(function(req, res, next){
         let type = req.params.type;
