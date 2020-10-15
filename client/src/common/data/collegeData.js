@@ -64,4 +64,19 @@ yog.forEach(y => {
     yogValues.push(y.value);
 })
 
-module.exports = {colleges, degrees, branches, yog, collegeValues, degreeValues, branchValues, yogValues};
+// For the landing page
+var yos = [
+    { value: "1", label: "1st Year" },
+    { value: "2", label: "2nd Year" },
+    { value: "3", label: "3rd Year" },
+    { value: "4", label: "4th Year" },
+    { value: "5", label: "5th Year" },
+    { value: "not applicable", label: "Not Applicable" },
+]
+
+var yosValues= []
+yos.forEach(y => {
+    yosValues.push(y.value);
+})
+
+module.exports = {colleges, degrees, branches, yog, collegeValues, degreeValues, branchValues, yogValues, yos, yosValues};

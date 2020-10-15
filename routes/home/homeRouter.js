@@ -1,7 +1,7 @@
 const homeRouter = require('express').Router();
 const path = require('path');
 const { postLoginStudent , postSignupStudent, getVerifyStudent, postForgotStudent, getResetStudent, postResetStudent } = require('./homeStudent');
-const { colleges, branches, yog, degrees } = require('../../client/src/common/data/collegeData');
+const { colleges, branches, yog, degrees, yos, branchValues, yosValues } = require('../../client/src/common/data/collegeData');
 const { StatusCodes, ReasonPhrases } = require('http-status-codes');
 const { postLoginProfessor, postSignupProfessor, getVerifyProfessor, postForgotProfessor, getResetProfessor, postResetProfessor } = require('./homeProfessor')
 const { sendContactUsEmail } = require('../../utils/email/sendgirdEmailHelper');
@@ -62,10 +62,10 @@ homeRouter.route("/landingpage/:email?")
     .get(function(req, res){
         let email = req.params.email;
         if(email === "complete"){
-            res.render("landingPage", {done: "Details submitted successfully!"})
+            res.render("landingPage", {done: "Details submitted successfully!", departments: branches, yoss:yos })
         }
         else{
-            res.render("landingPage", { email: req.params.email });
+            res.render("landingPage", { email: req.params.email, departments: branches, yoss:yos });
         }
     })
     // adds information to the waiting list collection
@@ -74,10 +74,15 @@ homeRouter.route("/landingpage/:email?")
         let name = req.body.name;
         let type = req.body.type;
         let from = req.body.from;
+        let department = req.body.department;
+        let year = req.body.yos;
+
         if (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(req.body.email) &&
             (name && typeof name === 'string' && name.length < 500) &&
             (type && typeof type === 'string' && type.length < 500) &&
-            (from && typeof from === 'string' && from.length < 500)) {
+            (from && typeof from === 'string' && from.length < 500) &&
+            (branchValues.find(b => department)) &&
+            (yosValues.find(b => year))) {
             WaitingList.updateOne(
                 {email: email},
                 {
@@ -85,28 +90,31 @@ homeRouter.route("/landingpage/:email?")
                         addedAt: Date.now(),
                         name: name,
                         type: type,
-                        from: from
+                        from: from,
+                        department: department,
+                        yos: year
                     }
                 },
                 {upsert: true},
                 function (err, result) {
                     if(err) {
                         logger.tank(err);
-                        return res.render("landingPage", {errorMsg: "There was an error in requesting access. Please try again later."});
+                        return res.render("landingPage", {
+                            errorMsg: "There was an error in requesting access. Please try again later.",departments: branches, yoss:yos});
                     }
                     // TODO(aditya): What to do if it fails?
                     else {
                         if(type === 'student') {
-                            return res.render("landingPage", {done: "student"});
+                            return res.render("landingPage", {done: "student", departments: branches, yoss:yos});
                         }
                         else {
-                            return res.render("landingPage", {done: "professor"});
+                            return res.render("landingPage", {done: "professor", departments: branches, yoss:yos});
                         }
                     }
             })
         }
         else {
-            return res.render("landingPage", {errorMsg: "Please enter all fields correctly."})
+            return res.render("landingPage", {errorMsg: "Please enter all fields correctly.", departments: branches, yoss:yos});
         }
     })
 
@@ -138,7 +146,7 @@ homeRouter.route('/signup/:type?')
         let type = req.params.type;
         if(type === 'student') {
             if(process.env.BLOCK_STUDENT_SIGNUP === "true") {
-                return res.render('landingPage');
+                return res.redirect('/landingpage/');
             }
             else {
                 res.render('student/signup', {
@@ -154,7 +162,7 @@ homeRouter.route('/signup/:type?')
 
         else if(type === 'professor') {
             if(process.env.BLOCK_PROFESSOR_SIGNUP === "true") {
-                return res.render('landingPage');
+                return res.redirect('/landingpage/');
             }
             else {
                 res.render('professor/signup', {colleges: colleges});       // replace this with professor implementation
