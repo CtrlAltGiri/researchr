@@ -5,6 +5,12 @@ html(lang='en', style='scroll-behavior: smooth;')
     meta(name='viewport', content='width=device-width, initial-scale=1.0')
     link(rel='stylesheet', href='/css/index.css')
     style.
+      /*img {*/
+      /*  max-width: 100%;*/
+      /*  height: 60%;*/
+      /*  width: 60%;*/
+      /*}*/
+
       .video-container {
           overflow: hidden;
           position: relative;
@@ -47,21 +53,48 @@ html(lang='en', style='scroll-behavior: smooth;')
               button.text-white.bg-teal-500.border-0.py-2.px-8.rounded.text-lg(class='focus:outline-none hover:bg-teal-600' name="type" value="student" type='submit')
                 | Request Access
           p.text-xs.text-gray-500.mt-3 We promise not to send you any spam.
+    // ABOUT US SECTION
     section.text-gray-700.body-font
-      .container.px-5.py-12.mx-auto
-        .flex.flex-col.text-center.w-full.mb-2
-          h1#what-we-do.text-2xl.font-medium.title-font.mb-4.pt-4.text-gray-900.tracking-widest WHAT WE DO
-          p.mx-auto.leading-relaxed.text-base(class='lg:w-4/5')
-            | We have started off with features to match students to professor guided projects depending on their interests and skill-sets
-          div(class="flex flex-col md:flex-row md:justify-center md:items-center my-12")
-            div(class="w-full md:w-4/6")
-              div(class="video-container")
-                iframe(src='https://www.youtube.com/embed/hGryQDDDKTo' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen='')
-          div(class="flex flex-col md:flex-row md:justify-center md:items-center my-12")
-            div(class="w-full md:w-4/6")
-              div(class="video-container")
-                iframe(src='https://www.youtube.com/embed/nuCgpP4GFrE' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen='')
-
+      .flex.flex-col.text-center.w-full.mb-2
+        h1#what-we-do.text-2xl.font-medium.title-font.mb-4.pt-6.text-gray-900.tracking-widest(style="font-size: 25px;") WHAT WE DO
+        p.leading-relaxed.mt-4(style="font-size: 18px;")
+          span.font-medium researchR
+          |  enables college students to apply to projects/engagements of any kind listed by professors, startups and fellow students.
+          br(class="hidden sm:block")
+          br(class="hidden sm:block")
+          | Our current version enables professors to list projects, and students to apply.
+          br(class="hidden sm:block")
+          | Through this we seek to incentivize and simplify "outside classroom engagements", a crucial aspect of learning, within and across colleges.
+        hr(style="height:40pt; visibility:hidden;")
+        a.flex.title-font.font-medium.justify-center.text-gray-900.mb-0
+          img(src='/images/homeDesc.png')
+          // style="width: 60%; height: 60%")
+      // VIDEOS SECTION
+      hr(style="height:40pt; visibility:hidden;")
+      .flex.flex-col.mb-20.space-y-12.px-8(class='md:flex-row md:space-y-0 md:space-x-12 md:px-12')
+        .w-full(class='md:w-1/2')
+          //p.text-center.text-gray-900(style="font-size: 18px; font-weight: 500") Professor
+          hr(style="height:10pt; visibility:hidden;")
+          .video-container
+            iframe(src='https://www.youtube.com/embed/nuCgpP4GFrE' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen='')
+        .w-full(class='md:w-1/2')
+          //p.text-center.text-gray-900(style="font-size: 18px; font-weight: 500") Student
+          hr(style="height:10pt; visibility:hidden;")
+          .video-container
+            iframe(src='https://www.youtube.com/embed/hGryQDDDKTo' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen='')
+      //.container.px-5.py-12.mx-auto
+      //  .flex.flex-col.text-center.w-full.mb-2
+      //    h1#what-we-do.text-2xl.font-medium.title-font.mb-4.pt-4.text-gray-900.tracking-widest WHAT WE DO
+      //    p.mx-auto.leading-relaxed.text-base(class='lg:w-4/5')
+      //      | We have started off with features to match students to professor guided projects depending on their interests and skill-sets
+      //    div(class="flex flex-col md:flex-row md:justify-center md:items-center my-12")
+      //      div(class="w-full md:w-4/6")
+      //        div(class="video-container")
+      //          iframe(src='https://www.youtube.com/embed/hGryQDDDKTo' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen='')
+      //    div(class="flex flex-col md:flex-row md:justify-center md:items-center my-12")
+      //      div(class="w-full md:w-4/6")
+      //        div(class="video-container")
+      //          iframe(src='https://www.youtube.com/embed/nuCgpP4GFrE' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen='')
 
     section#contact-us.text-gray-700.body-font.relative
       .container.px-5.py-24.mx-auto.flex.flex-wrap(class='sm:flex-no-wrap')
