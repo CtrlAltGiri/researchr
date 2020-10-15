@@ -134,6 +134,24 @@ html
                 option(value='student') Student
                 option(value='professor') Professor
                 //option(value='others') Other
+            .p-2(class='w-full md:w-1/2 flex flex-row md:flex-col')
+              p.text-gray-600.font-thin.px-1 Department
+              if departments
+                select#colleges.border-2.py-2.px-2.w-full.rounded-lg(name="department" required='')
+                  each val in departments
+                    if val.value === department
+                      option(value=val.value, selected)=val.label
+                    else
+                      option(value=val.value)=val.label
+            .p-2(class='w-full md:w-1/2 flex flex-row md:flex-col')
+              p.text-gray-600.font-thin.px-1 Year of Study
+              if yoss
+                select#colleges.border-2.py-2.px-2.w-full.rounded-lg(name="yos" required='')
+                  each val in yoss
+                    if val.value === yos
+                      option(value=val.value, selected)=val.label
+                    else
+                      option(value=val.value)=val.label
             .p-6.w-full
               button.flex.mx-auto.text-white.bg-teal-500.border-0.py-6.px-16.rounded.text-lg(class='focus:outline-none hover:bg-teal-600' style="font-size: 20px; font-weight: 600; height: 100%;") Request Access
             p.text-red-600.text-lg.mx-auto #{errorMsg}

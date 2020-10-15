@@ -5,6 +5,8 @@ const WaitingListSchema = new mongoose.Schema({
     email: String,
     type: String,
     from: String,
+    department: String,
+    yos: String,
     addedAt: Date
 });
 
