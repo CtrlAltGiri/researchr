@@ -7,6 +7,7 @@ const WaitingListSchema = new mongoose.Schema({
     from: String,
     department: String,
     yos: String,
+    college: String,
     addedAt: Date
 });
 
