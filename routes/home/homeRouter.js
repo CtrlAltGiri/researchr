@@ -2,6 +2,7 @@ const homeRouter = require('express').Router();
 const path = require('path');
 const { postLoginStudent , postSignupStudent, getVerifyStudent, postForgotStudent, getResetStudent, postResetStudent } = require('./homeStudent');
 const { colleges, branches, yog, degrees, yos, branchValues, yosValues } = require('../../client/src/common/data/collegeData');
+const { collegeList, collegeNames } = require('../../client/src/common/data/collegeList');
 const { StatusCodes, ReasonPhrases } = require('http-status-codes');
 const { postLoginProfessor, postSignupProfessor, getVerifyProfessor, postForgotProfessor, getResetProfessor, postResetProfessor } = require('./homeProfessor')
 const { sendContactUsEmail } = require('../../utils/email/sendgirdEmailHelper');
@@ -62,25 +63,29 @@ homeRouter.route("/landingpage/:email?")
     .get(function(req, res){
         let email = req.params.email;
         if(email === "complete"){
-            res.render("landingPage", {done: "Details submitted successfully!", departments: branches, yoss:yos })
+            res.render("landingPage",
+                {done: "Details submitted successfully!", departments: branches, yoss:yos, collegeList: collegeList })
         }
         else{
-            res.render("landingPage", { email: req.params.email, departments: branches, yoss:yos });
+            res.render("landingPage",
+                { email: req.params.email, departments: branches, yoss:yos, collegeList: collegeList });
         }
     })
     // adds information to the waiting list collection
     .post(function(req, res){
-        let email = req.body.email;
-        let name = req.body.name;
-        let type = req.body.type;
-        let from = req.body.from;
-        let department = req.body.department;
-        let year = req.body.yos;
+        let email = req.body.email.replace('$', '_').replace('{', '_').replace('}', '_');
+        let name = req.body.name.replace('$', '_').replace('{', '_').replace('}', '_');
+        let type = req.body.type.replace('$', '_').replace('{', '_').replace('}', '_');
+        let from = req.body.from.replace('$', '_').replace('{', '_').replace('}', '_');
+        let department = req.body.department.replace('$', '_').replace('{', '_').replace('}', '_');
+        let year = req.body.yos.replace('$', '_').replace('{', '_').replace('}', '_');
+        let college = req.body.college.replace('$', '_').replace('{', '_').replace('}', '_');
 
         if (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(req.body.email) &&
             (name && typeof name === 'string' && name.length < 500) &&
             (type && typeof type === 'string' && type.length < 500) &&
             (from && typeof from === 'string' && from.length < 500) &&
+            (college && typeof college === 'string' && college.length < 1000 && college in collegeNames) &&
             (branchValues.find(b => department)) &&
             (yosValues.find(b => year))) {
             WaitingList.updateOne(
@@ -92,7 +97,8 @@ homeRouter.route("/landingpage/:email?")
                         type: type,
                         from: from,
                         department: department,
-                        yos: year
+                        yos: year,
+                        college: collegeNames[college]
                     }
                 },
                 {upsert: true},
@@ -100,21 +106,26 @@ homeRouter.route("/landingpage/:email?")
                     if(err) {
                         logger.tank(err);
                         return res.render("landingPage", {
-                            errorMsg: "There was an error in requesting access. Please try again later.",departments: branches, yoss:yos});
+                            errorMsg: "There was an error in requesting access. Please try again later.",
+                            departments: branches, yoss:yos, collegeList: collegeList});
                     }
                     // TODO(aditya): What to do if it fails?
                     else {
                         if(type === 'student') {
-                            return res.render("landingPage", {done: "student", departments: branches, yoss:yos});
+                            return res.render("landingPage",
+                                {done: "student", departments: branches, yoss:yos, collegeList: collegeList});
                         }
                         else {
-                            return res.render("landingPage", {done: "professor", departments: branches, yoss:yos});
+                            return res.render("landingPage",
+                                {done: "professor", departments: branches, yoss:yos, collegeList: collegeList});
                         }
                     }
             })
         }
         else {
-            return res.render("landingPage", {errorMsg: "Please enter all fields correctly.", departments: branches, yoss:yos});
+            return res.render("landingPage",
+                {errorMsg: "Please enter all fields correctly.",
+                    departments: branches, yoss:yos, collegeList: collegeList});
         }
     })
 
