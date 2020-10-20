@@ -16,6 +16,16 @@
     fill: #38b2ac;
 }
 
+
+.svg-icon-dark-teal-small{
+    width:1.8em;
+    height:1.8em;
+}
+
+.svg-icon-dark-teal-small path{
+    fill: #319795;
+}
+
 .svg-icon-red-small{
     width: 1.5em;
     height: 1.5em;
