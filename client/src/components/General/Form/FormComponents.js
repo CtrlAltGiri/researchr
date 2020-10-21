@@ -1,4 +1,6 @@
 import React from 'react';
+import { QuestionMarkButton } from './Buttons';
+import ReactTooltip from 'react-tooltip';
 
 function TealButton(props) {
     return (
@@ -42,11 +44,16 @@ function Label(props) {
     return (<p className="text-l text-gray-700 px-1 mb-1 font-medium">{props.text}{props.required && <span className="text-red-500">*</span>}</p>);
 }
 
-function LabelMaxChars(props){
+function LabelMaxChars(props) {
     return (
         <div className="flex flex-row space-x-1 items-center">
-            <Label text={props.text} required={props.required}/>
+            <Label text={props.text} required={props.required} />
             {props.maxChars && <p className="mx-1 text-gray-600 text-xs">(max {props.maxChars} characters)</p>}
+            {props.toolTipId && <a data-tip data-for={props.toolTipId}><QuestionMarkButton /></a>}
+            {props.toolTipId && <ReactTooltip id={props.toolTipId} aria-haspopup='true' role='example'>
+                {props.toolTipMessage}
+            </ReactTooltip>
+            }
         </div>
     );
 }
@@ -54,8 +61,8 @@ function LabelMaxChars(props){
 function TextField(props) {
     return (
         <div className={props.extraClass}>
-            <LabelMaxChars text={props.text} maxChars={props.maxChars} required={props.required}/>
-            <input type={props.type || 'text'} onChange={props.onChange} className={`outline-none focus:border-teal-500 border-2 rounded-lg py-1 px-2 ${props.fieldExtraClass}`} name={props.name} value={props.value || ''} disabled={props.disabled}/>
+            <LabelMaxChars text={props.text} maxChars={props.maxChars} required={props.required} toolTipId={props.toolTipId} toolTipMessage={props.toolTipMessage} />
+            <input type={props.type || 'text'} onChange={props.onChange} className={`outline-none focus:border-teal-500 border-2 rounded-lg py-1 px-2 ${props.fieldExtraClass}`} name={props.name} value={props.value || ''} disabled={props.disabled} />
         </div>
     );
 }

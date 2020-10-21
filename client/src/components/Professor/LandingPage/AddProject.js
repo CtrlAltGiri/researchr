@@ -123,6 +123,8 @@ function AddProject(props) {
                     name="prereq"
                     heading="Chosen Prerequisites"
                     required={true}
+                    toolTipId="prereq"
+                    toolTipMessage="Please type in a skill and press the plus button / enter key."
                 />
 
                 <div className="flex flex-col md:flex-row mb-2 mt-4">
@@ -196,6 +198,8 @@ function AddProject(props) {
                         fieldExtraClass="w-4/5"
                         options={[{ value: true, label: "Show it only to students in my college" }, { value: false, label: "Show it to everyone" }]}
                         required={true}
+                        toolTipId="Visibility"
+                        toolTipMessage="Choose where you want this project to be visible."
                     />
 
                 </div>
@@ -211,6 +215,8 @@ function AddProject(props) {
                     name="questionnaire"
                     heading="Chosen Questionnaire"
                     allCases={true}
+                    toolTipId="questionnaire"
+                    toolTipMessage="We shall present this questionnaire to the student before he completes his application"
                 />}
 
                 {!props.editMode && <TagInput
