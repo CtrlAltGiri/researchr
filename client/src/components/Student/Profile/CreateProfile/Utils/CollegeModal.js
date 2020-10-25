@@ -24,6 +24,7 @@ function CollegeModal(props) {
 
                     <Dropdown
                         text="College"
+                        required={true}
                         changeDropdown={props.changeDropdown}
                         name="college"
                         val={isDropdownDisabled ? props.defaultValues.college : props.formState.college}
@@ -39,6 +40,7 @@ function CollegeModal(props) {
                         <Dropdown
                             val={isDropdownDisabled ? props.defaultValues.degree : props.formState.degree}
                             name="degree"
+                            required={true}
                             options={degrees}
                             changeDropdown={props.changeDropdown}
                             placeholder="Degree"
@@ -51,6 +53,7 @@ function CollegeModal(props) {
                         <Dropdown
                             val={isDropdownDisabled ? props.defaultValues.branch : props.formState.branch}
                             name="branch"
+                            required={true}
                             options={branches}
                             changeDropdown={props.changeDropdown}
                             placeholder="Branch"
@@ -63,6 +66,7 @@ function CollegeModal(props) {
                         <Dropdown
                             val={isDropdownDisabled ? props.defaultValues.yog.toString() : props.formState.yog}
                             name="yog"
+                            required={true}
                             options={yog}
                             changeDropdown={props.changeDropdown}
                             placeholder="YOG"
@@ -74,6 +78,7 @@ function CollegeModal(props) {
 
                         <TextField
                             text="CGPA"
+                            required={true}
                             onChange={props.changeInput}
                             name="cgpa"
                             value={props.formState.cgpa}
@@ -93,7 +98,7 @@ function CollegeModal(props) {
 
                     <TagInput
                         text="Enter coursework"
-                        extraClass="flex flex-col w-full"
+                        extraClass="flex flex-col w-full md:w-3/5"
                         fieldExtraClass="w-full"
                         updateTags={props.updateTags}
                         chosenTags={props.formState.coursework}    

@@ -36,8 +36,7 @@ function Error(props) {
 }
 
 function Title(props) {
-
-    return (<p className="mb-4 text-xl text-gray-900 font-medium title-font">{props.text}</p>)
+    return (<p className="mb-4 text-xl text-gray-900 font-medium title-font">{props.text}{props.essential && <span className="text-red-500">*</span>}</p>)
 }
 
 function Label(props) {
