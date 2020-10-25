@@ -34,6 +34,7 @@ function CompanyInput(props) {
         value={props.value}
         extraClass="w-full mb-4"
         fieldExtraClass="w-3/4 md:w-3/5"
+        required={props.required}
       />
       <div className="flex flex-row flex-wrap justify-center">
         {callAPI && companies && companies.map(company => {

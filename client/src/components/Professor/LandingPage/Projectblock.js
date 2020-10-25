@@ -49,13 +49,13 @@ function Projectblock(props) {
                 </div>
 
                 <div className="items-end flex flex-col">
-                <Link to={data.url} className="text-teal-600 inline-flex items-center text-xl hover:underline cursor-pointer" target="_blank">Project Details
+                <Link to={data.url} className="text-teal-600 inline-flex items-center text-xl hover:underline cursor-pointer">Project Details
                     <svg className="w-4 h-4 ml-2" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} fill="none" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M5 12h14" />
                         <path d="M12 5l7 7-7 7" />
                     </svg>
                 </Link>
-                <Link to={data.applicationURL} className="text-teal-600 inline-flex items-center text-xl hover:underline cursor-pointer" target="_blank">Applications
+                <Link to={data.applicationURL} className="text-teal-600 inline-flex items-center text-xl hover:underline cursor-pointer">Applications
                     <svg className="w-4 h-4 ml-2" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} fill="none" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M5 12h14" />
                         <path d="M12 5l7 7-7 7" />

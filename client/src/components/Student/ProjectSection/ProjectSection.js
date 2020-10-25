@@ -88,9 +88,14 @@ function ProjectSection() {
                     element={'div'}
                     className="flex flex-row flex-wrap"
                 >
-                    {projects.map(item => {
+                    {projects.length > 0 ? projects.map(item => {
                         return filterProjects(item) && <Projectile key={item.name} allItems={item} />  
-                    })}
+                    })
+                    :
+                        <div className="px-8 md:px-16">
+                            <p className="font-medium">No Projects here!</p>
+                        </div>
+                    }
 
                 </InfiniteScroll>
             </div>

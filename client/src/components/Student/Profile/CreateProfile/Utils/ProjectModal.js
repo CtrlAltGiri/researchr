@@ -55,6 +55,7 @@ function ProjectModal(props) {
                         value={props.formState.title}
                         extraClass="mb-8"
                         fieldExtraClass="w-full md:w-1/2"
+                        required={true}
                     />
 
                     <Checkbox
@@ -76,6 +77,7 @@ function ProjectModal(props) {
                                 value={props.formState.professor}
                                 extraClass="w-full md:w-1/2 mb-2"
                                 fieldExtraClass="w-full md:w-3/4"
+                                required={true}
                             />
 
                             <TextField
@@ -85,6 +87,7 @@ function ProjectModal(props) {
                                 value={props.formState.college}
                                 extraClass="w-full md:w-1/2 mb-2"
                                 fieldExtraClass="w-full md:w-3/4"
+                                required={true}
                             />
 
                             <MonthYear
@@ -95,6 +98,7 @@ function ProjectModal(props) {
                                 innerClass="flex"
                                 fieldExtraClass="w-full md:w-3/4 mr-24"
                                 text="Start Date"
+                                required={true}
                             />
 
                             <MonthYear
@@ -105,6 +109,7 @@ function ProjectModal(props) {
                                 innerClass="flex"
                                 fieldExtraClass="w-full md:w-3/4 mr-24"
                                 text="End Date"
+                                required={true}
                             />
 
                         </div>
@@ -125,6 +130,7 @@ function ProjectModal(props) {
                         value={props.formState.proof}
                         extraClass="mb-8"
                         fieldExtraClass="w-full md:w-1/2"
+                        required={true}
                     />
 
                     <TagInput
@@ -135,6 +141,7 @@ function ProjectModal(props) {
                         updateTags={props.updateTags}
                         chosenTags={props.formState.tags}
                         maxNumberOfTags={2}
+                        required={true}
                     />
 
                     <TealButton

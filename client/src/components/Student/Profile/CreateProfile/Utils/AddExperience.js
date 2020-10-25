@@ -26,16 +26,19 @@ function AddExperience(props) {
 
     function submitInnerForm(event) {
         event.preventDefault();
-        if (FormCheck(props.requiredFields, formState)) {
+        
+        let newFormState = {...formState, ...props.defaultValues}
 
-            let retVal = props.formValidator(formState);
+        if (FormCheck(props.requiredFields, newFormState)) {
+
+            let retVal = props.formValidator(newFormState);
             if (retVal === true) {
                 if (editMode === -1) {
-                    props.setMainObject([...props.mainObject, formState]);
+                    props.setMainObject([...props.mainObject, newFormState]);
                 }
                 else {
                     let tempVar = [...props.mainObject];
-                    tempVar[editMode] = formState;
+                    tempVar[editMode] = newFormState;
                     props.setMainObject(tempVar)
                 }
                 closeModal({});
@@ -98,7 +101,7 @@ function AddExperience(props) {
 
     return (
         <div className={props.extraClass}>
-            <Title text={props.title} />
+            <Title text={props.title} essential={props.essential}/>
             {
                 props.mainObject.length > 0 &&
                     <Accordian
