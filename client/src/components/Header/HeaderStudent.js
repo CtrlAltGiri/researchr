@@ -24,6 +24,7 @@ function Header() {
                     <ul className="md:flex items-center justify-between text-base text-gray-700 pt-2 md:pt-0 text-center md:text-left">
                         <li><Link to={"/student/profile/" + studentID} className="md:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-teal-500">My Profile</Link></li>
                         <li><Link to="/student/applications" className="md:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-teal-500">Applications</Link></li>
+                        <li><Link to="/student/faq" className="md:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-teal-500">FAQ</Link></li>
                         <li><a className="md:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-red-500 md:mb-0 mb-2 text-red-500" href="/logout">Sign out</a></li>
                     </ul>
                 </nav>

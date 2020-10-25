@@ -24,17 +24,13 @@ function retrieveStudentDetails(studId, currentID, cvOnly, res){
             return res.status(StatusCodes.BAD_REQUEST).send("Profile not found.");
         }
         
-        if(!obj.completed && cvOnly === 'false'){
-            
+        if(!obj.completed && cvOnly === 'false'){          
             let errorMsg;
-            if(mine){
-                errorMsg = "Profile not completed, please click edit profile to continue";
+            if(!mine){
+                errorMsg = "Profile not completed";
+                res.status(StatusCodes.BAD_REQUEST).send(errorMsg);
+                return;
             }
-            else{
-                errorMsg = "Profile not completed.";
-            }
-            res.status(StatusCodes.NOT_FOUND).send(errorMsg);
-            return;
         }
 
         obj = (({ name, c_email, college, branch, degree, yog, cvElements }) => ({ name, c_email, college, branch, degree, yog, cvElements }))(obj);

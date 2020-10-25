@@ -105,6 +105,7 @@ function Step2(props) {
                 shownFieldsDesc={["Degree", "Branch", "CGPA", "Year of Graduation", "Experience"]}
                 heading="college"   // this cannot change, needed for updateTags in AddExperience.js
                 title="University"
+                essential={true}
                 modal={CollegeModal}
                 formValidator={collegeFormValidator}
                 defaultValues={props.formData.defaultCollege}

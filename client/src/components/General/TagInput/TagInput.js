@@ -76,7 +76,7 @@ function TagInputs(props) {
 
     return (
         <div className={props.extraClass}>
-            <LabelMaxChars text={props.text} required={props.required} maxChars={props.maxChars} />
+            <LabelMaxChars text={props.text} required={props.required} maxChars={props.maxChars} toolTipId={props.toolTipId} toolTipMessage={props.toolTipMessage} />
             <div className="flex flex-row">
                 <input type="text" 
                     onChange={(e) => props.allCases ? setVal(e.target.value) : setVal(e.target.value.toLowerCase())} 

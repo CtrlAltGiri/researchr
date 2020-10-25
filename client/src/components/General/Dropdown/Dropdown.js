@@ -40,7 +40,7 @@ function Dropdown(props) {
     return (
 
         <div className={props.extraClass}>
-            <LabelMaxChars text={props.text} required={props.required} />
+            <LabelMaxChars text={props.text} required={props.required} toolTipId={props.toolTipId} toolTipMessage={props.toolTipMessage} />
             <Select
                 isDisabled={props.isDisabled || false}
                 className={props.fieldExtraClass}

@@ -27,6 +27,15 @@ profileRouter
         retrieveStudentDetails(studId, currentID, cvOnly, res);
     });
 
+profileRouter
+    .get("/checkMine/:studentID", function(req, res){
+        let x = req.params.studentID;
+        if(x == req.user._id)
+            res.status(StatusCodes.OK).send("true");
+        else
+            res.status(StatusCodes.IM_A_TEAPOT).send("false");
+    });
+
 
 
 profileRouter.route("/createProfile")

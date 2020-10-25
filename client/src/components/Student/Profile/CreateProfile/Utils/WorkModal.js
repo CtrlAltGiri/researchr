@@ -45,6 +45,7 @@ function WorkModal(props) {
                         text="Company"
                         onChange={props.changeDropdown}
                         onSelect={props.changeInput}
+                        required={true}
                         name="organization"
                         logoName="logoURL"
                         value={props.formState.organization}
@@ -64,6 +65,7 @@ function WorkModal(props) {
                     <div className="flex flex-col justify-around md:justify-center md:flex-row mb-8">
 
                         <TextField
+                            required={true}
                             text="Position"
                             onChange={props.changeInput}
                             name="position"
@@ -73,6 +75,7 @@ function WorkModal(props) {
                         />
 
                         <MonthYear
+                            required={true}
                             name="startDate"
                             onChange={props.changeDropdown}
                             date={props.formState.startDate}
@@ -84,6 +87,7 @@ function WorkModal(props) {
 
                         {!props.formState.presentWork ?
                             <MonthYear
+                                required={true}
                                 name="endDate"
                                 onChange={props.changeDropdown}
                                 date={props.formState.endDate}
@@ -106,6 +110,7 @@ function WorkModal(props) {
                     />
 
                     <TextField
+                        required={true}
                         text="Link to certificate / Proof (Drive Link)"
                         onChange={props.changeInput}
                         name="proof"
@@ -115,6 +120,7 @@ function WorkModal(props) {
                     />
 
                     <TagInput
+                        required={true}
                         text="ResearchR tags"
                         extraClass="mb-8"
                         fieldExtraClass="w-full md:w-1/2"

@@ -11,6 +11,7 @@ import axios from 'axios';
 import Test from '../General/Form/CompanyInput';
 import ApplicationDetails from '../Student/Applications/ApplicationDetails/ApplicationDetails';
 import ChangePassword from '../General/ChangePassword/ChangePassword';
+import Faq from '../Student/FAQ/Faq';
 
 function AppStudent(props) {
 
@@ -34,6 +35,7 @@ function AppStudent(props) {
         <Route path="/student/applications" component={Applications} />
         <Route path="/student/test" component={Test} />
         <Route path="/student/application/:projectId" component={ApplicationDetails} />
+        <Route path="/student/faq" component={Faq} />
         <Route path="/" component={Error} />
       </Switch>
     </div>
