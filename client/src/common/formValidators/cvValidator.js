@@ -95,7 +95,7 @@ function collegeFormValidator(props) {
     else if (!degrees.find(degree => degree.value === props.degree)) {
         return "Selected Degree is invalid";
     }
-    else if (!yog.find(yogx => yogx.value === props.yog)) {
+    else if (!yog.find(yogx => yogx.value === String(props.yog))) {
         return "Year of Graduation is invalid";
     }
     else if (isNaN(props.cgpa) === true || Number.parseFloat(props.cgpa) > 10 || Number.parseFloat(props.cgpa) < 0) {

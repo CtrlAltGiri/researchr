@@ -48,7 +48,7 @@ function MonthYear(props) {
 
     return (
         <div className={props.extraClass}>
-            <Label text={props.text} />
+            <Label text={props.text} required={props.required}/>
             <div className={props.innerClass}>
 
                 <Select
