@@ -6,7 +6,7 @@ const ApplicationsSchema = new mongoose.Schema({
     branch: String, // student branch
     profApplications: [
         {
-            projectID: {type: mongoose.Types.ObjectId, unique: true},
+            projectID: {type: mongoose.Types.ObjectId},
             name: String, // project name
             sameCollege: Boolean, // If the project offered is from the same college
             cgpa: Number, // student cgpa at time of application
