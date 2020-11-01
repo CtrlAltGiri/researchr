@@ -81,6 +81,13 @@ homeRouter.route("/landingpage/:email?")
         let year = req.body.yos.replace('$', '_').replace('{', '_').replace('}', '_');
         let college = req.body.college.replace('$', '_').replace('{', '_').replace('}', '_');
 
+        if(req.body.email.includes("@gmail.com") || req.body.email.includes("@yahoo.com") || req.body.email.includes("@hotmail.com")){
+            return res.render("landingPage", {
+                errorMsg: "Please enter your work email, not personal email",
+                departments: branches, yoss: yos, collegeList: collegeList
+            })
+        }
+
         if (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(req.body.email) &&
             (name && typeof name === 'string' && name.length < 500) &&
             (type && typeof type === 'string' && type.length < 500) &&
