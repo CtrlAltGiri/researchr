@@ -153,6 +153,7 @@ html
           p.mx-auto.leading-relaxed.text-base(class='lg:w-2/3' style="font-size: 18px") With a radically simple recruiting process we're here to ensure effective collaboration.
           p.mx-auto.leading-relaxed.text-base(class='lg:w-2/3' style="font-size: 18px") Our current version enables professors to list projects and students to apply.
           // So if you're a student or a professor with an exciting engagement, what are you waiting for?
+          p.text-red-600.text-lg.mx-auto.pt-4.font-medium #{errorMsg}
         .mx-auto(class='lg:w-1/2 md:w-2/3')
           form(action="/landingpage", method="POST").flex.flex-wrap.-m-2
             .p-2(class='w-full md:w-1/2')
@@ -199,7 +200,6 @@ html
                     input.border-2.py-2.px-2.w-full.rounded-lg#collegeInput(type="text" autocomplete="off" name="college" placeholder="College")
             .p-6.w-full
               button.flex.mx-auto.text-white.bg-teal-500.border-0.py-4.px-12.rounded.text-lg.font-medium(class='focus:outline-none hover:bg-teal-600') Request Access
-            p.text-red-600.text-lg.mx-auto #{errorMsg}
     // MODAL FOR SUCCESSFUL STUDENT REQUEST ACCESS
     #studentRequestAccessSuccessful.modal
       .modal-content
