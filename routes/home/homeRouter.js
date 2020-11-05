@@ -7,6 +7,7 @@ const { StatusCodes, ReasonPhrases } = require('http-status-codes');
 const { postLoginProfessor, postSignupProfessor, getVerifyProfessor, postForgotProfessor, getResetProfessor, postResetProfessor } = require('./homeProfessor')
 const { sendContactUsEmail } = require('../../utils/email/sendgirdEmailHelper');
 const WaitingList = require('../../models/waitingList');
+const MentorshipList = require('../../models/mentorshipWaitingList');
 const logger = require('../../config/winston');
 
 function personalEmailChecker(email) {
@@ -143,6 +144,74 @@ homeRouter.route("/landingpage/:email?")
         }
         else {
             return res.render("landingPage",
+                {
+                    errorMsg: "Please enter all fields correctly.",
+                    departments: branches, yoss: yos, collegeList: collegeList
+                });
+        }
+    })
+
+homeRouter.route("/mentorship")
+    .get(function (req, res) {
+        res.render("mentorshipLandingPage", {
+            departments: branches, yoss: yos, collegeList: collegeList
+        })
+    })
+    .post(function (req, res) {
+        let email = req.body.email.replace('$', '_').replace('{', '_').replace('}', '_');
+        let name = req.body.name.replace('$', '_').replace('{', '_').replace('}', '_');
+        let department = req.body.department.replace('$', '_').replace('{', '_').replace('}', '_');
+        let year = req.body.yos.replace('$', '_').replace('{', '_').replace('}', '_');
+        let college = req.body.college.replace('$', '_').replace('{', '_').replace('}', '_');
+        let type = req.body.type.replace('$', '_').replace('{', '_').replace('}', '_');
+        let session = req.body.session.replace('$', '_').replace('{', '_').replace('}', '_');
+
+        if (personalEmailChecker(req.body.email)) {
+            return res.render("mentorshipLandingPage", {
+                errorMsg: "Please enter your college email, not personal email",
+                departments: branches, yoss: yos, collegeList: collegeList,
+                name: name, department: department, college: college, type: type, session: session, yos: year
+            })
+        }
+
+        if (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(req.body.email) &&
+            (name && typeof name === 'string' && name.length < 500) &&
+            (type && typeof type === 'string' && type.length < 500) &&
+            (session && typeof session === 'string' && session.length < 500) &&
+            (college && typeof college === 'string' && college.length < 1000 && college in collegeNames) &&
+            (branchValues.find(b => department)) &&
+            (yosValues.find(b => year))) {
+            MentorshipList.updateOne(
+                { email: email },
+                {
+                    $set: {
+                        addedAt: Date.now(),
+                        name: name,
+                        type: type,
+                        session: session,
+                        department: department,
+                        yos: year,
+                        college: collegeNames[college]
+                    }
+                },
+                { upsert: true },
+                function (err, result) {
+                    if (err) {
+                        logger.tank(err);
+                        return res.render("mentorshipLandingPage", {
+                            errorMsg: "There was an error in requesting access. Please try again later.",
+                            departments: branches, yoss: yos, collegeList: collegeList
+                        });
+                    }
+                    // TODO(aditya): What to do if it fails?
+                    else {
+                        return res.render("mentorshipLandingPage",
+                            { done: "student", departments: branches, yoss: yos, collegeList: collegeList });
+                    }
+                })
+        }
+        else {
+            return res.render("mentorshipLandingPage",
                 {
                     errorMsg: "Please enter all fields correctly.",
                     departments: branches, yoss: yos, collegeList: collegeList
@@ -332,7 +401,9 @@ homeRouter.all(function (req, res) {
 ////////   TEST APIs
 
 homeRouter.get("/test", function (req, res) {
-    res.sendFile(path.resolve("views/html/login.html"))
+    res.render("mentorxLandingPage", {
+        departments: branches, yoss: yos, collegeList: collegeList
+    })
 });
 
 homeRouter.get('/plsauthenticate/:type', function (req, res) {
